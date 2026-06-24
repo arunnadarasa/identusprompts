@@ -21,7 +21,7 @@ function ThemesIndex() {
         <span className="font-mono-q text-[11px] tracking-[0.2em] uppercase text-accent">// themes</span>
         <h1 className="font-display text-4xl sm:text-5xl font-bold mt-3">Ten disciplines, one quantum playground.</h1>
         <p className="mt-4 text-muted-foreground max-w-2xl">
-          Each theme has 100 ready-to-build ideas with a Lovable mega-prompt and a Guppy/Selene quantum kernel.
+          Each theme has 100 ready-to-build ideas with a Lovable mega-prompt and a Guppy/Selene quantum kernel. Tap a discipline to see all 100.
         </p>
       </section>
       <section className="max-w-6xl mx-auto px-5 pb-16 grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -49,6 +49,14 @@ function ThemesIndex() {
                   <li key={i.id} className="truncate">· {i.title}</li>
                 ))}
               </ul>
+              <div className="flex items-center justify-between border-t border-border pt-3 mt-auto">
+                <span className="text-sm font-semibold text-primary group-hover:text-accent transition">
+                  View all {ideas.length} ideas →
+                </span>
+                <span className="font-mono-q text-[10px] text-muted-foreground">
+                  {new Set(ideas.map((i) => i.hook)).size} hooks
+                </span>
+              </div>
             </Link>
           );
         })}
