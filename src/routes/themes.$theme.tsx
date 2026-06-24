@@ -108,7 +108,7 @@ function FilterChip({ active, onClick, children }: { active: boolean; onClick: (
   return (
     <button
       onClick={onClick}
-      className={`px-2.5 py-1 rounded-full text-[11px] font-mono-q uppercase tracking-wider border transition ${
+      className={`shrink-0 whitespace-nowrap px-2.5 py-1 rounded-full text-[11px] font-mono-q uppercase tracking-wider border transition ${
         active
           ? "bg-accent text-accent-foreground border-accent"
           : "border-border text-muted-foreground hover:text-foreground hover:border-accent/50"
