@@ -67,11 +67,20 @@ function SiteHeader() {
               <MobileLink to="/quantum-primer" onClick={close}>Primer</MobileLink>
               <MobileLink to="/about" onClick={close}>About</MobileLink>
               <a
+                href="https://creativequantum.lovable.app/"
+                target="_blank"
+                rel="noreferrer"
+                onClick={close}
+                className="mt-3 px-4 py-3 border border-border text-foreground text-[11px] tracking-[0.28em] uppercase font-semibold text-center"
+              >
+                Hackathon ↗
+              </a>
+              <a
                 href="https://sepolia.etherscan.io/"
                 target="_blank"
                 rel="noreferrer"
                 onClick={close}
-                className="mt-3 px-4 py-3 bg-primary text-primary-foreground text-[11px] tracking-[0.28em] uppercase font-semibold text-center"
+                className="mt-2 px-4 py-3 bg-primary text-primary-foreground text-[11px] tracking-[0.28em] uppercase font-semibold text-center"
               >
                 Etherscan ↗
               </a>
