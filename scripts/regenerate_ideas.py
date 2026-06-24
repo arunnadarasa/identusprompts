@@ -314,7 +314,7 @@ def main():
 
     results: dict = {k: v for k, v in ckpt.items()}  # key -> list of raw ideas
 
-    with ThreadPoolExecutor(max_workers=2) as ex:
+    with ThreadPoolExecutor(max_workers=8) as ex:
         futs = {ex.submit(call_aisa, t, h, i): (t, h, key) for i, (t, h, key) in enumerate(tasks)}
         done = 0
         for f in as_completed(futs):
