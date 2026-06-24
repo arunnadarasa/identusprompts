@@ -18,7 +18,7 @@ function SiteHeader() {
   const close = () => setOpen(false);
   return (
     <header className="sticky top-0 z-40 backdrop-blur-md bg-background/70 border-b border-border">
-      <div className="max-w-6xl mx-auto px-4 sm:px-5 py-3 sm:py-4 flex items-center justify-between gap-3">
+      <div className="max-w-6xl mx-auto px-4 sm:px-5 py-2.5 sm:py-4 flex items-center justify-between gap-3">
         <Link to="/" className="flex items-center gap-2 min-w-0 group">
           <span className="hidden sm:inline font-mono-q text-xs tracking-[0.18em] uppercase text-accent shrink-0">|0⟩+|1⟩</span>
           <span className="font-display text-base sm:text-lg font-semibold truncate">Creative Quantum</span>
