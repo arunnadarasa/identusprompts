@@ -53,7 +53,7 @@ function IdeaPage() {
               {theme.emoji} {theme.name} · {idea.subDiscipline}
             </span>
           </div>
-          <h1 className="font-display text-5xl md:text-6xl font-bold leading-[0.95] tracking-tight">{idea.title}</h1>
+          <h1 className="font-display text-4xl sm:text-5xl md:text-6xl font-bold leading-[0.95] tracking-tight">{idea.title}</h1>
           <p className="mt-5 text-xl text-muted-foreground leading-relaxed">{idea.pitch}</p>
           <div className="mt-5">
             <QuantumChip hookId={idea.quantumHookId} label={idea.quantumHook} tag={idea.quantumTag} />

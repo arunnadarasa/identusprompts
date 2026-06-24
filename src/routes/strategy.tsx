@@ -86,7 +86,7 @@ function StrategyPage() {
         <div className="font-mono-q text-[11px] uppercase tracking-[0.2em] text-accent mb-4">
           // build-strategy / free-tier
         </div>
-        <h1 className="font-display text-5xl md:text-6xl font-bold leading-[0.95] tracking-tight">
+        <h1 className="font-display text-4xl sm:text-5xl md:text-6xl font-bold leading-[0.95] tracking-tight">
           Real quantum, <span className="text-accent">5 credits</span>, one build message.
         </h1>
         <p className="mt-6 text-lg text-muted-foreground leading-relaxed">
