@@ -49,11 +49,11 @@ function ThemesIndex() {
                   <li key={i.id} className="truncate">· {i.title}</li>
                 ))}
               </ul>
-              <div className="flex items-center justify-between border-t border-border pt-3 mt-auto">
-                <span className="text-sm font-semibold text-primary group-hover:text-accent transition">
-                  View all {ideas.length} ideas →
+              <div className="flex items-center justify-between gap-3 border-t border-border pt-3 mt-auto">
+                <span className="inline-flex items-center gap-1 px-3 py-1.5 rounded-full bg-primary/10 border border-primary/30 text-primary text-xs font-semibold group-hover:bg-accent/15 group-hover:border-accent/50 group-hover:text-accent transition">
+                  View all {ideas.length} ideas <span aria-hidden>→</span>
                 </span>
-                <span className="font-mono-q text-[10px] text-muted-foreground">
+                <span className="font-mono-q text-[10px] text-muted-foreground shrink-0">
                   {new Set(ideas.map((i) => i.quantumHookId)).size} hooks
                 </span>
               </div>
