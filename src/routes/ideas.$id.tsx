@@ -85,8 +85,18 @@ function IdeaPage() {
         <section className="mt-10">
           <div className="flex items-baseline justify-between gap-4 mb-3">
             <h2 className="font-display text-2xl font-semibold">Lovable mega-prompt</h2>
-            <CopyButton text={idea.megaPrompt} label="Copy prompt" />
+            <div className="flex items-center gap-2">
+              <span className="hidden sm:inline-flex items-center gap-1 px-2 py-1 rounded-md border border-accent/40 bg-accent/5 font-mono-q text-[10px] uppercase tracking-wider text-accent">
+                budget · 1 message · ~5 credits
+              </span>
+              <CopyButton text={idea.megaPrompt} label="Copy prompt" />
+            </div>
           </div>
+          <p className="text-xs text-muted-foreground mb-3">
+            This prompt is engineered to ship in a single Lovable build. Real Quantinuum Guppy/Selene circuit
+            runs in the Linux sandbox at build time and the results are baked in as JSON.{" "}
+            <Link to="/strategy" className="text-accent underline decoration-accent/50 underline-offset-2 hover:decoration-accent">read the build strategy →</Link>
+          </p>
           <pre className="whitespace-pre-wrap font-mono-q text-[13px] leading-relaxed p-6 rounded-lg border border-border bg-card text-foreground/90">
 {idea.megaPrompt}
           </pre>
