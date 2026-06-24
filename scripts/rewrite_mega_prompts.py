@@ -117,8 +117,30 @@ STACK
       config={{{{ loginMethods:['google'], embeddedWallets:{{createOnLogin:'users-without-wallets'}},
                 defaultChain:{{ id: 11155111, name:'Sepolia' }} }}}}>
 - All txs via Privy `useSendTransaction` with `{{ sponsor: true }}` (zero-gas for the user).
-{ipfs_step}- Hardhat in /contracts, deploy with METAMASK_PRIVATE_KEY + SEPOLIA_RPC_URL, then
-  `npx hardhat verify --network sepolia <address>` using ETHERSCAN_API_KEY.
+{ipfs_step}- Hardhat in /contracts (kept outside the Vite bundle). Install
+  `@nomicfoundation/hardhat-toolbox` AND `@nomicfoundation/hardhat-verify@latest`
+  (>=3.x — older versions still hit Etherscan v1 and fail with
+  "You are using a deprecated V1 endpoint, switch to Etherscan API V2").
+- hardhat.config.cjs MUST use the Etherscan v2 single-key shape (NOT the per-network map):
+    require("@nomicfoundation/hardhat-toolbox");
+    require("@nomicfoundation/hardhat-verify");
+    module.exports = {{
+      solidity: {{ version: "0.8.24", settings: {{ optimizer: {{ enabled: true, runs: 200 }} }} }},
+      networks: {{ sepolia: {{
+        url: process.env.SEPOLIA_RPC_URL || "https://ethereum-sepolia-rpc.publicnode.com",
+        accounts: [process.env.METAMASK_PRIVATE_KEY.startsWith("0x")
+          ? process.env.METAMASK_PRIVATE_KEY : "0x" + process.env.METAMASK_PRIVATE_KEY],
+        chainId: 11155111,
+      }} }},
+      etherscan: {{ apiKey: process.env.ETHERSCAN_API_KEY }},   // single string, NOT {{ sepolia: ... }}
+      sourcify: {{ enabled: false }},                            // silences the v2.x prompt
+    }};
+- Deploy: `npx hardhat run scripts/deploy.cjs --network sepolia`.
+- Verify (run RIGHT AFTER deploy, no constructor args for these contracts):
+  `npx hardhat verify --network sepolia <address>`
+  On success Etherscan returns "Successfully verified contract … on the block explorer"
+  and the source becomes readable at
+  `https://sepolia.etherscan.io/address/<address>#code`.
 - Write the deployed address to `src/data/contract.json` so the UI links to
   `https://sepolia.etherscan.io/address/<address>`.
 
