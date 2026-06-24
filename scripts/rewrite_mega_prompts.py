@@ -258,7 +258,9 @@ def make_prompt(idea: dict, theme: dict) -> str:
     rationale = idea.get("quantumRationale") or RATIONALES[hid](sub, theme["name"])
     body = BODIES[hid].format(CREDIT=CREDIT, sub=sub)
 
-    return f"""Build "{title}" in ONE Lovable message. Single-page TanStack Start demo.
+    return f"""Build "{title}" as a ONE-SHOT Lovable build. The participant has only
+5 credits — this single message must produce a working demo with no follow-ups.
+Single-page TanStack Start app. Cut scope ruthlessly.
 
 CONCEPT
 {pitch}
@@ -277,7 +279,7 @@ STACK
 
 {body}
 
-USER FLOW
+USER FLOW (the entire app — nothing else exists)
 1. Land on page; the headline previews what the demo does for {sub}.
 2. The primary action ({hook['ui']}) is one tap away; the rest of the layout supports it.
 3. After the audio plays / the conversation ends / the transcript commits, the result stays on screen and can be retried or shared.
