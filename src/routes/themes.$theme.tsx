@@ -51,27 +51,30 @@ function ThemePage() {
 
   return (
     <SiteShell>
-      <section className="max-w-6xl mx-auto px-5 pt-12 pb-6">
-        <Link to="/themes" className="text-xs text-muted-foreground font-mono-q hover:text-foreground">← all themes</Link>
-        <div className="flex items-end justify-between gap-6 mt-4 flex-wrap">
-          <div>
-            <div className="text-3xl">{theme.emoji}</div>
-            <h1 className="font-display text-4xl sm:text-5xl font-bold mt-2">{theme.name}</h1>
-            <p className="text-muted-foreground mt-2 max-w-2xl">For {theme.audience}.</p>
-          </div>
-          <span className="font-mono-q text-xs text-muted-foreground">{ideas.length} ideas</span>
+      <section className="max-w-6xl mx-auto px-5 pt-6 sm:pt-12 pb-3 sm:pb-6">
+        <div className="flex items-center gap-2 font-mono-q text-[11px] uppercase tracking-wider">
+          <Link to="/themes" className="text-muted-foreground hover:text-foreground">Themes</Link>
+          <span className="text-muted-foreground">/</span>
+          <span className="text-accent">{theme.slug}</span>
         </div>
+        <div className="mt-3 flex items-center gap-3">
+          <span className="text-3xl sm:text-4xl shrink-0">{theme.emoji}</span>
+          <h1 className="font-display text-3xl sm:text-5xl font-bold min-w-0">{theme.name}</h1>
+        </div>
+        <p className="font-mono-q text-[11px] text-muted-foreground mt-2">
+          {ideas.length} ideas · {new Set(ideas.map((i) => i.quantumHookId)).size} quantum hooks · for {theme.audience}
+        </p>
       </section>
 
-      <section className="max-w-6xl mx-auto px-5 sticky top-[68px] z-30 bg-background/85 backdrop-blur-md py-4 border-y border-border">
-        <div className="flex flex-col md:flex-row md:items-center gap-3">
+      <section className="max-w-6xl mx-auto px-5 sticky top-[68px] z-30 bg-background/85 backdrop-blur-md py-2.5 sm:py-4 border-y border-border">
+        <div className="flex flex-col md:flex-row md:items-center gap-2.5 md:gap-3">
           <input
             value={q}
             onChange={(e) => setQ(e.target.value)}
             placeholder="Search ideas in this theme…"
             className="flex-1 px-4 py-2 rounded-md bg-input border border-border text-sm focus:outline-none focus:border-accent"
           />
-          <div className="flex flex-wrap gap-1.5">
+          <div className="flex md:flex-wrap gap-1.5 overflow-x-auto -mx-5 px-5 md:mx-0 md:px-0 md:overflow-visible">
             <FilterChip active={hookFilter === null} onClick={() => setHookFilter(null)}>
               All hooks
             </FilterChip>
@@ -105,7 +108,7 @@ function FilterChip({ active, onClick, children }: { active: boolean; onClick: (
   return (
     <button
       onClick={onClick}
-      className={`px-2.5 py-1 rounded-full text-[11px] font-mono-q uppercase tracking-wider border transition ${
+      className={`shrink-0 whitespace-nowrap px-2.5 py-1 rounded-full text-[11px] font-mono-q uppercase tracking-wider border transition ${
         active
           ? "bg-accent text-accent-foreground border-accent"
           : "border-border text-muted-foreground hover:text-foreground hover:border-accent/50"
