@@ -1,0 +1,72 @@
+[
+  {
+    "slug": "dance",
+    "name": "Dance & Choreography",
+    "emoji": "\ud83d\udc83",
+    "audience": "choreographers, dancers, dance teachers, movement directors",
+    "market_anchor": "the global dance industry (~$5B; >2M studios worldwide)"
+  },
+  {
+    "slug": "music",
+    "name": "Music & Sound Design",
+    "emoji": "\ud83c\udfb5",
+    "audience": "musicians, producers, composers, sound designers",
+    "market_anchor": "the music software market (~$11B and music creators (~50M))"
+  },
+  {
+    "slug": "visual-art",
+    "name": "Visual Art",
+    "emoji": "\ud83c\udfa8",
+    "audience": "painters, illustrators, generative artists, gallerists",
+    "market_anchor": "the global art market (~$65B; >300K working visual artists)"
+  },
+  {
+    "slug": "video",
+    "name": "Videography & Film",
+    "emoji": "\ud83c\udfa5",
+    "audience": "videographers, editors, content creators",
+    "market_anchor": "the video editing software market (~$1.1B) and >50M creators"
+  },
+  {
+    "slug": "photography",
+    "name": "Photography",
+    "emoji": "\ud83d\udcf7",
+    "audience": "photographers, photo editors, photojournalists",
+    "market_anchor": "the photo software market (~$2.4B) and >15M pro photographers"
+  },
+  {
+    "slug": "writing",
+    "name": "Writing, Poetry & Narrative",
+    "emoji": "\u270d\ufe0f",
+    "audience": "writers, poets, screenwriters, narrative designers",
+    "market_anchor": "the writing tools market (~$1.5B) and >100M working writers"
+  },
+  {
+    "slug": "film-animation",
+    "name": "Filmmaking & Animation",
+    "emoji": "\ud83c\udfac",
+    "audience": "filmmakers, animators, motion designers, storyboard artists",
+    "market_anchor": "the animation industry (~$400B incl. film/TV) with >500K working animators"
+  },
+  {
+    "slug": "games",
+    "name": "Game Design & Interactive Media",
+    "emoji": "\ud83c\udfae",
+    "audience": "game designers, interactive artists, XR creators",
+    "market_anchor": "the game industry (~$200B) and >3M indie developers"
+  },
+  {
+    "slug": "theater",
+    "name": "Theater & Live Performance",
+    "emoji": "\ud83c\udfad",
+    "audience": "directors, playwrights, performers, lighting and stage designers",
+    "market_anchor": "the live performance market (~$30B globally) with >100K active companies"
+  },
+  {
+    "slug": "fashion",
+    "name": "Fashion & Textile Design",
+    "emoji": "\ud83d\udc57",
+    "audience": "fashion designers, textile artists, costume designers, stylists",
+    "market_anchor": "the fashion design software market (~$1.2B) within a $2.5T global fashion industry"
+  }
+]

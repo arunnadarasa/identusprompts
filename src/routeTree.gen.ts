@@ -9,38 +9,127 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as ThemesRouteImport } from './routes/themes'
+import { Route as QuantumPrimerRouteImport } from './routes/quantum-primer'
+import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as ThemesThemeRouteImport } from './routes/themes.$theme'
+import { Route as IdeasIdRouteImport } from './routes/ideas.$id'
 
+const ThemesRoute = ThemesRouteImport.update({
+  id: '/themes',
+  path: '/themes',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const QuantumPrimerRoute = QuantumPrimerRouteImport.update({
+  id: '/quantum-primer',
+  path: '/quantum-primer',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AboutRoute = AboutRouteImport.update({
+  id: '/about',
+  path: '/about',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ThemesThemeRoute = ThemesThemeRouteImport.update({
+  id: '/$theme',
+  path: '/$theme',
+  getParentRoute: () => ThemesRoute,
+} as any)
+const IdeasIdRoute = IdeasIdRouteImport.update({
+  id: '/ideas/$id',
+  path: '/ideas/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
+  '/quantum-primer': typeof QuantumPrimerRoute
+  '/themes': typeof ThemesRouteWithChildren
+  '/ideas/$id': typeof IdeasIdRoute
+  '/themes/$theme': typeof ThemesThemeRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
+  '/quantum-primer': typeof QuantumPrimerRoute
+  '/themes': typeof ThemesRouteWithChildren
+  '/ideas/$id': typeof IdeasIdRoute
+  '/themes/$theme': typeof ThemesThemeRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
+  '/quantum-primer': typeof QuantumPrimerRoute
+  '/themes': typeof ThemesRouteWithChildren
+  '/ideas/$id': typeof IdeasIdRoute
+  '/themes/$theme': typeof ThemesThemeRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/about'
+    | '/quantum-primer'
+    | '/themes'
+    | '/ideas/$id'
+    | '/themes/$theme'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/about'
+    | '/quantum-primer'
+    | '/themes'
+    | '/ideas/$id'
+    | '/themes/$theme'
+  id:
+    | '__root__'
+    | '/'
+    | '/about'
+    | '/quantum-primer'
+    | '/themes'
+    | '/ideas/$id'
+    | '/themes/$theme'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AboutRoute: typeof AboutRoute
+  QuantumPrimerRoute: typeof QuantumPrimerRoute
+  ThemesRoute: typeof ThemesRouteWithChildren
+  IdeasIdRoute: typeof IdeasIdRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/themes': {
+      id: '/themes'
+      path: '/themes'
+      fullPath: '/themes'
+      preLoaderRoute: typeof ThemesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/quantum-primer': {
+      id: '/quantum-primer'
+      path: '/quantum-primer'
+      fullPath: '/quantum-primer'
+      preLoaderRoute: typeof QuantumPrimerRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/about': {
+      id: '/about'
+      path: '/about'
+      fullPath: '/about'
+      preLoaderRoute: typeof AboutRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -48,22 +137,41 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/themes/$theme': {
+      id: '/themes/$theme'
+      path: '/$theme'
+      fullPath: '/themes/$theme'
+      preLoaderRoute: typeof ThemesThemeRouteImport
+      parentRoute: typeof ThemesRoute
+    }
+    '/ideas/$id': {
+      id: '/ideas/$id'
+      path: '/ideas/$id'
+      fullPath: '/ideas/$id'
+      preLoaderRoute: typeof IdeasIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
+interface ThemesRouteChildren {
+  ThemesThemeRoute: typeof ThemesThemeRoute
+}
+
+const ThemesRouteChildren: ThemesRouteChildren = {
+  ThemesThemeRoute: ThemesThemeRoute,
+}
+
+const ThemesRouteWithChildren =
+  ThemesRoute._addFileChildren(ThemesRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AboutRoute: AboutRoute,
+  QuantumPrimerRoute: QuantumPrimerRoute,
+  ThemesRoute: ThemesRouteWithChildren,
+  IdeasIdRoute: IdeasIdRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}
