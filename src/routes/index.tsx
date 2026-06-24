@@ -16,112 +16,222 @@ export const Route = createFileRoute("/")({
 });
 
 function Index() {
+  const featured = ALL_IDEAS[42];
+  const portrait = ALL_IDEAS[317];
+  const wide = ALL_IDEAS[618];
   return (
     <SiteShell>
-      <section className="max-w-6xl mx-auto px-5 pt-8 sm:pt-20 pb-10 sm:pb-16">
-        <div className="flex items-center gap-3 mb-6">
-          <span className="font-mono-q text-[11px] tracking-[0.2em] uppercase text-accent">
-            //  creative-quantum / hackathon-kit
-          </span>
-        </div>
-        <h1 className="font-display text-[2.75rem] sm:text-6xl md:text-7xl font-bold tracking-tight leading-[0.95] max-w-4xl">
-          1,000 ideas where <span className="text-primary">creativity</span> meets a
-          <span className="text-accent"> quantum kernel</span>.
-        </h1>
-        <p className="mt-6 sm:mt-7 text-base sm:text-lg text-muted-foreground max-w-2xl leading-relaxed">
-          A copy-and-paste repo for the{" "}
-          <a href="https://creativequantum.lovable.app/" target="_blank" rel="noreferrer" className="text-foreground underline decoration-accent/60 underline-offset-4 hover:decoration-accent">
-            Creative Quantum hackathon
-          </a>
-          . Every idea includes a Lovable mega-prompt, a Quantinuum Guppy/Selene hook, and TAM/SAM/SOM —
-          so you can pick one in five minutes and start building.
-        </p>
-        <div className="mt-8 sm:mt-9 flex flex-col sm:flex-row sm:flex-wrap gap-3">
-          <Link to="/themes" className="inline-flex items-center justify-center gap-2 px-5 py-3 sm:py-2.5 rounded-md bg-primary text-primary-foreground font-semibold hover:opacity-90 transition">
-            Browse 10 themes →
+      {/* HERO — editorial folio header */}
+      <section className="max-w-7xl mx-auto px-5 sm:px-8 pt-12 sm:pt-24 pb-12 sm:pb-20 animate-fade-in">
+        <header className="flex flex-col lg:flex-row justify-between items-start lg:items-end border-b border-border pb-10 lg:pb-12 gap-8">
+          <div className="max-w-3xl">
+            <span className="eyebrow block mb-6">Collection No. 04 — One Thousand Entries</span>
+            <h1 className="font-display text-[clamp(3.25rem,9vw,8.5rem)] leading-[0.92] tracking-tight text-foreground">
+              Creative <span className="italic text-primary">Quantum</span>
+            </h1>
+            <p className="mt-8 max-w-xl text-base sm:text-lg text-muted-foreground leading-relaxed font-light">
+              An archive of one thousand conceptual threads where the world's creative
+              disciplines meet a real Quantinuum kernel — annotated, indexed, and ready
+              to ship in a single Lovable build.
+            </p>
+          </div>
+          <div className="flex flex-wrap gap-3 text-[10px] uppercase tracking-[0.28em]">
+            <Link
+              to="/themes"
+              className="px-6 py-3 border border-primary/40 text-foreground hover:bg-primary hover:text-primary-foreground transition-colors duration-500"
+            >
+              Browse the Index
+            </Link>
+            <a
+              href="https://creativequantum.lovable.app/"
+              target="_blank"
+              rel="noreferrer"
+              className="px-6 py-3 bg-primary text-primary-foreground hover:bg-foreground transition-colors duration-500"
+            >
+              Open Hackathon ↗
+            </a>
+          </div>
+        </header>
+
+        {/* BENTO — primary repository grid */}
+        <div className="mt-12 grid grid-cols-1 md:grid-cols-4 auto-rows-[260px] gap-4 md:gap-5">
+          {/* Feature tile */}
+          <Link
+            to="/ideas/$id"
+            params={{ id: featured.id }}
+            className="md:col-span-2 md:row-span-2 group relative overflow-hidden bg-card border border-border p-8 sm:p-10 flex flex-col justify-between hover:border-primary/50 transition-all duration-500"
+          >
+            <div className="absolute -top-20 -right-20 w-80 h-80 rounded-full gold-bloom blur-3xl opacity-60 group-hover:opacity-100 transition-opacity duration-700" />
+            <div className="relative z-10">
+              <span className="eyebrow">Primary Directive · {featured.theme}</span>
+              <h2 className="font-display text-3xl sm:text-5xl md:text-[3.25rem] mt-6 leading-[1.05] italic text-foreground">
+                {featured.title}
+              </h2>
+            </div>
+            <div className="relative z-10">
+              <p className="text-sm text-muted-foreground max-w-md mb-7 leading-relaxed line-clamp-3 font-light">
+                {featured.pitch}
+              </p>
+              <div className="flex items-center gap-4 border-t border-border pt-5">
+                <div className="w-12 h-px bg-primary" />
+                <span className="eyebrow text-primary">View Entry</span>
+              </div>
+            </div>
           </Link>
-          <Link to="/strategy" className="inline-flex items-center justify-center gap-2 px-5 py-3 sm:py-2.5 rounded-md border border-accent/60 text-accent hover:bg-accent/10 transition">
-            Build strategy (5-credit pattern) →
+
+          {/* Portrait tile */}
+          <Link
+            to="/ideas/$id"
+            params={{ id: portrait.id }}
+            className="md:row-span-2 group bg-card border border-border p-7 flex flex-col hover:border-primary/50 transition-all duration-500"
+          >
+            <div className="flex-1 flex flex-col">
+              <div className="w-full aspect-[3/4] bg-background border border-border/60 mb-6 overflow-hidden relative">
+                <div className="absolute inset-0 gold-bloom opacity-40" />
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <span className="font-display text-[9rem] italic text-primary/30 leading-none">02</span>
+                </div>
+              </div>
+              <h3 className="font-display text-2xl leading-tight text-foreground">{portrait.title}</h3>
+            </div>
+            <div className="pt-4 mt-4 border-t border-border/60">
+              <span className="eyebrow text-muted-foreground capitalize">Theme · {portrait.theme}</span>
+            </div>
           </Link>
+
+          {/* Gold stat tile */}
+          <div className="bg-primary text-primary-foreground p-8 flex flex-col justify-center items-center text-center relative overflow-hidden">
+            <span className="font-display text-7xl italic leading-none">1k</span>
+            <span className="eyebrow text-primary-foreground/80 mt-3" style={{ color: "var(--color-primary-foreground)", opacity: 0.85 }}>
+              Active Entries
+            </span>
+          </div>
+
+          {/* Detail tile */}
+          <Link
+            to="/quantum-primer"
+            className="group bg-card border border-border p-7 flex flex-col justify-between hover:border-primary/50 transition-colors duration-500"
+          >
+            <span className="eyebrow">Section II</span>
+            <div>
+              <h3 className="font-display text-2xl leading-tight text-foreground italic">Ten quantum primitives.</h3>
+              <p className="text-[11px] text-muted-foreground leading-relaxed mt-3 font-light">
+                A reading guide to the kernels each entry leans on — kernel, signal, surface.
+              </p>
+            </div>
+            <div className="flex gap-1">
+              <div className="w-1 h-1 rounded-full bg-primary" />
+              <div className="w-1 h-1 rounded-full bg-primary/30" />
+              <div className="w-1 h-1 rounded-full bg-primary/30" />
+            </div>
+          </Link>
+
+          {/* Wide tile */}
+          <Link
+            to="/strategy"
+            className="md:col-span-2 group relative bg-background border border-primary/30 p-8 sm:p-10 flex items-center justify-between gap-6 hover:border-primary transition-colors duration-500"
+          >
+            <div className="max-w-md">
+              <span className="eyebrow">Appendix · Build Strategy</span>
+              <h3 className="font-display text-2xl sm:text-3xl mt-3 text-foreground">The Five-Credit Protocol</h3>
+              <p className="text-sm text-muted-foreground mt-2 font-light leading-relaxed">
+                Real Quantinuum results, one build message, zero runtime backend.
+              </p>
+            </div>
+            <span className="w-12 h-12 shrink-0 rounded-full border border-primary flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-primary-foreground transition-all duration-500">
+              →
+            </span>
+          </Link>
+
+          {/* Final tile */}
+          <div className="bg-card border border-border p-7">
+            <div className="h-full border-l border-primary/30 pl-5 flex flex-col justify-center">
+              <span className="eyebrow mb-2">Status</span>
+              <p className="font-display text-2xl italic text-foreground leading-tight">In residence at the lab.</p>
+            </div>
+          </div>
         </div>
-        <div className="mt-12 sm:mt-14 grid grid-cols-2 sm:grid-cols-4 gap-4 max-w-2xl">
-          <Stat n="1,000" label="ideas" />
-          <Stat n="10" label="disciplines" />
-          <Stat n="10" label="quantum hooks" />
-          <Stat n="1" label="build message" />
-        </div>
-        <p className="mt-6 text-xs text-muted-foreground font-mono-q max-w-2xl">
-          Designed to ship on Lovable's free tier — every mega-prompt runs real Quantinuum Selene/Guppy
-          circuits in the Linux sandbox at build time, then ships a static frontend.{" "}
-          <Link to="/strategy" className="text-accent underline decoration-accent/50 underline-offset-2 hover:decoration-accent">read the strategy →</Link>
-        </p>
       </section>
 
-      <section className="max-w-6xl mx-auto px-5 py-10 sm:py-12 border-t border-border">
-        <div className="flex items-baseline justify-between mb-7">
-          <h2 className="font-display text-2xl sm:text-3xl font-semibold">Pick your discipline</h2>
-          <Link to="/themes" className="text-sm text-muted-foreground hover:text-foreground">See all →</Link>
+      <section className="max-w-7xl mx-auto px-5 sm:px-8 py-16 border-t border-border">
+        <div className="flex items-end justify-between mb-10 gap-6 flex-wrap">
+          <div>
+            <span className="eyebrow block mb-3">Chapter I · Disciplines</span>
+            <h2 className="font-display text-4xl sm:text-5xl text-foreground italic">Ten houses, one craft.</h2>
+          </div>
+          <Link to="/themes" className="story-gold text-sm tracking-[0.24em] uppercase text-primary">See full index →</Link>
         </div>
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3">
-          {THEMES.map((t) => (
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-px bg-border">
+          {THEMES.map((t, idx) => (
             <Link
               key={t.slug}
               to="/themes/$theme"
               params={{ theme: t.slug }}
-              className="group p-4 rounded-lg border border-border bg-card hover:border-accent/60 transition"
+              className="group p-6 bg-card hover:bg-background transition-colors duration-500 flex flex-col gap-4 min-h-[180px]"
             >
-              <div className="text-2xl mb-2">{t.emoji}</div>
-              <div className="font-display text-base font-semibold leading-tight group-hover:text-primary">{t.name}</div>
-              <div className="mt-2 text-[11px] text-muted-foreground font-mono-q group-hover:text-accent transition">100 ideas →</div>
+              <div className="flex items-baseline justify-between">
+                <span className="text-3xl">{t.emoji}</span>
+                <span className="font-display italic text-primary/60 text-xs">{String(idx + 1).padStart(2, "0")}/10</span>
+              </div>
+              <div className="font-display text-xl leading-tight text-foreground mt-auto">{t.name}</div>
+              <div className="eyebrow text-muted-foreground group-hover:text-primary transition-colors">100 entries →</div>
             </Link>
           ))}
         </div>
       </section>
 
-      <section className="max-w-6xl mx-auto px-5 py-10 sm:py-12 border-t border-border">
-        <h2 className="font-display text-2xl sm:text-3xl font-semibold mb-7">The quantum hooks you can lean on</h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-          {HOOKS.map((h) => (
-            <Link key={h.id} to="/quantum-primer" hash={h.id} className="p-4 rounded-lg border border-border bg-card hover:border-accent/60 transition">
-              <div className="font-mono-q text-[10px] uppercase tracking-wider text-accent">{h.tag}</div>
-              <div className="font-display text-lg font-semibold mt-1">{h.name}</div>
-              <div className="text-xs text-muted-foreground mt-2 line-clamp-2">{h.kernel}</div>
+      <section className="max-w-7xl mx-auto px-5 sm:px-8 py-16 border-t border-border">
+        <div className="flex items-end justify-between mb-10 gap-6 flex-wrap">
+          <div>
+            <span className="eyebrow block mb-3">Chapter II · Primitives</span>
+            <h2 className="font-display text-4xl sm:text-5xl text-foreground italic">The ten kernels.</h2>
+          </div>
+          <Link to="/quantum-primer" className="story-gold text-sm tracking-[0.24em] uppercase text-primary">Read the primer →</Link>
+        </div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-px bg-border">
+          {HOOKS.map((h, idx) => (
+            <Link
+              key={h.id}
+              to="/quantum-primer"
+              hash={h.id}
+              className="group p-7 bg-card hover:bg-background transition-colors duration-500 flex flex-col gap-4"
+            >
+              <div className="flex items-baseline justify-between">
+                <span className="eyebrow">{h.tag}</span>
+                <span className="font-display italic text-primary/50 text-xs">№ {String(idx + 1).padStart(2, "0")}</span>
+              </div>
+              <div className="font-display text-2xl leading-tight text-foreground">{h.name}</div>
+              <div className="text-[12px] text-muted-foreground line-clamp-2 font-light leading-relaxed">{h.kernel}</div>
             </Link>
           ))}
         </div>
       </section>
 
-      <section className="max-w-6xl mx-auto px-5 py-10 sm:py-12 border-t border-border">
-        <h2 className="font-display text-2xl sm:text-3xl font-semibold mb-3">How to use this repo</h2>
-        <p className="text-muted-foreground max-w-2xl">Three steps, ten minutes to a buildable hackathon project.</p>
-        <ol className="mt-7 grid md:grid-cols-3 gap-4">
-          <Step n={1} title="Pick a discipline" body="Browse the 10 themes and skim 100 ideas in each." />
-          <Step n={2} title="Open an idea" body="Read the pitch, the quantum hook, and the TAM/SAM/SOM." />
-          <Step n={3} title="Copy the mega-prompt" body="Paste it into Lovable. Wire in the Guppy kernel. Ship." />
+      <section className="max-w-7xl mx-auto px-5 sm:px-8 py-16 border-t border-border">
+        <span className="eyebrow block mb-3">Chapter III · Method</span>
+        <h2 className="font-display text-4xl sm:text-5xl text-foreground italic max-w-2xl">Three movements, ten minutes.</h2>
+        <ol className="mt-10 grid md:grid-cols-3 gap-px bg-border">
+          <Step n={1} title="Choose a house" body="Skim ten disciplines. Open the one that suits your team." />
+          <Step n={2} title="Read an entry" body="Pitch, quantum kernel, plain-language proposition, market sizing." />
+          <Step n={3} title="Copy the mega-prompt" body="One paste into Lovable. Real Selene runs at build time. Ship." />
         </ol>
-        <p className="mt-8 text-xs text-muted-foreground font-mono-q">
-          {ALL_IDEAS.length} ideas indexed · all static · zero backend
+        <p className="mt-10 eyebrow text-muted-foreground">
+          {ALL_IDEAS.length.toLocaleString()} entries indexed · zero backend · ready to publish
         </p>
       </section>
     </SiteShell>
   );
 }
 
-function Stat({ n, label }: { n: string; label: string }) {
-  return (
-    <div>
-      <div className="font-display text-3xl sm:text-4xl font-bold text-primary">{n}</div>
-      <div className="text-xs text-muted-foreground uppercase tracking-wider mt-1">{label}</div>
-    </div>
-  );
-}
-
 function Step({ n, title, body }: { n: number; title: string; body: string }) {
   return (
-    <li className="p-5 rounded-lg border border-border bg-card">
-      <div className="font-mono-q text-xs text-accent">step {String(n).padStart(2, "0")}</div>
-      <div className="font-display text-xl font-semibold mt-2">{title}</div>
-      <div className="text-sm text-muted-foreground mt-2">{body}</div>
+    <li className="p-8 bg-card flex flex-col gap-4">
+      <div className="flex items-baseline justify-between">
+        <span className="eyebrow">Movement {String(n).padStart(2, "0")}</span>
+        <span className="font-display italic text-primary text-3xl leading-none">{String(n).padStart(2, "0")}</span>
+      </div>
+      <div className="font-display text-2xl text-foreground">{title}</div>
+      <div className="text-sm text-muted-foreground font-light leading-relaxed">{body}</div>
     </li>
   );
 }
