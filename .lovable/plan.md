@@ -1,63 +1,64 @@
+# Refine every mega-prompt with AIsa
 
-# Make every idea buildable on 5 free credits with real Guppy/Selene circuits
+AIsa is OpenAI-compatible at `https://api.aisa.one/v1` with a bearer `AISA_API_KEY`. I'll use it as a one-off, offline batch to upgrade all 1,000 mega-prompts, then ship the improved JSON. No runtime API calls, no Lovable Cloud, no frontend changes — the site keeps loading static JSON.
 
-Two problems to fix:
+## Step 1 — Store the key
 
-1. The current mega-prompt is silent on **where** Guppy/Selene runs. Lovable apps deploy to Cloudflare Workers (edge JS), so Python cannot run at runtime. A naive participant will burn credits trying to call Selene from a TanStack server function and fail.
-2. Free-tier participants have ~5 build credits. The prompt must produce a working pitchable demo in **one shot**, not a multi-step refinement loop.
+When build mode starts, request `AISA_API_KEY` via `add_secret`. The key is only read by the offline refinement script (`/tmp/refine_prompts.py`) executed in this sandbox; it is never bundled into the client or shipped to Cloudflare.
 
-The fix is a single pattern: **build-time quantum**.
+## Step 2 — Model choice
 
-## The pattern (what every mega-prompt will now instruct)
+Default: `**gpt-5-mini**` via `POST /v1/chat/completions` — strong instruction-following, $0.15 in / $1.20 out per 1M tokens. Estimated total for 1,000 refinements (~600 in + ~400 out tokens each): **≈ $0.60–$1.20**. (Fallback if rate-limited: `gemini-3.5-flash`.) I'll set `temperature: 0.4` and force a JSON response so parsing is robust.
+
+## Step 3 — The refinement task per idea
+
+For each of the 1,000 ideas I send:
+
+- The original generated mega-prompt
+- The idea's `title`, `pitch`, `subDiscipline`, `quantumHook`, `quantumHookId`, kernel description, and the grid shape (e.g. "10×10 fidelities")
+- A system prompt that locks in the non-negotiables:
 
 ```text
-1. In the Lovable Linux sandbox during the build:
-     pip install guppylang selene-sim
-2. Write the Guppy kernel as a real .py file at quantum/<kernel>.py
-   (Guppy reads source via inspect — a real file is mandatory).
-3. Write a driver script quantum/run.py that:
-     - imports the @guppy kernel
-     - compiles it
-     - runs it on the Selene emulator over a small grid of
-       representative inputs (5-20 samples, ≤8 qubits, ~256 shots)
-     - writes the real results to src/data/quantum-results.json
-4. Execute the driver once at build time. Commit the JSON.
-5. The React frontend imports src/data/quantum-results.json and
-   renders the results interactively (browse / filter / compare).
-6. A "Quantum trace" disclosure shows the raw kernel output and the
-   .py source, so judges see it is genuine Quantinuum quantum, not faked.
+You are a senior Lovable + Quantinuum hackathon prompt engineer.
+
+Rewrite the user-supplied mega-prompt so a free-tier Lovable account (~5 build
+credits) can ship a real-quantum demo in ONE build message. Keep ALL of:
+
+  - the build-time quantum pattern (pip install guppylang selene-sim in the
+    Lovable Linux sandbox; quantum/kernel.py + quantum/run.py; output to
+    src/data/quantum-results.json; React reads it statically)
+  - the specific Guppy/Selene kernel and grid shape provided
+  - one page (workspace) + "About the quantum" strip; no Cloud, no auth, no DB
+  - the "Quantum trace" disclosure showing raw output + kernel.py source
+  - the explicit "ship in one message, ~5 credits" budget warning
+
+Make it sharper, more concrete, and easier for the Lovable agent to act on:
+- name the exact files, imports, and selene_sim APIs to use
+- collapse fluff; aim for ~250-320 words
+- write the UI in concrete shadcn/Tailwind nouns (Card, Slider, Tabs) instead of vague layouts
+- add a 4-step "Build order" the agent must follow to avoid scope creep
+
+Return JSON: { "megaPrompt": "<the refined prompt as a single string>" }.
+Do not return anything else.
 ```
 
-This is the only pattern that delivers real quantum + real frontend + pitchable demo on 5 credits.
+## Step 4 — Offline batch runner
 
-## Mega-prompt rewrite
+Script at `/tmp/refine_prompts.py`:
 
-Edit `/tmp/build_ideas.py` so the `mega_prompt(...)` template produces a single one-shot prompt with:
+- Loads `src/data/ideas/*.json` (the 10 theme files plus hooks/themes manifests).
+- Iterates ideas, calls AIsa with the prompt above. Concurrency ~8 with retry/backoff on 429/5xx.
+- Validates each response (JSON parse, length 150–500 words, contains the required substrings: `pip install guppylang selene-sim`, `quantum/kernel.py`, `quantum-results.json`, `~5 credits`). Failures fall back to the existing prompt and are logged.
+- Writes the refined `megaPrompt` back in place. Saves an audit log to `/tmp/refine_log.json`.
 
-- A **hard scope cap**: 1 page (the workspace) + a small "About the quantum" strip. No auth, no Lovable Cloud, no extra routes, no history page.
-- **Explicit sandbox instructions** with the exact `pip install` and file paths above.
-- The **kernel spec** (already present per hook) — kept short and concrete.
-- The **precompute step**: enumerate the grid the driver iterates over, named the dataset the user manipulates (e.g. "10 candidate beats × 10 references = 100 SWAP-test fidelities").
-- The **frontend spec**: how the precomputed JSON drives the UI (grid, slider, dropdown, etc.), with one accent color and one type family.
-- A short **"Quantum trace" requirement**: surface fidelity/Betti/bitstring numbers and a "View Guppy source" link/disclosure.
-- A **credit budget warning** at the end: "You have ~5 credits. Build this in ONE message. Do not add features beyond what is listed."
+I'll start by refining a 5-idea sample (one per major theme), spot-check the output, then run the full 1,000. If the sample looks wrong I'll adjust the system prompt before burning the rest of the budget.
 
-Then re-run `python /tmp/build_ideas.py` to regenerate all 1,000 ideas.
+## Step 5 — Ship
 
-## Site updates
+Re-read 3 random ideas across 3 themes to confirm the refined prompts still pass the acceptance checklist from the previous plan (sandbox instructions, JSON output, 5-credit warning, ≤~350 words). No UI changes needed — the idea detail page already renders `idea.megaPrompt`.
 
-1. **New route `/strategy`** — a single page that explains the build-time quantum pattern in plain language: the pip-install, the .py kernel, the driver, the JSON, the React reader. Includes a copy-able starter snippet for a Guppy kernel + Selene driver + JSON write. Linked from the header.
-2. **Update `/about`** — add a "Built for 5 credits" section pointing to `/strategy`.
-3. **Update homepage** — add a third stat ("1 build message") and a small callout strip: "Designed to ship on Lovable's free tier."
-4. **Update idea detail page (`/ideas/$id`)** — add a small "Credit budget" badge near the Copy button explaining one-shot intent, and a "Read the build strategy →" link to `/strategy`.
-5. **Update `/quantum-primer`** — add one sentence per hook noting the typical grid shape used in precompute (e.g. "10×10 pairs", "single dataset of 32 points").
+## Open question
 
-## Acceptance check
+Use `gpt-5-mini` as proposed, or do you want a different model from the AIsa catalog (e.g. `claude-haiku-4-5-20251001` for tighter writing, or `qwen-flash` to save ~10× on cost)? If you don't say, I'll go with `gpt-5-mini`. 
 
-After regenerating, spot-check 3 ideas across 3 themes:
-- mega-prompt explicitly says "Lovable Linux sandbox", names `guppylang` and `selene-sim`, and gives the exact file paths
-- mentions JSON output and the React reader
-- ends with the 5-credit one-shot warning
-- total prompt length is under ~350 words so participants can read it fast
-
-No backend, no Cloud, no auth. Site stays purely static.
+use Claude haiku for tighter writing
