@@ -81,12 +81,14 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { name: "description", content: "An archive of 1,000 copy-paste Lovable mega-prompts that wire MetaMask, Ethereum Sepolia, Etherscan, Privy and Pinata into ten creative disciplines." },
       { name: "author", content: "StreetKode Fam · Indian Krump Festival 14" },
       { property: "og:title", content: "Creative Blockchain — 1,000 web3 hackathon ideas" },
-      { property: "og:description", content: "1,000 blockchain mega-prompts for Lovable, ready to ship onchain on Sepolia." },
+      { property: "og:description", content: "An archive of 1,000 copy-paste Lovable mega-prompts that wire MetaMask, Ethereum Sepolia, Etherscan, Privy and Pinata into ten creative disciplines." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
       { name: "twitter:site", content: "@Lovable" },
       { name: "twitter:title", content: "Creative Blockchain — 1,000 web3 hackathon ideas" },
-      { name: "twitter:description", content: "1,000 blockchain mega-prompts for Lovable, ready to ship onchain on Sepolia." },
+      { name: "twitter:description", content: "An archive of 1,000 copy-paste Lovable mega-prompts that wire MetaMask, Ethereum Sepolia, Etherscan, Privy and Pinata into ten creative disciplines." },
+      { property: "og:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/attachments/og-images/60c6be5c-ef40-4d85-beb8-7633cb220b49" },
+      { name: "twitter:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/attachments/og-images/60c6be5c-ef40-4d85-beb8-7633cb220b49" },
     ],
     links: [
       {
