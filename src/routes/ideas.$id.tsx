@@ -8,8 +8,8 @@ import { getPlainProposition } from "@/lib/plain-language";
 export const Route = createFileRoute("/ideas/$id")({
   head: ({ params }) => {
     const idea = getIdea(params.id);
-    const title = idea ? `${idea.title} · Creative Blockchain idea` : "Idea · Creative Blockchain";
-    const desc = idea ? idea.pitch : "An onchain hackathon idea.";
+    const title = idea ? `${idea.title} · Creative AI idea` : "Idea · Creative AI";
+    const desc = idea ? idea.pitch : "An ElevenLabs hackathon idea.";
     return {
       meta: [
         { title },
@@ -32,11 +32,7 @@ export const Route = createFileRoute("/ideas/$id")({
 });
 
 const SECRETS = [
-  { name: "METAMASK_PRIVATE_KEY", note: "Exported from MetaMask. Fund on Sepolia via the Google Cloud faucet.", href: "https://cloud.google.com/application/web3/faucet/ethereum/sepolia" },
-  { name: "SEPOLIA_RPC_URL", note: "Alchemy Sepolia HTTPS endpoint. Create a free app → copy the HTTPS URL.", href: "https://dashboard.alchemy.com/" },
-  { name: "ETHERSCAN_API_KEY", note: "Required for npx hardhat verify after deploy.", href: "https://etherscan.io/myapikey" },
-  { name: "PRIVY_APP_ID", note: "Enables Google sign-in and sponsored transactions.", href: "https://docs.privy.io/llms-full.txt" },
-  { name: "PINATA_JWT", note: "Pins images / JSON / manifests to IPFS.", href: "https://docs.pinata.cloud/llms-full.txt" },
+  { name: "ELEVENLABS_API_KEY", note: "Single key for TTS, voice agents, scribe, music and SFX. Free tier covers a hackathon weekend.", href: "https://elevenlabs.io/app/settings/api-keys" },
 ];
 
 function IdeaPage() {
@@ -73,7 +69,7 @@ function IdeaPage() {
           <div className="absolute -top-24 -right-24 w-72 h-72 rounded-full gold-bloom blur-3xl opacity-60 pointer-events-none" />
           <div className="relative flex items-baseline justify-between gap-4 mb-5">
             <div>
-              <span className="eyebrow block mb-2">Section · Onchain</span>
+              <span className="eyebrow block mb-2">Section · Voice</span>
               <h2 className="font-display text-3xl italic text-foreground">The primitive.</h2>
             </div>
             <Link to="/quantum-primer" hash={idea.quantumHookId} className="story-gold eyebrow text-primary">
@@ -103,8 +99,8 @@ function IdeaPage() {
 
         <section className="mt-12">
           <span className="eyebrow block mb-2">Appendix · Secrets</span>
-          <h2 className="font-display text-3xl italic text-foreground mb-6">Required keys.</h2>
-          <div className="grid sm:grid-cols-2 gap-px bg-border">
+          <h2 className="font-display text-3xl italic text-foreground mb-6">Required key.</h2>
+          <div className="grid gap-px bg-border">
             {SECRETS.map((s) => (
               <div key={s.name} className="p-6 bg-card">
                 <div className="font-mono text-[12px] tracking-wider text-primary">{s.name}</div>
@@ -116,7 +112,7 @@ function IdeaPage() {
             ))}
           </div>
           <p className="mt-4 eyebrow text-muted-foreground">
-            Add these in your Lovable project under Settings → Secrets before pasting the prompt below.
+            Add this in your Lovable project under Settings → Secrets before pasting the prompt below.
           </p>
         </section>
 
@@ -134,7 +130,7 @@ function IdeaPage() {
             </div>
           </div>
           <p className="text-sm text-muted-foreground mb-4 font-light leading-relaxed">
-            Paste into a fresh Lovable project. Make sure all five secrets above are set first.{" "}
+            Paste into a fresh Lovable project. Make sure the key above is set first.{" "}
             <Link to="/strategy" className="story-gold text-primary">read the build strategy →</Link>
           </p>
           <pre className="whitespace-pre-wrap break-all font-mono text-[11px] sm:text-[13px] leading-relaxed p-4 sm:p-8 border border-border bg-card text-foreground/90 w-full max-w-full overflow-x-hidden" style={{ fontFamily: "'JetBrains Mono', ui-monospace, monospace", letterSpacing: 0, wordBreak: "break-word", overflowWrap: "anywhere" }}>
@@ -150,12 +146,12 @@ function IdeaPage() {
               Open in Lovable ↗
             </a>
             <a
-              href="https://sepolia.etherscan.io/"
+              href="https://elevenlabs.io/docs"
               target="_blank"
               rel="noreferrer"
               className="inline-flex items-center gap-2 px-6 py-3 border border-primary/40 text-foreground hover:bg-primary hover:text-primary-foreground transition-colors duration-500"
             >
-              Sepolia Etherscan ↗
+              ElevenLabs Docs ↗
             </a>
           </div>
         </section>
