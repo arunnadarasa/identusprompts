@@ -33,6 +33,7 @@ export const Route = createFileRoute("/ideas/$id")({
 
 const SECRETS = [
   { name: "METAMASK_PRIVATE_KEY", note: "Exported from MetaMask. Fund on Sepolia via the Google Cloud faucet.", href: "https://cloud.google.com/application/web3/faucet/ethereum/sepolia" },
+  { name: "SEPOLIA_RPC_URL", note: "Alchemy Sepolia HTTPS endpoint. Create a free app → copy the HTTPS URL.", href: "https://dashboard.alchemy.com/" },
   { name: "ETHERSCAN_API_KEY", note: "Required for npx hardhat verify after deploy.", href: "https://etherscan.io/myapikey" },
   { name: "PRIVY_APP_ID", note: "Enables Google sign-in and sponsored transactions.", href: "https://docs.privy.io/llms-full.txt" },
   { name: "PINATA_JWT", note: "Pins images / JSON / manifests to IPFS.", href: "https://docs.pinata.cloud/llms-full.txt" },
