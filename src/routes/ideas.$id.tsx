@@ -39,80 +39,87 @@ function IdeaPage() {
 
   return (
     <SiteShell>
-      <article className="max-w-4xl mx-auto px-5 pt-12 pb-16">
-        <nav className="text-xs font-mono-q text-muted-foreground flex items-center gap-2">
-          <Link to="/themes" className="hover:text-foreground">themes</Link>
+      <article className="max-w-4xl mx-auto px-5 sm:px-8 pt-12 sm:pt-20 pb-20 animate-fade-in">
+        <nav className="eyebrow text-muted-foreground flex items-center gap-2">
+          <Link to="/themes" className="hover:text-primary transition-colors">Index</Link>
           <span>/</span>
-          <Link to="/themes/$theme" params={{ theme: theme.slug }} className="hover:text-foreground">{theme.slug}</Link>
+          <Link to="/themes/$theme" params={{ theme: theme.slug }} className="hover:text-primary transition-colors">{theme.slug}</Link>
           <span>/</span>
-          <span className="text-foreground">{idea.id.slice(-3)}</span>
+          <span className="text-primary">№ {idea.id.slice(-3)}</span>
         </nav>
 
-        <header className="mt-6">
-          <div className="flex flex-wrap items-center gap-2 mb-4">
-            <span className="text-xs font-mono-q text-muted-foreground uppercase tracking-wider">
-              {theme.emoji} {theme.name} · {idea.subDiscipline}
-            </span>
-          </div>
-          <h1 className="font-display text-4xl sm:text-5xl md:text-6xl font-bold leading-[0.95] tracking-tight">{idea.title}</h1>
-          <p className="mt-5 text-xl text-muted-foreground leading-relaxed">{idea.pitch}</p>
-          <div className="mt-5">
+        <header className="mt-8 pb-10 border-b border-border">
+          <span className="eyebrow block mb-6">
+            {theme.emoji} {theme.name} · {idea.subDiscipline}
+          </span>
+          <h1 className="font-display text-5xl sm:text-6xl md:text-7xl leading-[0.95] text-foreground">
+            {idea.title}
+          </h1>
+          <p className="mt-7 text-lg sm:text-xl text-muted-foreground leading-relaxed font-light max-w-3xl">{idea.pitch}</p>
+          <div className="mt-6">
             <QuantumChip hookId={idea.quantumHookId} label={idea.quantumHook} tag={idea.quantumTag} />
           </div>
         </header>
 
-        <section className="mt-10 p-6 rounded-lg border border-accent/30 bg-accent/5">
-          <div className="flex items-baseline justify-between gap-4 mb-3">
-            <h2 className="font-display text-xl font-semibold">Quantum hook</h2>
-            <Link to="/quantum-primer" hash={idea.quantumHookId} className="text-xs font-mono-q text-accent hover:underline">
+        <section className="mt-12 p-8 sm:p-10 border border-primary/30 bg-card relative overflow-hidden">
+          <div className="absolute -top-24 -right-24 w-72 h-72 rounded-full gold-bloom blur-3xl opacity-60 pointer-events-none" />
+          <div className="relative flex items-baseline justify-between gap-4 mb-5">
+            <div>
+              <span className="eyebrow block mb-2">Section · Quantum</span>
+              <h2 className="font-display text-3xl italic text-foreground">The hook.</h2>
+            </div>
+            <Link to="/quantum-primer" hash={idea.quantumHookId} className="story-gold eyebrow text-primary">
               full primer →
             </Link>
           </div>
-          <p className="text-base text-foreground/90 leading-relaxed">
+          <p className="relative text-lg text-foreground leading-relaxed font-light">
             {getPlainProposition(idea, theme)}
           </p>
-          <p className="text-sm text-muted-foreground leading-relaxed mt-3">
-            <span className="font-mono-q text-[10px] uppercase tracking-wider text-accent mr-2">why this primitive</span>
+          <p className="relative text-sm text-muted-foreground leading-relaxed mt-4 font-light">
+            <span className="eyebrow text-primary mr-3">Why this primitive</span>
             {idea.quantumRationale}
           </p>
           {hook && (
-            <div className="mt-4 grid sm:grid-cols-2 gap-4 text-sm">
+            <div className="relative mt-8 pt-6 border-t border-border grid sm:grid-cols-2 gap-6 text-sm">
               <div>
-                <div className="font-mono-q text-[10px] uppercase text-accent tracking-wider mb-1">kernel</div>
-                <div className="text-foreground/90">{hook.kernel}</div>
+                <div className="eyebrow mb-2">Kernel</div>
+                <div className="text-foreground/90 font-light leading-relaxed">{hook.kernel}</div>
               </div>
               <div>
-                <div className="font-mono-q text-[10px] uppercase text-accent tracking-wider mb-1">drives the UI as</div>
-                <div className="text-foreground/90">{hook.ui}</div>
+                <div className="eyebrow mb-2">Drives the UI as</div>
+                <div className="text-foreground/90 font-light leading-relaxed">{hook.ui}</div>
               </div>
             </div>
           )}
         </section>
 
-        <section className="mt-10">
-          <div className="flex items-baseline justify-between gap-4 mb-3">
-            <h2 className="font-display text-2xl font-semibold">Lovable mega-prompt</h2>
+        <section className="mt-12">
+          <div className="flex items-baseline justify-between gap-4 mb-4">
+            <div>
+              <span className="eyebrow block mb-2">Appendix A</span>
+              <h2 className="font-display text-3xl italic text-foreground">The mega-prompt.</h2>
+            </div>
             <div className="flex items-center gap-2">
-              <span className="hidden sm:inline-flex items-center gap-1 px-2 py-1 rounded-md border border-accent/40 bg-accent/5 font-mono-q text-[10px] uppercase tracking-wider text-accent">
+              <span className="hidden sm:inline-flex items-center gap-1 px-3 py-2 border border-primary/40 eyebrow text-primary">
                 budget · 1 message · ~5 credits
               </span>
               <CopyButton text={idea.megaPrompt} label="Copy prompt" />
             </div>
           </div>
-          <p className="text-xs text-muted-foreground mb-3">
+          <p className="text-sm text-muted-foreground mb-4 font-light leading-relaxed">
             This prompt is engineered to ship in a single Lovable build. Real Quantinuum Guppy/Selene circuit
             runs in the Linux sandbox at build time and the results are baked in as JSON.{" "}
-            <Link to="/strategy" className="text-accent underline decoration-accent/50 underline-offset-2 hover:decoration-accent">read the build strategy →</Link>
+            <Link to="/strategy" className="story-gold text-primary">read the build strategy →</Link>
           </p>
-          <pre className="whitespace-pre-wrap font-mono-q text-[13px] leading-relaxed p-6 rounded-lg border border-border bg-card text-foreground/90">
+          <pre className="whitespace-pre-wrap font-mono text-[13px] leading-relaxed p-6 sm:p-8 border border-border bg-card text-foreground/90" style={{ fontFamily: "'JetBrains Mono', ui-monospace, monospace", letterSpacing: 0 }}>
 {idea.megaPrompt}
           </pre>
-          <div className="mt-4 flex flex-wrap gap-3">
+          <div className="mt-5 flex flex-wrap gap-3 text-[10px] uppercase tracking-[0.28em]">
             <a
               href={`https://lovable.dev/?prompt=${encodeURIComponent(idea.megaPrompt)}`}
               target="_blank"
               rel="noreferrer"
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-md bg-primary text-primary-foreground text-sm font-semibold hover:opacity-90"
+              className="inline-flex items-center gap-2 px-6 py-3 bg-primary text-primary-foreground font-semibold hover:bg-foreground transition-colors duration-500"
             >
               Open in Lovable ↗
             </a>
@@ -120,33 +127,36 @@ function IdeaPage() {
               href="https://creativequantum.lovable.app/"
               target="_blank"
               rel="noreferrer"
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-md border border-border text-sm hover:bg-secondary/60"
+              className="inline-flex items-center gap-2 px-6 py-3 border border-primary/40 text-foreground hover:bg-primary hover:text-primary-foreground transition-colors duration-500"
             >
               Hackathon home ↗
             </a>
           </div>
         </section>
 
-        <section className="mt-10">
-          <h2 className="font-display text-2xl font-semibold mb-4">Market sizing</h2>
-          <div className="grid sm:grid-cols-3 gap-3">
+        <section className="mt-12">
+          <span className="eyebrow block mb-2">Appendix B</span>
+          <h2 className="font-display text-3xl italic text-foreground mb-6">Market sizing.</h2>
+          <div className="grid sm:grid-cols-3 gap-px bg-border">
             <MarketCard label="TAM" value={idea.tam} />
-            <MarketCard label="SAM" value={idea.sam} />
+            <MarketCard label="SAM" value={idea.sam} gold />
             <MarketCard label="SOM" value={idea.som} />
           </div>
-          <p className="mt-3 text-[11px] text-muted-foreground font-mono-q">
+          <p className="mt-4 eyebrow text-muted-foreground">
             Indicative figures for hackathon pitches — refine with your own research before raising.
           </p>
         </section>
 
         {related.length > 0 && (
-          <section className="mt-12 pt-8 border-t border-border">
-            <h2 className="font-display text-2xl font-semibold mb-4">Adjacent ideas</h2>
-            <div className="grid sm:grid-cols-2 gap-3">
+          <section className="mt-16 pt-10 border-t border-border">
+            <span className="eyebrow block mb-2">See also</span>
+            <h2 className="font-display text-3xl italic text-foreground mb-6">Adjacent entries.</h2>
+            <div className="grid sm:grid-cols-2 gap-px bg-border">
               {related.map((r) => (
-                <Link key={r.id} to="/ideas/$id" params={{ id: r.id }} className="p-4 rounded-lg border border-border bg-card hover:border-accent/60 transition">
-                  <div className="font-display text-lg font-semibold">{r.title}</div>
-                  <div className="text-xs text-muted-foreground mt-1.5 line-clamp-2">{r.pitch}</div>
+                <Link key={r.id} to="/ideas/$id" params={{ id: r.id }} className="p-6 bg-card hover:bg-background transition-colors duration-500 group">
+                  <span className="eyebrow capitalize">{r.subDiscipline}</span>
+                  <div className="font-display text-xl mt-2 text-foreground">{r.title}</div>
+                  <div className="text-sm text-muted-foreground mt-2 line-clamp-2 font-light">{r.pitch}</div>
                 </Link>
               ))}
             </div>
@@ -157,13 +167,13 @@ function IdeaPage() {
   );
 }
 
-function MarketCard({ label, value }: { label: string; value: string }) {
+function MarketCard({ label, value, gold = false }: { label: string; value: string; gold?: boolean }) {
   const [num, ...rest] = value.split(" — ");
   return (
-    <div className="p-5 rounded-lg border border-border bg-card">
-      <div className="font-mono-q text-[10px] uppercase tracking-wider text-accent">{label}</div>
-      <div className="font-display text-3xl font-bold mt-2 text-primary">{num}</div>
-      <div className="text-xs text-muted-foreground mt-2 leading-relaxed">{rest.join(" — ")}</div>
+    <div className={`p-7 ${gold ? "bg-primary text-primary-foreground" : "bg-card"}`}>
+      <div className={`text-[10px] tracking-[0.32em] uppercase font-semibold ${gold ? "opacity-80" : "text-primary"}`}>{label}</div>
+      <div className={`font-display text-4xl mt-3 italic leading-none ${gold ? "" : "text-primary"}`}>{num}</div>
+      <div className={`text-xs mt-3 leading-relaxed font-light ${gold ? "opacity-80" : "text-muted-foreground"}`}>{rest.join(" — ")}</div>
     </div>
   );
 }
