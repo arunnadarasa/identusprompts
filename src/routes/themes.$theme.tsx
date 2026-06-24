@@ -51,43 +51,60 @@ function ThemePage() {
 
   return (
     <SiteShell>
-      <section className="max-w-6xl mx-auto px-5 pt-6 sm:pt-12 pb-3 sm:pb-6">
-        <div className="flex items-center gap-2 font-mono-q text-[11px] uppercase tracking-wider">
+      <section className="max-w-6xl mx-auto px-5 pt-5 sm:pt-12 pb-3 sm:pb-6">
+        <div className="flex items-center gap-1.5 font-mono-q text-[10px] sm:text-[11px] uppercase tracking-wider">
           <Link to="/themes" className="text-muted-foreground hover:text-foreground">Themes</Link>
           <span className="text-muted-foreground">/</span>
-          <span className="text-accent">{theme.slug}</span>
+          <span className="text-accent truncate">{theme.slug}</span>
         </div>
-        <div className="mt-3 flex items-center gap-3">
-          <span className="text-3xl sm:text-4xl shrink-0">{theme.emoji}</span>
-          <h1 className="font-display text-3xl sm:text-5xl font-bold min-w-0">{theme.name}</h1>
+        <div className="mt-2 sm:mt-3 flex flex-col sm:flex-row sm:items-center gap-1.5 sm:gap-3">
+          <span className="text-3xl sm:text-4xl">{theme.emoji}</span>
+          <h1 className="font-display text-[26px] leading-[1.05] sm:text-5xl font-bold min-w-0">{theme.name}</h1>
         </div>
-        <p className="font-mono-q text-[11px] text-muted-foreground mt-2">
-          {ideas.length} ideas · {new Set(ideas.map((i) => i.quantumHookId)).size} quantum hooks · for {theme.audience}
+        <div className="mt-3 flex flex-wrap items-center gap-1.5">
+          <span className="inline-flex items-center px-2 py-0.5 rounded-full bg-primary/10 border border-primary/30 text-primary font-mono-q text-[10px]">
+            {ideas.length} ideas
+          </span>
+          <span className="inline-flex items-center px-2 py-0.5 rounded-full bg-accent/10 border border-accent/30 text-accent font-mono-q text-[10px]">
+            {new Set(ideas.map((i) => i.quantumHookId)).size} hooks
+          </span>
+        </div>
+        <p className="text-xs sm:text-sm text-muted-foreground mt-2 line-clamp-2">
+          For {theme.audience}.
         </p>
       </section>
 
-      <section className="max-w-6xl mx-auto px-5 sticky top-[68px] z-30 bg-background/85 backdrop-blur-md py-2.5 sm:py-4 border-y border-border">
+      <section className="max-w-6xl mx-auto px-5 md:sticky md:top-[68px] z-30 bg-background/85 backdrop-blur-md py-3 sm:py-4 border-y border-border">
         <div className="flex flex-col md:flex-row md:items-center gap-2.5 md:gap-3">
           <input
             value={q}
             onChange={(e) => setQ(e.target.value)}
-            placeholder="Search ideas in this theme…"
-            className="flex-1 px-4 py-2 rounded-md bg-input border border-border text-sm focus:outline-none focus:border-accent"
+            placeholder="Search ideas…"
+            className="flex-1 px-4 py-2.5 rounded-md bg-input border border-border text-[15px] sm:text-sm focus:outline-none focus:border-accent"
           />
-          <div className="flex md:flex-wrap gap-1.5 overflow-x-auto -mx-5 px-5 md:mx-0 md:px-0 md:overflow-visible">
+          <div
+            className="flex md:flex-wrap gap-1.5 overflow-x-auto -mx-5 px-5 md:mx-0 md:px-0 md:overflow-visible pb-1 md:pb-0"
+            style={{
+              WebkitMaskImage:
+                "linear-gradient(to right, black 0, black calc(100% - 24px), transparent 100%)",
+              maskImage:
+                "linear-gradient(to right, black 0, black calc(100% - 24px), transparent 100%)",
+            }}
+          >
             <FilterChip active={hookFilter === null} onClick={() => setHookFilter(null)}>
-              All hooks
+              All
             </FilterChip>
             {HOOKS.map((h) => (
               <FilterChip key={h.id} active={hookFilter === h.id} onClick={() => setHookFilter(h.id)}>
                 {h.name}
               </FilterChip>
             ))}
+            <span className="shrink-0 w-2" aria-hidden />
           </div>
         </div>
       </section>
 
-      <section className="max-w-6xl mx-auto px-5 py-8">
+      <section className="max-w-6xl mx-auto px-5 py-6 sm:py-8">
         <p className="text-xs text-muted-foreground font-mono-q mb-4">
           {filtered.length} / {ideas.length} ideas shown
         </p>
@@ -108,7 +125,7 @@ function FilterChip({ active, onClick, children }: { active: boolean; onClick: (
   return (
     <button
       onClick={onClick}
-      className={`shrink-0 whitespace-nowrap px-2.5 py-1 rounded-full text-[11px] font-mono-q uppercase tracking-wider border transition ${
+      className={`shrink-0 whitespace-nowrap px-2.5 py-1 rounded-full text-[11px] font-mono-q normal-case tracking-wide border transition ${
         active
           ? "bg-accent text-accent-foreground border-accent"
           : "border-border text-muted-foreground hover:text-foreground hover:border-accent/50"

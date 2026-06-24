@@ -18,7 +18,7 @@ export const Route = createFileRoute("/")({
 function Index() {
   return (
     <SiteShell>
-      <section className="max-w-6xl mx-auto px-5 pt-12 sm:pt-20 pb-12 sm:pb-16">
+      <section className="max-w-6xl mx-auto px-5 pt-8 sm:pt-20 pb-10 sm:pb-16">
         <div className="flex items-center gap-3 mb-6">
           <span className="font-mono-q text-[11px] tracking-[0.2em] uppercase text-accent">
             //  creative-quantum / hackathon-kit
