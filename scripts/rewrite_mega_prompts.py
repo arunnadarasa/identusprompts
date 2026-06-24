@@ -1,167 +1,286 @@
 #!/usr/bin/env python3
-"""Rewrite the `megaPrompt` field on every idea to fit the 5-credit Lovable budget.
+"""Re-stamp every idea with an ElevenLabs-flavored mega-prompt.
 
-Reads each src/data/ideas/<theme>.json, keeps title/pitch/subDiscipline/quantum*
-intact, and replaces megaPrompt with a tight, copy-pasteable build prompt.
+- Remaps the legacy onchain `quantumHookId` to one of the four ElevenLabs
+  kernels in hooks.json (tts-narration / voice-agent / realtime-stt / music-sfx).
+- Rewrites `quantumHook`, `quantumTag`, `quantumRationale` from the new kernel.
+- Replaces `megaPrompt` with a single-message Lovable prompt that builds the
+  matching server function + client surface.
 
-No API calls. Idempotent.
+No API calls. Idempotent. Keeps title / pitch / subDiscipline / market sizing
+intact (titles still carry their original creative-domain flavour; rerun
+regenerate_ideas.py with AISA_API_KEY set to refresh those too).
 """
 import json, re, pathlib
 
 ROOT = pathlib.Path(__file__).resolve().parents[1]
 DATA = ROOT / "src" / "data" / "ideas"
 THEMES = json.loads((DATA / "themes.json").read_text())
+HOOKS = {h["id"]: h for h in json.loads((DATA / "hooks.json").read_text())}
 
 CREDIT = ("Built during the Creative AI & Quantum Hackathon organised by "
           "StreetKode Fam during Indian Krump Festival 14")
 
-SECRETS = """REQUIRED SECRETS (Lovable -> Project Settings -> Secrets):
-- METAMASK_PRIVATE_KEY  Sepolia deployer key. Fund it: https://cloud.google.com/application/web3/faucet/ethereum/sepolia
-- SEPOLIA_RPC_URL       Alchemy Sepolia HTTPS endpoint (https://eth-sepolia.g.alchemy.com/v2/<key>). Create a free app at https://dashboard.alchemy.com/ -> copy the HTTPS URL. Public RPCs throttle/fail under hackathon load — Alchemy is required.
-- ETHERSCAN_API_KEY     For `npx hardhat verify`. Get: https://etherscan.io/myapikey
-- PRIVY_APP_ID          Google sign-in + sponsored tx. Docs: https://docs.privy.io/llms-full.txt
-- PINATA_JWT            IPFS uploads (only if app pins media). Docs: https://docs.pinata.cloud/llms-full.txt"""
+SECRETS = """REQUIRED SECRET (Lovable -> Project Settings -> Secrets):
+- ELEVENLABS_API_KEY    Single key for TTS, voice agents, scribe, music and SFX.
+                        Get it from https://elevenlabs.io/app/settings/api-keys
+                        Free tier is enough for a hackathon weekend."""
 
-BUDGET = """5-CREDIT BUDGET (HARD LIMIT):
-- ONE single-page app. No router, no Lovable Cloud, no database, no auth flows beyond Privy drop-in.
-- ONE Solidity contract, <=80 lines, deployed to Sepolia, verified on Etherscan.
-- Privy is always the auth + sponsored-tx layer (Google login, embedded wallet).
-- Pinata/IPFS only if the idea genuinely needs to store a file or metadata.
-- At most ONE AI call per user action (use Lovable AI Gateway with LOVABLE_API_KEY if AI is part of the idea).
-- Skip tests, skip CI, skip docs pages. Ship the demo, nothing else."""
+BUDGET = """LOVABLE BUDGET (ONE BUILD MESSAGE):
+- ONE TanStack Start app. Single page is fine; add a /how-it-works strip only if it helps the pitch.
+- ONE TanStack server function that proxies ElevenLabs and keeps the API key on the server.
+- ONE client surface (a button, a mic, a prompt box) for the chosen kernel.
+- No database, no Lovable Cloud unless the idea genuinely needs persistence.
+- Skip tests, skip docs pages. Ship the demo, nothing else."""
 
-def safe_name(title: str, fallback: str) -> str:
-    return re.sub(r"[^A-Za-z0-9]", "", title)[:36] or fallback
+# ---------------------------------------------------------------------------
+# Legacy onchain hook id -> new ElevenLabs kernel id
+LEGACY_MAP = {
+    "sepolia-deploy": "tts-narration",
+    "ipfs-pinata":    "music-sfx",
+    "privy-social":   "voice-agent",
+    "nft-provenance": "realtime-stt",
+}
 
-def contract_log(title: str, pitch: str) -> str:
-    n = safe_name(title, "Provenance")
-    return f"""// SPDX-License-Identifier: MIT
-pragma solidity ^0.8.24;
-/// @title {n}
-/// @notice {pitch}
-/// @notice {CREDIT}
-contract {n} {{
-    event Logged(address indexed author, string cid, uint256 at);
-    /// @notice {CREDIT}
-    function log(string calldata cid) external {{
-        emit Logged(msg.sender, cid, block.timestamp);
-    }}
-}}"""
+RATIONALES = {
+    "tts-narration": lambda sub, theme: (
+        f"Streaming text-to-speech turns every {sub} surface in {theme} into something audible, "
+        f"so the user gets a presentation-grade voiceover instead of static text."
+    ),
+    "voice-agent": lambda sub, theme: (
+        f"A conversational ElevenLabs agent fits {sub} because the work is dialogic — "
+        f"the user wants to talk to {theme}, not click through a form."
+    ),
+    "realtime-stt": lambda sub, theme: (
+        f"Realtime scribe is the right primitive for {sub}: the user speaks the work into existence "
+        f"and {theme} needs the captions to land as the words land."
+    ),
+    "music-sfx": lambda sub, theme: (
+        f"On-demand music + SFX matches {sub} because {theme} lives or dies on the soundbed — "
+        f"the demo needs a sound, generated in seconds, not a Freesound library trawl."
+    ),
+}
 
-def contract_nft(title: str, pitch: str) -> str:
-    n = safe_name(title, "ProvenanceNFT")
-    sym = (n[:6] or "PROV").upper()
-    return f"""// SPDX-License-Identifier: MIT
-pragma solidity ^0.8.24;
-import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
-/// @title {n}
-/// @notice ERC-721 provenance for: {pitch}
-/// @notice {CREDIT}
-contract {n} is ERC721 {{
-    uint256 public nextId;
-    mapping(uint256 => string) public cidOf;
-    constructor() ERC721("{n}", "{sym}") {{}}
-    /// @notice {CREDIT}
-    function mint(string calldata cid) external returns (uint256 id) {{
-        id = ++nextId; cidOf[id] = cid; _safeMint(msg.sender, id);
-    }}
-    function tokenURI(uint256 id) public view override returns (string memory) {{
-        return string(abi.encodePacked("ipfs://", cidOf[id]));
-    }}
-}}"""
+# ---------------------------------------------------------------------------
+# Per-kernel build snippets (TanStack server fn + client surface)
 
-def needs_ipfs(hook_id: str) -> bool:
-    return hook_id in ("ipfs-pinata", "nft-provenance")
+TTS_BODY = """SERVER FUNCTION (src/lib/tts.functions.ts):
+```ts
+import {{ createServerFn }} from "@tanstack/react-start";
+import {{ z }} from "zod";
+
+/** {CREDIT} */
+export const speak = createServerFn({{ method: "POST" }})
+  .inputValidator((d) => z.object({{ text: z.string().min(1).max(4000) }}).parse(d))
+  .handler(async ({{ data }}) => {{
+    const r = await fetch(
+      "https://api.elevenlabs.io/v1/text-to-speech/JBFqnCBsd6RMkjVDRZzb/stream?output_format=mp3_44100_128",
+      {{
+        method: "POST",
+        headers: {{
+          "xi-api-key": process.env.ELEVENLABS_API_KEY!,
+          "Content-Type": "application/json",
+        }},
+        body: JSON.stringify({{ text: data.text, model_id: "eleven_turbo_v2_5" }}),
+      }},
+    );
+    if (!r.ok) throw new Error(`TTS failed: ${{r.status}}`);
+    const buf = await r.arrayBuffer();
+    return {{ audio: Buffer.from(buf).toString("base64") }};
+  }});
+```
+
+CLIENT (in the page component):
+```tsx
+import {{ useServerFn }} from "@tanstack/react-start";
+import {{ speak }} from "@/lib/tts.functions";
+
+const tts = useServerFn(speak);
+const play = async (text: string) => {{
+  const {{ audio }} = await tts({{ data: {{ text }} }});
+  await new Audio(`data:audio/mpeg;base64,${{audio}}`).play();
+}};
+```
+
+VOICE: George (`JBFqnCBsd6RMkjVDRZzb`) is the default; swap for any voice id from
+https://elevenlabs.io/voice-library. Use `eleven_multilingual_v2` instead of
+`eleven_turbo_v2_5` when broadcast quality matters more than first-token latency.
+"""
+
+AGENT_BODY = """SERVER FUNCTION (src/lib/agent.functions.ts):
+```ts
+import {{ createServerFn }} from "@tanstack/react-start";
+import {{ z }} from "zod";
+
+/** {CREDIT} */
+export const mintAgentToken = createServerFn({{ method: "POST" }})
+  .inputValidator((d) => z.object({{ agentId: z.string() }}).parse(d))
+  .handler(async ({{ data }}) => {{
+    const r = await fetch(
+      `https://api.elevenlabs.io/v1/convai/conversation/token?agent_id=${{data.agentId}}`,
+      {{ headers: {{ "xi-api-key": process.env.ELEVENLABS_API_KEY! }} }},
+    );
+    const {{ token }} = await r.json();
+    return {{ token }};
+  }});
+```
+
+CLIENT (`bun add @elevenlabs/react` first):
+```tsx
+import {{ useConversation }} from "@elevenlabs/react";
+import {{ useServerFn }} from "@tanstack/react-start";
+import {{ mintAgentToken }} from "@/lib/agent.functions";
+
+const c = useConversation();
+const getToken = useServerFn(mintAgentToken);
+
+const start = async () => {{
+  await navigator.mediaDevices.getUserMedia({{ audio: true }});
+  const {{ token }} = await getToken({{ data: {{ agentId: import.meta.env.VITE_AGENT_ID }} }});
+  await c.startSession({{ conversationToken: token, connectionType: "webrtc" }});
+}};
+```
+
+AGENT SETUP: create the agent in https://elevenlabs.io/app/agents, give it a
+system prompt fit for the {sub} use case, copy its agent id, and expose it as
+`VITE_AGENT_ID` in the project (public env, not a secret).
+"""
+
+SCRIBE_BODY = """SERVER FUNCTION (src/lib/scribe.functions.ts):
+```ts
+import {{ createServerFn }} from "@tanstack/react-start";
+
+/** {CREDIT} */
+export const mintScribeToken = createServerFn({{ method: "POST" }}).handler(async () => {{
+  const r = await fetch(
+    "https://api.elevenlabs.io/v1/single-use-token/realtime_scribe",
+    {{ method: "POST", headers: {{ "xi-api-key": process.env.ELEVENLABS_API_KEY! }} }},
+  );
+  const {{ token }} = await r.json();
+  return {{ token }};
+}});
+```
+
+CLIENT (`bun add @elevenlabs/react` first):
+```tsx
+import {{ useScribe }} from "@elevenlabs/react";
+import {{ useServerFn }} from "@tanstack/react-start";
+import {{ mintScribeToken }} from "@/lib/scribe.functions";
+
+const scribe = useScribe({{ modelId: "scribe_v2_realtime", commitStrategy: "vad" }});
+const getToken = useServerFn(mintScribeToken);
+
+const start = async () => {{
+  const {{ token }} = await getToken();
+  await scribe.connect({{
+    token,
+    microphone: {{ echoCancellation: true, noiseSuppression: true }},
+  }});
+}};
+```
+
+RENDER: show `scribe.partialTranscript` live, and append each
+`scribe.committedTranscripts[i].text` to the finalized list as VAD detects the
+pause. Perfect for {sub} where the user is speaking the work into the page.
+"""
+
+MUSIC_BODY = """SERVER FUNCTION (src/lib/music.functions.ts):
+```ts
+import {{ createServerFn }} from "@tanstack/react-start";
+import {{ z }} from "zod";
+
+/** {CREDIT} */
+export const conjureSfx = createServerFn({{ method: "POST" }})
+  .inputValidator((d) => z.object({{
+    prompt: z.string().min(1),
+    seconds: z.number().min(0.5).max(22).optional(),
+    kind: z.enum(["sfx", "music"]).default("sfx"),
+  }}).parse(d))
+  .handler(async ({{ data }}) => {{
+    const endpoint = data.kind === "music"
+      ? "https://api.elevenlabs.io/v1/music"
+      : "https://api.elevenlabs.io/v1/sound-generation";
+    const body = data.kind === "music"
+      ? {{ prompt: data.prompt, duration_seconds: data.seconds ?? 30 }}
+      : {{ text: data.prompt, duration_seconds: data.seconds ?? 5, prompt_influence: 0.3 }};
+    const r = await fetch(endpoint, {{
+      method: "POST",
+      headers: {{ "xi-api-key": process.env.ELEVENLABS_API_KEY!, "Content-Type": "application/json" }},
+      body: JSON.stringify(body),
+    }});
+    const buf = await r.arrayBuffer();
+    return {{ audio: Buffer.from(buf).toString("base64") }};
+  }});
+```
+
+CLIENT:
+```tsx
+const conjure = useServerFn(conjureSfx);
+const play = async (prompt: string, kind: "sfx" | "music" = "sfx") => {{
+  const {{ audio }} = await conjure({{ data: {{ prompt, kind }} }});
+  await new Audio(`data:audio/mpeg;base64,${{audio}}`).play();
+}};
+```
+
+TIP: the music endpoint uses `prompt`, the SFX endpoint uses `text` — the
+server fn above already maps them. Keep SFX under 22 seconds; cap music at ~30s
+for the demo so generation finishes inside the pitch slot.
+"""
+
+BODIES = {
+    "tts-narration": TTS_BODY,
+    "voice-agent": AGENT_BODY,
+    "realtime-stt": SCRIBE_BODY,
+    "music-sfx": MUSIC_BODY,
+}
+
+
+def remap_kernel(idea: dict) -> str:
+    hid = idea.get("quantumHookId") or idea.get("chainHookId") or "tts-narration"
+    if hid in HOOKS:
+        return hid
+    return LEGACY_MAP.get(hid, "tts-narration")
+
 
 def make_prompt(idea: dict, theme: dict) -> str:
-    title = idea["title"]; pitch = idea["pitch"]; sub = idea["subDiscipline"]
-    hid = idea.get("quantumHookId") or idea.get("chainHookId") or "sepolia-deploy"
-    hook_name = idea.get("quantumHook") or "Sepolia smart contract"
-    rationale = idea.get("quantumRationale") or ""
+    title = idea["title"]
+    pitch = idea["pitch"]
+    sub = idea["subDiscipline"]
+    hid = remap_kernel(idea)
+    hook = HOOKS[hid]
+    rationale = idea.get("quantumRationale") or RATIONALES[hid](sub, theme["name"])
+    body = BODIES[hid].format(CREDIT=CREDIT, sub=sub)
 
-    if hid == "nft-provenance":
-        contract = contract_nft(title, pitch)
-        action = (f"After the user creates a {sub} artefact, pin the file to IPFS via Pinata, "
-                  f"then call `mint(cid)` on the deployed contract through Privy's sponsored transaction. "
-                  f"Show tokenId, IPFS preview (`https://gateway.pinata.cloud/ipfs/<cid>`), and Etherscan mint-tx link.")
-    elif hid == "ipfs-pinata":
-        contract = contract_log("CIDLog" + safe_name(title, "Idea"), pitch)
-        action = (f"On submit, pin the {sub} artefact to Pinata, then call `log(cid)` on the contract via Privy sponsored tx. "
-                  f"Render the CID, IPFS gateway preview, and Etherscan tx link.")
-    elif hid == "privy-social":
-        contract = contract_log("SocialLog" + safe_name(title, "Idea"), pitch)
-        action = (f"Every {sub} action the user performs is sent as a sponsored Sepolia tx (`log(payload)`) "
-                  f"and displayed with an Etherscan link. No wallet popups.")
-    else:  # sepolia-deploy
-        contract = contract_log(title, pitch)
-        action = (f"User performs a {sub} action; the app calls `log(payload)` on the contract via Privy sponsored tx "
-                  f"and shows the Etherscan link as proof.")
-
-    ipfs_step = ("- src/lib/pinata.ts uploads via `fetch('https://api.pinata.cloud/pinning/pinFileToIPFS', "
-                 "{ method:'POST', headers:{ Authorization: `Bearer ${import.meta.env.VITE_PINATA_JWT}` }, body: fd })`.\n"
-                 if needs_ipfs(hid) else "")
-
-    return f"""Build "{title}" in ONE Lovable message. Single-page demo.
+    return f"""Build "{title}" in ONE Lovable message. Single-page TanStack Start demo.
 
 CONCEPT
 {pitch}
 Discipline: {theme['name']} ({sub}).
-Onchain primitive: {hook_name}. Why this primitive: {rationale}
+Voice primitive: {hook['name']} ({hook['tag']}).
+Why this primitive: {rationale}
 
 {BUDGET}
 
 STACK
-- React + Vite single page (the index route).
-- Privy embedded wallet wraps `<App />` in src/main.tsx:
-    <PrivyProvider appId={{import.meta.env.VITE_PRIVY_APP_ID}}
-      config={{{{ loginMethods:['google'], embeddedWallets:{{createOnLogin:'users-without-wallets'}},
-                defaultChain:{{ id: 11155111, name:'Sepolia' }} }}}}>
-- All txs via Privy `useSendTransaction` with `{{ sponsor: true }}` (zero-gas for the user).
-{ipfs_step}- Hardhat in /contracts (kept outside the Vite bundle). Install
-  `@nomicfoundation/hardhat-toolbox` AND `@nomicfoundation/hardhat-verify@latest`
-  (>=3.x — older versions still hit Etherscan v1 and fail with
-  "You are using a deprecated V1 endpoint, switch to Etherscan API V2").
-- hardhat.config.cjs MUST use the Etherscan v2 single-key shape (NOT the per-network map):
-    require("@nomicfoundation/hardhat-toolbox");
-    require("@nomicfoundation/hardhat-verify");
-    module.exports = {{
-      solidity: {{ version: "0.8.24", settings: {{ optimizer: {{ enabled: true, runs: 200 }} }} }},
-      networks: {{ sepolia: {{
-        url: process.env.SEPOLIA_RPC_URL,                       // Alchemy HTTPS endpoint, REQUIRED
-        accounts: [process.env.METAMASK_PRIVATE_KEY.startsWith("0x")
-          ? process.env.METAMASK_PRIVATE_KEY : "0x" + process.env.METAMASK_PRIVATE_KEY],
-        chainId: 11155111,
-      }} }},
-      etherscan: {{ apiKey: process.env.ETHERSCAN_API_KEY }},   // single string, NOT {{ sepolia: ... }}
-      sourcify: {{ enabled: false }},                            // silences the v2.x prompt
-    }};
-- Deploy: `npx hardhat run scripts/deploy.cjs --network sepolia`.
-- Verify (run RIGHT AFTER deploy, no constructor args for these contracts):
-  `npx hardhat verify --network sepolia <address>`
-  On success Etherscan returns "Successfully verified contract … on the block explorer"
-  and the source becomes readable at
-  `https://sepolia.etherscan.io/address/<address>#code`.
-- Frontend reads: create a viem public client with the Alchemy URL too —
-  `createPublicClient({{ chain: sepolia, transport: http(import.meta.env.VITE_SEPOLIA_RPC_URL) }})`.
-  Expose SEPOLIA_RPC_URL to the client by also setting VITE_SEPOLIA_RPC_URL to the same value.
-- Write the deployed address to `src/data/contract.json` so the UI links to
-  `https://sepolia.etherscan.io/address/<address>`.
+- TanStack Start app (the index route).
+- All ElevenLabs calls go through a `createServerFn` so the API key stays on the server.
+- Client surface fits the kernel: a `<button>` for TTS / music / SFX, a mic for agents, a live caption strip for scribe.
+- Tailwind + shadcn for the UI. Keep it editorial: gold accent on a dark or warm-cream background, generous type.
+- Footer renders: "{CREDIT}"
 
-CONTRACT (contracts/{safe_name(title,'Provenance')}.sol):
-```solidity
-{contract}
-```
+{body}
 
 USER FLOW
-1. Land on page -> 'Sign in with Google' (Privy) -> embedded wallet auto-provisioned.
-2. {action}
-3. Footer renders: "{CREDIT}"
+1. Land on page; the headline previews what the demo does for {sub}.
+2. The primary action ({hook['ui']}) is one tap away; the rest of the layout supports it.
+3. After the audio plays / the conversation ends / the transcript commits, the result stays on screen and can be retried or shared.
 
 {SECRETS}
 
-CREDIT (must appear in UI footer AND as NatSpec on every deployed contract):
+CREDIT (must appear in UI footer AND as JSDoc on the server function):
 {CREDIT}
 """
+
 
 def main():
     total = 0
@@ -169,11 +288,22 @@ def main():
         p = DATA / f"{t['slug']}.json"
         doc = json.loads(p.read_text())
         for idea in doc["ideas"]:
+            hid = remap_kernel(idea)
+            hook = HOOKS[hid]
+            idea["quantumHookId"] = hid
+            idea["quantumHook"] = hook["name"]
+            idea["quantumTag"] = hook["tag"]
+            if not idea.get("quantumRationale") or any(
+                w in idea["quantumRationale"] for w in
+                ("Sepolia", "smart contract", "blockchain", "onchain", "NFT", "IPFS", "Pinata", "Privy", "MetaMask")
+            ):
+                idea["quantumRationale"] = RATIONALES[hid](idea["subDiscipline"], t["name"])
             idea["megaPrompt"] = make_prompt(idea, t)
             total += 1
         p.write_text(json.dumps(doc, indent=2, ensure_ascii=False))
         print(f"  {t['slug']}: {len(doc['ideas'])} prompts rewritten")
     print(f"total: {total}")
+
 
 if __name__ == "__main__":
     main()
