@@ -54,7 +54,7 @@ function ThemesIndex() {
                   View all {ideas.length} ideas →
                 </span>
                 <span className="font-mono-q text-[10px] text-muted-foreground">
-                  {new Set(ideas.map((i) => i.hook)).size} hooks
+                  {new Set(ideas.map((i) => i.quantumHookId)).size} hooks
                 </span>
               </div>
             </Link>
