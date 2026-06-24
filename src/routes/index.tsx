@@ -40,15 +40,21 @@ function Index() {
           <Link to="/themes" className="inline-flex items-center gap-2 px-5 py-2.5 rounded-md bg-primary text-primary-foreground font-semibold hover:opacity-90 transition">
             Browse 10 themes →
           </Link>
-          <Link to="/quantum-primer" className="inline-flex items-center gap-2 px-5 py-2.5 rounded-md border border-border hover:bg-secondary/60 transition">
-            Quantum primer
+          <Link to="/strategy" className="inline-flex items-center gap-2 px-5 py-2.5 rounded-md border border-accent/60 text-accent hover:bg-accent/10 transition">
+            Build strategy (5-credit pattern) →
           </Link>
         </div>
-        <div className="mt-14 grid grid-cols-3 gap-4 max-w-2xl">
+        <div className="mt-14 grid grid-cols-2 sm:grid-cols-4 gap-4 max-w-2xl">
           <Stat n="1,000" label="ideas" />
           <Stat n="10" label="disciplines" />
           <Stat n="10" label="quantum hooks" />
+          <Stat n="1" label="build message" />
         </div>
+        <p className="mt-6 text-xs text-muted-foreground font-mono-q max-w-2xl">
+          Designed to ship on Lovable's free tier — every mega-prompt runs real Quantinuum Selene/Guppy
+          circuits in the Linux sandbox at build time, then ships a static frontend.{" "}
+          <Link to="/strategy" className="text-accent underline decoration-accent/50 underline-offset-2 hover:decoration-accent">read the strategy →</Link>
+        </p>
       </section>
 
       <section className="max-w-6xl mx-auto px-5 py-12 border-t border-border">
