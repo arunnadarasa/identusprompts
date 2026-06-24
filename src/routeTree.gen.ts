@@ -11,11 +11,14 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as ThemesRouteImport } from './routes/themes'
 import { Route as StrategyRouteImport } from './routes/strategy'
+import { Route as ShowcaseRouteImport } from './routes/showcase'
 import { Route as QuantumPrimerRouteImport } from './routes/quantum-primer'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ThemesIndexRouteImport } from './routes/themes.index'
+import { Route as ShowcaseIndexRouteImport } from './routes/showcase.index'
 import { Route as ThemesThemeRouteImport } from './routes/themes.$theme'
+import { Route as ShowcaseChoreoLedgerRouteImport } from './routes/showcase.choreo-ledger'
 import { Route as IdeasIdRouteImport } from './routes/ideas.$id'
 
 const ThemesRoute = ThemesRouteImport.update({
@@ -26,6 +29,11 @@ const ThemesRoute = ThemesRouteImport.update({
 const StrategyRoute = StrategyRouteImport.update({
   id: '/strategy',
   path: '/strategy',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ShowcaseRoute = ShowcaseRouteImport.update({
+  id: '/showcase',
+  path: '/showcase',
   getParentRoute: () => rootRouteImport,
 } as any)
 const QuantumPrimerRoute = QuantumPrimerRouteImport.update({
@@ -48,10 +56,20 @@ const ThemesIndexRoute = ThemesIndexRouteImport.update({
   path: '/',
   getParentRoute: () => ThemesRoute,
 } as any)
+const ShowcaseIndexRoute = ShowcaseIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => ShowcaseRoute,
+} as any)
 const ThemesThemeRoute = ThemesThemeRouteImport.update({
   id: '/$theme',
   path: '/$theme',
   getParentRoute: () => ThemesRoute,
+} as any)
+const ShowcaseChoreoLedgerRoute = ShowcaseChoreoLedgerRouteImport.update({
+  id: '/choreo-ledger',
+  path: '/choreo-ledger',
+  getParentRoute: () => ShowcaseRoute,
 } as any)
 const IdeasIdRoute = IdeasIdRouteImport.update({
   id: '/ideas/$id',
@@ -63,10 +81,13 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/quantum-primer': typeof QuantumPrimerRoute
+  '/showcase': typeof ShowcaseRouteWithChildren
   '/strategy': typeof StrategyRoute
   '/themes': typeof ThemesRouteWithChildren
   '/ideas/$id': typeof IdeasIdRoute
+  '/showcase/choreo-ledger': typeof ShowcaseChoreoLedgerRoute
   '/themes/$theme': typeof ThemesThemeRoute
+  '/showcase/': typeof ShowcaseIndexRoute
   '/themes/': typeof ThemesIndexRoute
 }
 export interface FileRoutesByTo {
@@ -75,7 +96,9 @@ export interface FileRoutesByTo {
   '/quantum-primer': typeof QuantumPrimerRoute
   '/strategy': typeof StrategyRoute
   '/ideas/$id': typeof IdeasIdRoute
+  '/showcase/choreo-ledger': typeof ShowcaseChoreoLedgerRoute
   '/themes/$theme': typeof ThemesThemeRoute
+  '/showcase': typeof ShowcaseIndexRoute
   '/themes': typeof ThemesIndexRoute
 }
 export interface FileRoutesById {
@@ -83,10 +106,13 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/quantum-primer': typeof QuantumPrimerRoute
+  '/showcase': typeof ShowcaseRouteWithChildren
   '/strategy': typeof StrategyRoute
   '/themes': typeof ThemesRouteWithChildren
   '/ideas/$id': typeof IdeasIdRoute
+  '/showcase/choreo-ledger': typeof ShowcaseChoreoLedgerRoute
   '/themes/$theme': typeof ThemesThemeRoute
+  '/showcase/': typeof ShowcaseIndexRoute
   '/themes/': typeof ThemesIndexRoute
 }
 export interface FileRouteTypes {
@@ -95,10 +121,13 @@ export interface FileRouteTypes {
     | '/'
     | '/about'
     | '/quantum-primer'
+    | '/showcase'
     | '/strategy'
     | '/themes'
     | '/ideas/$id'
+    | '/showcase/choreo-ledger'
     | '/themes/$theme'
+    | '/showcase/'
     | '/themes/'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -107,17 +136,22 @@ export interface FileRouteTypes {
     | '/quantum-primer'
     | '/strategy'
     | '/ideas/$id'
+    | '/showcase/choreo-ledger'
     | '/themes/$theme'
+    | '/showcase'
     | '/themes'
   id:
     | '__root__'
     | '/'
     | '/about'
     | '/quantum-primer'
+    | '/showcase'
     | '/strategy'
     | '/themes'
     | '/ideas/$id'
+    | '/showcase/choreo-ledger'
     | '/themes/$theme'
+    | '/showcase/'
     | '/themes/'
   fileRoutesById: FileRoutesById
 }
@@ -125,6 +159,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AboutRoute: typeof AboutRoute
   QuantumPrimerRoute: typeof QuantumPrimerRoute
+  ShowcaseRoute: typeof ShowcaseRouteWithChildren
   StrategyRoute: typeof StrategyRoute
   ThemesRoute: typeof ThemesRouteWithChildren
   IdeasIdRoute: typeof IdeasIdRoute
@@ -144,6 +179,13 @@ declare module '@tanstack/react-router' {
       path: '/strategy'
       fullPath: '/strategy'
       preLoaderRoute: typeof StrategyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/showcase': {
+      id: '/showcase'
+      path: '/showcase'
+      fullPath: '/showcase'
+      preLoaderRoute: typeof ShowcaseRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/quantum-primer': {
@@ -174,12 +216,26 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ThemesIndexRouteImport
       parentRoute: typeof ThemesRoute
     }
+    '/showcase/': {
+      id: '/showcase/'
+      path: '/'
+      fullPath: '/showcase/'
+      preLoaderRoute: typeof ShowcaseIndexRouteImport
+      parentRoute: typeof ShowcaseRoute
+    }
     '/themes/$theme': {
       id: '/themes/$theme'
       path: '/$theme'
       fullPath: '/themes/$theme'
       preLoaderRoute: typeof ThemesThemeRouteImport
       parentRoute: typeof ThemesRoute
+    }
+    '/showcase/choreo-ledger': {
+      id: '/showcase/choreo-ledger'
+      path: '/choreo-ledger'
+      fullPath: '/showcase/choreo-ledger'
+      preLoaderRoute: typeof ShowcaseChoreoLedgerRouteImport
+      parentRoute: typeof ShowcaseRoute
     }
     '/ideas/$id': {
       id: '/ideas/$id'
@@ -190,6 +246,20 @@ declare module '@tanstack/react-router' {
     }
   }
 }
+
+interface ShowcaseRouteChildren {
+  ShowcaseChoreoLedgerRoute: typeof ShowcaseChoreoLedgerRoute
+  ShowcaseIndexRoute: typeof ShowcaseIndexRoute
+}
+
+const ShowcaseRouteChildren: ShowcaseRouteChildren = {
+  ShowcaseChoreoLedgerRoute: ShowcaseChoreoLedgerRoute,
+  ShowcaseIndexRoute: ShowcaseIndexRoute,
+}
+
+const ShowcaseRouteWithChildren = ShowcaseRoute._addFileChildren(
+  ShowcaseRouteChildren,
+)
 
 interface ThemesRouteChildren {
   ThemesThemeRoute: typeof ThemesThemeRoute
@@ -208,6 +278,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AboutRoute: AboutRoute,
   QuantumPrimerRoute: QuantumPrimerRoute,
+  ShowcaseRoute: ShowcaseRouteWithChildren,
   StrategyRoute: StrategyRoute,
   ThemesRoute: ThemesRouteWithChildren,
   IdeasIdRoute: IdeasIdRoute,

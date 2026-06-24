@@ -79,7 +79,7 @@ export default function PrivyClientEntry({ children }: { children: ReactNode }) 
       appId={privyCfg.appId}
       config={{
         loginMethods: ["google", "email"],
-        embeddedWallets: { createOnLogin: "users-without-wallets" },
+        embeddedWallets: { ethereum: { createOnLogin: "users-without-wallets" } },
         appearance: { theme: "dark", accentColor: "#d4a574" },
       }}
     >
