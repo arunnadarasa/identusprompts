@@ -22,6 +22,7 @@ function SiteHeader() {
         </Link>
         <nav className="flex items-center gap-1 text-sm">
           <NavLink to="/themes">Themes</NavLink>
+          <NavLink to="/strategy">Strategy</NavLink>
           <NavLink to="/quantum-primer">Quantum primer</NavLink>
           <NavLink to="/about">About</NavLink>
           <a
