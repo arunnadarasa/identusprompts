@@ -59,7 +59,7 @@ function IdeaPage() {
           <span className="eyebrow block mb-6">
             {theme.emoji} {theme.name} · {idea.subDiscipline}
           </span>
-          <h1 className="font-display text-5xl sm:text-6xl md:text-7xl leading-[0.95] text-foreground">
+          <h1 className="font-display text-4xl sm:text-6xl md:text-7xl leading-[0.95] text-foreground break-words">
             {idea.title}
           </h1>
           <p className="mt-7 text-lg sm:text-xl text-muted-foreground leading-relaxed font-light max-w-3xl">{idea.pitch}</p>
@@ -68,7 +68,7 @@ function IdeaPage() {
           </div>
         </header>
 
-        <section className="mt-12 p-8 sm:p-10 border border-primary/30 bg-card relative overflow-hidden">
+        <section className="mt-12 p-5 sm:p-10 border border-primary/30 bg-card relative overflow-hidden">
           <div className="absolute -top-24 -right-24 w-72 h-72 rounded-full gold-bloom blur-3xl opacity-60 pointer-events-none" />
           <div className="relative flex items-baseline justify-between gap-4 mb-5">
             <div>
@@ -136,7 +136,7 @@ function IdeaPage() {
             Paste into a fresh Lovable project. Make sure all five secrets above are set first.{" "}
             <Link to="/strategy" className="story-gold text-primary">read the build strategy →</Link>
           </p>
-          <pre className="whitespace-pre-wrap break-words [overflow-wrap:anywhere] font-mono text-[12px] sm:text-[13px] leading-relaxed p-4 sm:p-8 border border-border bg-card text-foreground/90 max-w-full overflow-x-hidden" style={{ fontFamily: "'JetBrains Mono', ui-monospace, monospace", letterSpacing: 0 }}>
+          <pre className="whitespace-pre-wrap break-all font-mono text-[11px] sm:text-[13px] leading-relaxed p-4 sm:p-8 border border-border bg-card text-foreground/90 w-full max-w-full overflow-x-hidden" style={{ fontFamily: "'JetBrains Mono', ui-monospace, monospace", letterSpacing: 0, wordBreak: "break-word", overflowWrap: "anywhere" }}>
 {idea.megaPrompt}
           </pre>
           <div className="mt-5 flex flex-wrap gap-3 text-[10px] uppercase tracking-[0.28em]">
