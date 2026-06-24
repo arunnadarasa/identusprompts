@@ -77,14 +77,18 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Lovable App" },
-      { name: "description", content: "Lovable Generated Project" },
+      { title: "Quantum Prompts Library" },
+      { name: "description", content: "Quantum Prompts Library for the Creative AI & Quantum Hackathon" },
       { name: "author", content: "Lovable" },
-      { property: "og:title", content: "Lovable App" },
-      { property: "og:description", content: "Lovable Generated Project" },
+      { property: "og:title", content: "Quantum Prompts Library" },
+      { property: "og:description", content: "Quantum Prompts Library for the Creative AI & Quantum Hackathon" },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
       { name: "twitter:site", content: "@Lovable" },
+      { name: "twitter:title", content: "Quantum Prompts Library" },
+      { name: "twitter:description", content: "Quantum Prompts Library for the Creative AI & Quantum Hackathon" },
+      { property: "og:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/attachments/og-images/4e1b70f0-572e-4f49-9c65-c3963b666a47" },
+      { name: "twitter:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/attachments/og-images/4e1b70f0-572e-4f49-9c65-c3963b666a47" },
     ],
     links: [
       {
