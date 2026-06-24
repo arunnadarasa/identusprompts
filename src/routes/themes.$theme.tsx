@@ -51,39 +51,43 @@ function ThemePage() {
 
   return (
     <SiteShell>
-      <section className="max-w-6xl mx-auto px-5 pt-5 sm:pt-12 pb-3 sm:pb-6">
-        <div className="flex items-center gap-1.5 font-mono-q text-[10px] sm:text-[11px] uppercase tracking-wider">
-          <Link to="/themes" className="text-muted-foreground hover:text-foreground">Themes</Link>
-          <span className="text-muted-foreground">/</span>
-          <span className="text-accent truncate">{theme.slug}</span>
+      <section className="max-w-7xl mx-auto px-5 sm:px-8 pt-10 sm:pt-20 pb-10 animate-fade-in">
+        <div className="flex items-center gap-2 eyebrow text-muted-foreground">
+          <Link to="/themes" className="hover:text-primary transition-colors">Index</Link>
+          <span>/</span>
+          <span className="text-primary">{theme.slug}</span>
         </div>
-        <div className="mt-2 sm:mt-3 flex flex-col sm:flex-row sm:items-center gap-1.5 sm:gap-3">
-          <span className="text-3xl sm:text-4xl">{theme.emoji}</span>
-          <h1 className="font-display text-[26px] leading-[1.05] sm:text-5xl font-bold min-w-0">{theme.name}</h1>
-        </div>
-        <div className="mt-3 flex flex-wrap items-center gap-1.5">
-          <span className="inline-flex items-center px-2 py-0.5 rounded-full bg-primary/10 border border-primary/30 text-primary font-mono-q text-[10px]">
-            {ideas.length} ideas
-          </span>
-          <span className="inline-flex items-center px-2 py-0.5 rounded-full bg-accent/10 border border-accent/30 text-accent font-mono-q text-[10px]">
-            {new Set(ideas.map((i) => i.quantumHookId)).size} hooks
-          </span>
-        </div>
-        <p className="text-xs sm:text-sm text-muted-foreground mt-2 line-clamp-2">
-          For {theme.audience}.
-        </p>
+        <header className="mt-6 flex flex-col md:flex-row md:items-end md:justify-between border-b border-border pb-8 gap-6">
+          <div className="max-w-3xl">
+            <span className="eyebrow block mb-4">House · {theme.audience}</span>
+            <div className="flex items-center gap-5">
+              <span className="text-5xl sm:text-6xl">{theme.emoji}</span>
+              <h1 className="font-display text-5xl sm:text-7xl leading-[0.95] italic text-foreground">{theme.name}</h1>
+            </div>
+          </div>
+          <div className="flex gap-8 font-display">
+            <div>
+              <div className="text-3xl italic text-primary leading-none">{ideas.length}</div>
+              <div className="eyebrow text-muted-foreground mt-2">Entries</div>
+            </div>
+            <div>
+              <div className="text-3xl italic text-primary leading-none">{new Set(ideas.map((i) => i.quantumHookId)).size}</div>
+              <div className="eyebrow text-muted-foreground mt-2">Kernels</div>
+            </div>
+          </div>
+        </header>
       </section>
 
-      <section className="max-w-6xl mx-auto px-5 md:sticky md:top-[68px] z-30 bg-background/85 backdrop-blur-md py-3 sm:py-4 border-y border-border">
-        <div className="flex flex-col md:flex-row md:items-center gap-2.5 md:gap-3">
+      <section className="max-w-7xl mx-auto px-5 sm:px-8 md:sticky md:top-[76px] z-30 bg-background/85 backdrop-blur-md py-4 sm:py-5 border-b border-border">
+        <div className="flex flex-col md:flex-row md:items-center gap-3">
           <input
             value={q}
             onChange={(e) => setQ(e.target.value)}
-            placeholder="Search ideas…"
-            className="flex-1 px-4 py-2.5 rounded-md bg-input border border-border text-[15px] sm:text-sm focus:outline-none focus:border-accent"
+            placeholder="Search entries…"
+            className="flex-1 px-4 py-3 bg-transparent border border-border text-sm font-light focus:outline-none focus:border-primary text-foreground placeholder:text-muted-foreground transition-colors"
           />
           <div
-            className="flex md:flex-wrap gap-1.5 overflow-x-auto -mx-5 px-5 md:mx-0 md:px-0 md:overflow-visible pb-1 md:pb-0"
+            className="flex md:flex-wrap gap-2 overflow-x-auto -mx-5 px-5 md:mx-0 md:px-0 md:overflow-visible pb-1 md:pb-0"
             style={{
               WebkitMaskImage:
                 "linear-gradient(to right, black 0, black calc(100% - 24px), transparent 100%)",
@@ -104,17 +108,17 @@ function ThemePage() {
         </div>
       </section>
 
-      <section className="max-w-6xl mx-auto px-5 py-6 sm:py-8">
-        <p className="text-xs text-muted-foreground font-mono-q mb-4">
-          {filtered.length} / {ideas.length} ideas shown
+      <section className="max-w-7xl mx-auto px-5 sm:px-8 py-10 sm:py-14">
+        <p className="eyebrow text-muted-foreground mb-6">
+          Showing {filtered.length} of {ideas.length} entries
         </p>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-px bg-border">
           {filtered.map((i) => (
             <IdeaCard key={i.id} idea={i} />
           ))}
         </div>
         {filtered.length === 0 && (
-          <div className="text-center py-16 text-muted-foreground">No ideas match. Clear filters?</div>
+          <div className="text-center py-20 font-display text-2xl italic text-muted-foreground">No entries match. Clear the filter?</div>
         )}
       </section>
     </SiteShell>
@@ -125,10 +129,10 @@ function FilterChip({ active, onClick, children }: { active: boolean; onClick: (
   return (
     <button
       onClick={onClick}
-      className={`shrink-0 whitespace-nowrap px-2.5 py-1 rounded-full text-[11px] font-mono-q normal-case tracking-wide border transition ${
+      className={`shrink-0 whitespace-nowrap px-3 py-1.5 text-[10px] tracking-[0.24em] uppercase font-semibold border transition-colors duration-500 ${
         active
-          ? "bg-accent text-accent-foreground border-accent"
-          : "border-border text-muted-foreground hover:text-foreground hover:border-accent/50"
+          ? "bg-primary text-primary-foreground border-primary"
+          : "border-border text-muted-foreground hover:text-primary hover:border-primary/50"
       }`}
     >
       {children}
