@@ -1,0 +1,154 @@
+#!/usr/bin/env python3
+"""Rewrite the `megaPrompt` field on every idea to fit the 5-credit Lovable budget.
+
+Reads each src/data/ideas/<theme>.json, keeps title/pitch/subDiscipline/quantum*
+intact, and replaces megaPrompt with a tight, copy-pasteable build prompt.
+
+No API calls. Idempotent.
+"""
+import json, re, pathlib
+
+ROOT = pathlib.Path(__file__).resolve().parents[1]
+DATA = ROOT / "src" / "data" / "ideas"
+THEMES = json.loads((DATA / "themes.json").read_text())
+
+CREDIT = ("Built during the Creative AI & Quantum Hackathon organised by "
+          "StreetKode Fam during Indian Krump Festival 14")
+
+SECRETS = """REQUIRED SECRETS (Lovable -> Project Settings -> Secrets):
+- METAMASK_PRIVATE_KEY  Sepolia deployer key. Fund it: https://cloud.google.com/application/web3/faucet/ethereum/sepolia
+- ETHERSCAN_API_KEY     For `npx hardhat verify`. Get: https://etherscan.io/myapikey
+- PRIVY_APP_ID          Google sign-in + sponsored tx. Docs: https://docs.privy.io/llms-full.txt
+- PINATA_JWT            IPFS uploads (only if app pins media). Docs: https://docs.pinata.cloud/llms-full.txt
+- SEPOLIA_RPC_URL       Optional. Public RPC used by default."""
+
+BUDGET = """5-CREDIT BUDGET (HARD LIMIT):
+- ONE single-page app. No router, no Lovable Cloud, no database, no auth flows beyond Privy drop-in.
+- ONE Solidity contract, <=80 lines, deployed to Sepolia, verified on Etherscan.
+- Privy is always the auth + sponsored-tx layer (Google login, embedded wallet).
+- Pinata/IPFS only if the idea genuinely needs to store a file or metadata.
+- At most ONE AI call per user action (use Lovable AI Gateway with LOVABLE_API_KEY if AI is part of the idea).
+- Skip tests, skip CI, skip docs pages. Ship the demo, nothing else."""
+
+def safe_name(title: str, fallback: str) -> str:
+    return re.sub(r"[^A-Za-z0-9]", "", title)[:36] or fallback
+
+def contract_log(title: str, pitch: str) -> str:
+    n = safe_name(title, "Provenance")
+    return f"""// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.24;
+/// @title {n}
+/// @notice {pitch}
+/// @notice {CREDIT}
+contract {n} {{
+    event Logged(address indexed author, string cid, uint256 at);
+    /// @notice {CREDIT}
+    function log(string calldata cid) external {{
+        emit Logged(msg.sender, cid, block.timestamp);
+    }}
+}}"""
+
+def contract_nft(title: str, pitch: str) -> str:
+    n = safe_name(title, "ProvenanceNFT")
+    sym = (n[:6] or "PROV").upper()
+    return f"""// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.24;
+import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
+/// @title {n}
+/// @notice ERC-721 provenance for: {pitch}
+/// @notice {CREDIT}
+contract {n} is ERC721 {{
+    uint256 public nextId;
+    mapping(uint256 => string) public cidOf;
+    constructor() ERC721("{n}", "{sym}") {{}}
+    /// @notice {CREDIT}
+    function mint(string calldata cid) external returns (uint256 id) {{
+        id = ++nextId; cidOf[id] = cid; _safeMint(msg.sender, id);
+    }}
+    function tokenURI(uint256 id) public view override returns (string memory) {{
+        return string(abi.encodePacked("ipfs://", cidOf[id]));
+    }}
+}}"""
+
+def needs_ipfs(hook_id: str) -> bool:
+    return hook_id in ("ipfs-pinata", "nft-provenance")
+
+def make_prompt(idea: dict, theme: dict) -> str:
+    title = idea["title"]; pitch = idea["pitch"]; sub = idea["subDiscipline"]
+    hid = idea.get("quantumHookId") or idea.get("chainHookId") or "sepolia-deploy"
+    hook_name = idea.get("quantumHook") or "Sepolia smart contract"
+    rationale = idea.get("quantumRationale") or ""
+
+    if hid == "nft-provenance":
+        contract = contract_nft(title, pitch)
+        action = (f"After the user creates a {sub} artefact, pin the file to IPFS via Pinata, "
+                  f"then call `mint(cid)` on the deployed contract through Privy's sponsored transaction. "
+                  f"Show tokenId, IPFS preview (`https://gateway.pinata.cloud/ipfs/<cid>`), and Etherscan mint-tx link.")
+    elif hid == "ipfs-pinata":
+        contract = contract_log("CIDLog" + safe_name(title, "Idea"), pitch)
+        action = (f"On submit, pin the {sub} artefact to Pinata, then call `log(cid)` on the contract via Privy sponsored tx. "
+                  f"Render the CID, IPFS gateway preview, and Etherscan tx link.")
+    elif hid == "privy-social":
+        contract = contract_log("SocialLog" + safe_name(title, "Idea"), pitch)
+        action = (f"Every {sub} action the user performs is sent as a sponsored Sepolia tx (`log(payload)`) "
+                  f"and displayed with an Etherscan link. No wallet popups.")
+    else:  # sepolia-deploy
+        contract = contract_log(title, pitch)
+        action = (f"User performs a {sub} action; the app calls `log(payload)` on the contract via Privy sponsored tx "
+                  f"and shows the Etherscan link as proof.")
+
+    ipfs_step = ("- src/lib/pinata.ts uploads via `fetch('https://api.pinata.cloud/pinning/pinFileToIPFS', "
+                 "{ method:'POST', headers:{ Authorization: `Bearer ${import.meta.env.VITE_PINATA_JWT}` }, body: fd })`.\n"
+                 if needs_ipfs(hid) else "")
+
+    return f"""Build "{title}" in ONE Lovable message. Single-page demo.
+
+CONCEPT
+{pitch}
+Discipline: {theme['name']} ({sub}).
+Onchain primitive: {hook_name}. Why this primitive: {rationale}
+
+{BUDGET}
+
+STACK
+- React + Vite single page (the index route).
+- Privy embedded wallet wraps `<App />` in src/main.tsx:
+    <PrivyProvider appId={{import.meta.env.VITE_PRIVY_APP_ID}}
+      config={{{{ loginMethods:['google'], embeddedWallets:{{createOnLogin:'users-without-wallets'}},
+                defaultChain:{{ id: 11155111, name:'Sepolia' }} }}}}>
+- All txs via Privy `useSendTransaction` with `{{ sponsor: true }}` (zero-gas for the user).
+{ipfs_step}- Hardhat in /contracts, deploy with METAMASK_PRIVATE_KEY + SEPOLIA_RPC_URL, then
+  `npx hardhat verify --network sepolia <address>` using ETHERSCAN_API_KEY.
+- Write the deployed address to `src/data/contract.json` so the UI links to
+  `https://sepolia.etherscan.io/address/<address>`.
+
+CONTRACT (contracts/{safe_name(title,'Provenance')}.sol):
+```solidity
+{contract}
+```
+
+USER FLOW
+1. Land on page -> 'Sign in with Google' (Privy) -> embedded wallet auto-provisioned.
+2. {action}
+3. Footer renders: "{CREDIT}"
+
+{SECRETS}
+
+CREDIT (must appear in UI footer AND as NatSpec on every deployed contract):
+{CREDIT}
+"""
+
+def main():
+    total = 0
+    for t in THEMES:
+        p = DATA / f"{t['slug']}.json"
+        doc = json.loads(p.read_text())
+        for idea in doc["ideas"]:
+            idea["megaPrompt"] = make_prompt(idea, t)
+            total += 1
+        p.write_text(json.dumps(doc, indent=2, ensure_ascii=False))
+        print(f"  {t['slug']}: {len(doc['ideas'])} prompts rewritten")
+    print(f"total: {total}")
+
+if __name__ == "__main__":
+    main()
