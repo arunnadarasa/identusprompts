@@ -19,7 +19,7 @@ function About() {
     <SiteShell>
       <article className="max-w-2xl mx-auto px-5 pt-16 pb-20 prose prose-invert">
         <span className="font-mono-q text-[11px] tracking-[0.2em] uppercase text-accent">// about</span>
-        <h1 className="font-display text-5xl font-bold mt-3 mb-6">A starter pack for the Creative Quantum hackathon.</h1>
+        <h1 className="font-display text-4xl sm:text-5xl font-bold mt-3 mb-6">A starter pack for the Creative Quantum hackathon.</h1>
         <p className="text-lg text-muted-foreground leading-relaxed">
           Hackathons live or die on the first hour. This repo gives Creative Quantum participants a 1,000-idea
           launchpad so you skip the blank page and start shipping.

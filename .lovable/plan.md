@@ -1,64 +1,34 @@
-# Refine every mega-prompt with AIsa
+## Goal
+Fix mobile UX issues visible on a ~384px viewport: header overflows off-screen (nav + Hackathon button), hero text is too large, CTAs and grids feel cramped.
 
-AIsa is OpenAI-compatible at `https://api.aisa.one/v1` with a bearer `AISA_API_KEY`. I'll use it as a one-off, offline batch to upgrade all 1,000 mega-prompts, then ship the improved JSON. No runtime API calls, no Lovable Cloud, no frontend changes — the site keeps loading static JSON.
+## Changes
 
-## Step 1 — Store the key
+### 1. `src/components/site-shell.tsx` — responsive header
+- On mobile (`<md`): show logo + hamburger button only. Hide inline nav.
+- Tap hamburger → open shadcn `Sheet` (right side) with vertical nav links (Themes, Strategy, Quantum primer, About, Hackathon ↗). Close on link click.
+- On `md+`: keep current inline nav unchanged.
+- Shrink logo wordmark on mobile (`text-base md:text-lg`) and drop the `|0⟩+|1⟩` prefix below `sm` so the title doesn't wrap.
+- Footer: stack on mobile (already `flex-wrap`, OK) — minor: smaller text + `gap-2`.
 
-When build mode starts, request `AISA_API_KEY` via `add_secret`. The key is only read by the offline refinement script (`/tmp/refine_prompts.py`) executed in this sandbox; it is never bundled into the client or shipped to Cloudflare.
+### 2. `src/routes/index.tsx` — hero + grids
+- Hero `h1`: `text-4xl sm:text-5xl md:text-7xl` (currently jumps straight to 6xl).
+- Hero padding: `pt-12 sm:pt-20`.
+- Lede paragraph: `text-base sm:text-lg`.
+- CTA buttons: full-width on mobile (`w-full sm:w-auto`) inside `flex-col sm:flex-row`.
+- Stats grid: keep 2-col on mobile but reduce number size to `text-3xl sm:text-4xl`.
+- Themes grid: already 2-col on mobile ✓.
+- Section vertical padding: `py-8 sm:py-12`.
 
-## Step 2 — Model choice
+### 3. Other pages — quick parity pass
+Apply the same hero scale-down pattern (h1 starts at `text-4xl sm:text-5xl`) to:
+- `src/routes/themes.tsx`
+- `src/routes/themes.$theme.tsx`
+- `src/routes/ideas.$id.tsx`
+- `src/routes/strategy.tsx`
+- `src/routes/quantum-primer.tsx`
+- `src/routes/about.tsx`
 
-Default: `**gpt-5-mini**` via `POST /v1/chat/completions` — strong instruction-following, $0.15 in / $1.20 out per 1M tokens. Estimated total for 1,000 refinements (~600 in + ~400 out tokens each): **≈ $0.60–$1.20**. (Fallback if rate-limited: `gemini-3.5-flash`.) I'll set `temperature: 0.4` and force a JSON response so parsing is robust.
+No structural/content changes — only Tailwind class adjustments + the Sheet-based mobile nav.
 
-## Step 3 — The refinement task per idea
-
-For each of the 1,000 ideas I send:
-
-- The original generated mega-prompt
-- The idea's `title`, `pitch`, `subDiscipline`, `quantumHook`, `quantumHookId`, kernel description, and the grid shape (e.g. "10×10 fidelities")
-- A system prompt that locks in the non-negotiables:
-
-```text
-You are a senior Lovable + Quantinuum hackathon prompt engineer.
-
-Rewrite the user-supplied mega-prompt so a free-tier Lovable account (~5 build
-credits) can ship a real-quantum demo in ONE build message. Keep ALL of:
-
-  - the build-time quantum pattern (pip install guppylang selene-sim in the
-    Lovable Linux sandbox; quantum/kernel.py + quantum/run.py; output to
-    src/data/quantum-results.json; React reads it statically)
-  - the specific Guppy/Selene kernel and grid shape provided
-  - one page (workspace) + "About the quantum" strip; no Cloud, no auth, no DB
-  - the "Quantum trace" disclosure showing raw output + kernel.py source
-  - the explicit "ship in one message, ~5 credits" budget warning
-
-Make it sharper, more concrete, and easier for the Lovable agent to act on:
-- name the exact files, imports, and selene_sim APIs to use
-- collapse fluff; aim for ~250-320 words
-- write the UI in concrete shadcn/Tailwind nouns (Card, Slider, Tabs) instead of vague layouts
-- add a 4-step "Build order" the agent must follow to avoid scope creep
-
-Return JSON: { "megaPrompt": "<the refined prompt as a single string>" }.
-Do not return anything else.
-```
-
-## Step 4 — Offline batch runner
-
-Script at `/tmp/refine_prompts.py`:
-
-- Loads `src/data/ideas/*.json` (the 10 theme files plus hooks/themes manifests).
-- Iterates ideas, calls AIsa with the prompt above. Concurrency ~8 with retry/backoff on 429/5xx.
-- Validates each response (JSON parse, length 150–500 words, contains the required substrings: `pip install guppylang selene-sim`, `quantum/kernel.py`, `quantum-results.json`, `~5 credits`). Failures fall back to the existing prompt and are logged.
-- Writes the refined `megaPrompt` back in place. Saves an audit log to `/tmp/refine_log.json`.
-
-I'll start by refining a 5-idea sample (one per major theme), spot-check the output, then run the full 1,000. If the sample looks wrong I'll adjust the system prompt before burning the rest of the budget.
-
-## Step 5 — Ship
-
-Re-read 3 random ideas across 3 themes to confirm the refined prompts still pass the acceptance checklist from the previous plan (sandbox instructions, JSON output, 5-credit warning, ≤~350 words). No UI changes needed — the idea detail page already renders `idea.megaPrompt`.
-
-## Open question
-
-Use `gpt-5-mini` as proposed, or do you want a different model from the AIsa catalog (e.g. `claude-haiku-4-5-20251001` for tighter writing, or `qwen-flash` to save ~10× on cost)? If you don't say, I'll go with `gpt-5-mini`. 
-
-use Claude haiku for tighter writing
+## Verification
+After build, set preview viewport to mobile and confirm: header fits, no horizontal scroll, hamburger opens drawer, hero readable, CTAs tappable.

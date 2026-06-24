@@ -19,7 +19,7 @@ function Primer() {
     <SiteShell>
       <section className="max-w-3xl mx-auto px-5 pt-14 pb-10">
         <span className="font-mono-q text-[11px] tracking-[0.2em] uppercase text-accent">// primer</span>
-        <h1 className="font-display text-5xl font-bold mt-3">Quantum hooks, demystified.</h1>
+        <h1 className="font-display text-4xl sm:text-5xl font-bold mt-3">Quantum hooks, demystified.</h1>
         <p className="mt-4 text-muted-foreground leading-relaxed">
           Each idea in the repo leans on one of ten quantum primitives. Build the kernel in Guppy, run it on Selene
           (Quantinuum's emulator), and drop the output into a Lovable UI. Keep it small — &lt;10 qubits, a few hundred shots.
