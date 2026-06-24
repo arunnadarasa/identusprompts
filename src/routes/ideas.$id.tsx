@@ -59,7 +59,7 @@ function IdeaPage() {
           <span className="eyebrow block mb-6">
             {theme.emoji} {theme.name} · {idea.subDiscipline}
           </span>
-          <h1 className="font-display text-5xl sm:text-6xl md:text-7xl leading-[0.95] text-foreground">
+          <h1 className="font-display text-4xl sm:text-6xl md:text-7xl leading-[0.95] text-foreground break-words">
             {idea.title}
           </h1>
           <p className="mt-7 text-lg sm:text-xl text-muted-foreground leading-relaxed font-light max-w-3xl">{idea.pitch}</p>
@@ -68,7 +68,7 @@ function IdeaPage() {
           </div>
         </header>
 
-        <section className="mt-12 p-8 sm:p-10 border border-primary/30 bg-card relative overflow-hidden">
+        <section className="mt-12 p-5 sm:p-10 border border-primary/30 bg-card relative overflow-hidden">
           <div className="absolute -top-24 -right-24 w-72 h-72 rounded-full gold-bloom blur-3xl opacity-60 pointer-events-none" />
           <div className="relative flex items-baseline justify-between gap-4 mb-5">
             <div>
