@@ -1,30 +1,66 @@
-# Regenerate the remaining ideas via AISA (parallel)
+# Choreo Ledger live demo (showcase test run)
 
-## Current state
+## What ships
 
-The checkpoint at `scripts/.regen-checkpoint.json` has all 40 (theme × hook) batches cached, but it doesn't record which provider produced each one. From the prior run, roughly 12 batches came from AISA (~300 ideas) and ~28 from the Lovable fallback (~700 ideas). We can't reliably tell them apart per-batch.
+A working Sepolia demo embedded at `/showcase/choreo-ledger`, plus a tiny `/showcase` index that lists future demos.
 
-## Approach
+**Flow**: user lands → Google sign-in via Privy (embedded wallet auto-created) → pastes a choreography title / IPFS CID / hash → clicks "Log on Sepolia" → Privy sends a sponsored tx calling `log(string)` on the deployed contract → UI shows the tx hash + Etherscan link + a live feed of all `Logged` events.
 
-Since the AISA balance is healthy ($16.97), the safest and simplest fix is to **re-run all 40 batches through AISA only** with parallel workers. This guarantees every idea is AISA-generated and is faster than trying to detect-and-replace.
+## Contract
 
-Changes to `scripts/regenerate_ideas.py`:
+`contracts/ChoreoLedger.sol` — single contract, ~30 lines, includes the hackathon NatSpec credit:
 
-- **Drop the checkpoint** before running so every batch hits AISA fresh (rename to `.regen-checkpoint.lovable-mixed.json` for safety, don't delete).
-- **AISA-only mode**: add `AISA_ONLY=1` env flag that disables the Lovable fallback so a bad batch surfaces as a hard error instead of silently degrading.
-- **Concurrency 8** workers (up from 2) — 40 batches finish in ~5 waves.
-- **Retries**: keep 6 retries with exponential backoff; on AISA 429, back off longer.
-- **Model**: `qwen3.7-max` (per AISA docs default).
-- **Per-batch logging**: print `[done X/40] theme::hook -> 25 ideas` so progress is visible.
+```solidity
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.24;
+/// @title ChoreoLedger
+/// @notice Timestamp original choreography on Sepolia.
+/// @notice Built during the Creative AI & Quantum Hackathon organised by
+///         StreetKode Fam during Indian Krump Festival 14
+contract ChoreoLedger {
+    event Logged(address indexed author, string cid, uint256 at);
+    function log(string calldata cid) external {
+        emit Logged(msg.sender, cid, block.timestamp);
+    }
+}
+```
 
-After AISA returns, the script rebuilds each theme JSON using the **lean 5-credit `make_prompt()`** template already in `scripts/rewrite_mega_prompts.py` (single-page, Privy + 1 contract + optional Pinata, hackathon credit in NatSpec + UI footer). No template regression — the budget rules from the last approved plan stay intact.
+## Deploy pipeline (run once in the sandbox)
+
+1. `bun add -D hardhat @nomicfoundation/hardhat-toolbox` in a sibling `/contracts` workspace (kept out of the Vite bundle).
+2. `hardhat.config.ts` reads `METAMASK_PRIVATE_KEY`, `SEPOLIA_RPC_URL` (defaults to `https://ethereum-sepolia-rpc.publicnode.com`), `ETHERSCAN_API_KEY`.
+3. `npx hardhat run scripts/deploy.ts --network sepolia` → captures the deployed address.
+4. `npx hardhat verify --network sepolia <addr>` → Etherscan verification.
+5. Write `{ address, txHash, chainId: 11155111, deployedAt }` to `src/data/contract.json`. Also write `src/data/privy.json` with the `PRIVY_APP_ID` (Privy app IDs are public — safe to commit).
+
+If deploy fails (faucet not topped up, RPC down), I stop and report — no half-baked frontend.
+
+## Frontend
+
+- New route `src/routes/showcase.tsx` (layout with `<Outlet/>`) and `src/routes/showcase.index.tsx` (lists demos).
+- New leaf `src/routes/showcase.choreo-ledger.tsx`.
+- New `src/components/privy-root.tsx` mounted via `<ClientOnly>` + `lazy()` (per the SSR-safe pattern — Privy crashes workerd if imported at module scope).
+- New `src/lib/use-evvm-signer.ts`-style hook OR a simpler `useChoreoLog()` hook that calls `useSendTransaction({ sponsor: true })`.
+- Uses `viem` to encode `log(string)` calldata and to read past `Logged` events via `createPublicClient({ chain: sepolia, transport: http() })`.
+- Nav: add "Showcase" link in `src/components/site-shell.tsx`.
+
+## Secrets I'll request (in build mode)
+
+| Secret | Purpose | Sensitivity |
+|---|---|---|
+| `METAMASK_PRIVATE_KEY` | Sepolia deploy (sandbox only, never shipped) | High — burner wallet please |
+| `ETHERSCAN_API_KEY` | `npx hardhat verify` | Medium |
+| `PRIVY_APP_ID` | Client-side Privy provider | Low (public) |
+| `SEPOLIA_RPC_URL` | Optional RPC override | Low |
+
+I'll use `add_secret` to collect them securely (you paste into a form, never the chat). `PRIVY_APP_ID` will also be committed to `src/data/privy.json` so the client can read it without a build-time `VITE_` indirection.
+
+## Budget guard
+
+One single-page demo, one contract, one Privy provider, no DB, no Lovable Cloud, no AI calls, no extra routes beyond the two showcase ones. Aiming well under 5 credits.
 
 ## Out of scope
 
-- No UI changes, no field renames.
-- No new secrets, no Lovable Cloud.
-- No edits to themes / hooks lists.
-
-## Risk
-
-If AISA rate-limits at 8 concurrent, backoff handles it. If a batch genuinely fails after all retries, the script logs the failing key and the corresponding theme retains its prior ideas — user can rerun just that batch.
+- No IPFS / Pinata (Choreo Ledger only logs the CID string the user provides).
+- No mobile-specific tweaks; works in the existing Editorial Folio Noir shell.
+- No regeneration of the 1000 prompts.
