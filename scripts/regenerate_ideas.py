@@ -293,7 +293,11 @@ def build_idea(raw: dict, theme: dict, hook: dict, n: int) -> dict:
         "megaPrompt": "",
         "tam": tam, "sam": sam, "som": som,
     }
-    idea["megaPrompt"] = make_mega_prompt(idea, theme, hook)
+    # Use the lean 5-credit prompt builder from rewrite_mega_prompts.py
+    import importlib.util, pathlib as _pl
+    _spec = importlib.util.spec_from_file_location("rmp", _pl.Path(__file__).parent / "rewrite_mega_prompts.py")
+    _rmp = importlib.util.module_from_spec(_spec); _spec.loader.exec_module(_rmp)
+    idea["megaPrompt"] = _rmp.make_prompt(idea, theme)
     return idea
 
 def load_ckpt() -> dict:
