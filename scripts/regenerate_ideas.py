@@ -19,14 +19,15 @@ CKPT = pathlib.Path(__file__).parent / ".regen-checkpoint.json"
 
 AISA_URL = "https://api.aisa.one/v1/chat/completions"
 AISA_KEY = os.environ.get("AISA_API_KEY")
-AISA_MODEL = os.environ.get("AISA_MODEL", "gpt-4.1-mini")
+AISA_MODEL = os.environ.get("AISA_MODEL", "qwen3.7-max")
 
+AISA_ONLY = os.environ.get("AISA_ONLY", "1") != "0"
 LOVABLE_URL = "https://ai.gateway.lovable.dev/v1/chat/completions"
-LOVABLE_KEY = os.environ.get("LOVABLE_API_KEY")
+LOVABLE_KEY = None if AISA_ONLY else os.environ.get("LOVABLE_API_KEY")
 LOVABLE_MODEL = "google/gemini-3-flash-preview"
 
 if not AISA_KEY and not LOVABLE_KEY:
-    print("ERROR: need AISA_API_KEY or LOVABLE_API_KEY", file=sys.stderr); sys.exit(1)
+    print("ERROR: need AISA_API_KEY (AISA_ONLY mode) or LOVABLE_API_KEY", file=sys.stderr); sys.exit(1)
 
 THEMES = json.loads((DATA / "themes.json").read_text())
 HOOKS = json.loads((DATA / "hooks.json").read_text())
@@ -292,7 +293,11 @@ def build_idea(raw: dict, theme: dict, hook: dict, n: int) -> dict:
         "megaPrompt": "",
         "tam": tam, "sam": sam, "som": som,
     }
-    idea["megaPrompt"] = make_mega_prompt(idea, theme, hook)
+    # Use the lean 5-credit prompt builder from rewrite_mega_prompts.py
+    import importlib.util, pathlib as _pl
+    _spec = importlib.util.spec_from_file_location("rmp", _pl.Path(__file__).parent / "rewrite_mega_prompts.py")
+    _rmp = importlib.util.module_from_spec(_spec); _spec.loader.exec_module(_rmp)
+    idea["megaPrompt"] = _rmp.make_prompt(idea, theme)
     return idea
 
 def load_ckpt() -> dict:
@@ -313,7 +318,7 @@ def main():
 
     results: dict = {k: v for k, v in ckpt.items()}  # key -> list of raw ideas
 
-    with ThreadPoolExecutor(max_workers=2) as ex:
+    with ThreadPoolExecutor(max_workers=8) as ex:
         futs = {ex.submit(call_aisa, t, h, i): (t, h, key) for i, (t, h, key) in enumerate(tasks)}
         done = 0
         for f in as_completed(futs):
