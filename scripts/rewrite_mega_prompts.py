@@ -17,10 +17,10 @@ CREDIT = ("Built during the Creative AI & Quantum Hackathon organised by "
 
 SECRETS = """REQUIRED SECRETS (Lovable -> Project Settings -> Secrets):
 - METAMASK_PRIVATE_KEY  Sepolia deployer key. Fund it: https://cloud.google.com/application/web3/faucet/ethereum/sepolia
+- SEPOLIA_RPC_URL       Alchemy Sepolia HTTPS endpoint (https://eth-sepolia.g.alchemy.com/v2/<key>). Create a free app at https://dashboard.alchemy.com/ -> copy the HTTPS URL. Public RPCs throttle/fail under hackathon load — Alchemy is required.
 - ETHERSCAN_API_KEY     For `npx hardhat verify`. Get: https://etherscan.io/myapikey
 - PRIVY_APP_ID          Google sign-in + sponsored tx. Docs: https://docs.privy.io/llms-full.txt
-- PINATA_JWT            IPFS uploads (only if app pins media). Docs: https://docs.pinata.cloud/llms-full.txt
-- SEPOLIA_RPC_URL       Optional. Public RPC used by default."""
+- PINATA_JWT            IPFS uploads (only if app pins media). Docs: https://docs.pinata.cloud/llms-full.txt"""
 
 BUDGET = """5-CREDIT BUDGET (HARD LIMIT):
 - ONE single-page app. No router, no Lovable Cloud, no database, no auth flows beyond Privy drop-in.
