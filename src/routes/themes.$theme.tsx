@@ -7,9 +7,9 @@ import { getTheme, IDEAS_BY_THEME, HOOKS } from "@/data/ideas";
 export const Route = createFileRoute("/themes/$theme")({
   head: ({ params }) => {
     const theme = getTheme(params.theme);
-    const title = theme ? `${theme.name} · 100 quantum hackathon ideas` : "Theme · Creative Quantum";
+    const title = theme ? `${theme.name} · 100 onchain hackathon ideas` : "Theme · Creative Blockchain";
     const desc = theme
-      ? `100 buildable hackathon ideas for ${theme.audience} using Lovable + Quantinuum Guppy/Selene.`
+      ? `100 buildable hackathon ideas for ${theme.audience} using Lovable + Ethereum Sepolia, Privy, Pinata.`
       : "Browse ideas by discipline.";
     return {
       meta: [
@@ -72,7 +72,7 @@ function ThemePage() {
             </div>
             <div>
               <div className="text-3xl italic text-primary leading-none">{new Set(ideas.map((i) => i.quantumHookId)).size}</div>
-              <div className="eyebrow text-muted-foreground mt-2">Kernels</div>
+              <div className="eyebrow text-muted-foreground mt-2">Primitives</div>
             </div>
           </div>
         </header>

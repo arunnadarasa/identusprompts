@@ -5,168 +5,186 @@ import { CopyButton } from "@/components/copy-button";
 export const Route = createFileRoute("/strategy")({
   head: () => ({
     meta: [
-      { title: "Build strategy — real quantum on 5 free credits" },
-      { name: "description", content: "How to ship a real Quantinuum Guppy/Selene demo on Lovable's free plan: run the kernel in the Linux sandbox at build time, precompute results, ship a static frontend." },
-      { property: "og:title", content: "Real quantum on 5 free credits" },
-      { property: "og:description", content: "Build-time quantum pattern for Lovable + Quantinuum Selene/Guppy hackathon entries." },
+      { title: "Build strategy — verifiable onchain demos in one Lovable build" },
+      { name: "description", content: "How to ship a Sepolia-verified web3 demo in a single Lovable build: five secrets, one paste, contract live on Etherscan, assets pinned on IPFS, sign-in via Privy." },
+      { property: "og:title", content: "Real onchain in one Lovable build" },
+      { property: "og:description", content: "Build-time pattern for Lovable + Ethereum Sepolia hackathon entries." },
     ],
   }),
   component: StrategyPage,
 });
 
-const KERNEL_SNIPPET = `# quantum/kernel.py — a real .py file on disk (Guppy reads source via inspect)
-from guppylang import guppy
-from guppylang.std.builtins import result
-from guppylang.std.quantum import qubit, h, cx, measure, discard
+const CONTRACT_SNIPPET = `// contracts/Provenance.sol — every contract carries the hackathon credit in NatSpec
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.24;
 
-@guppy
-def swap_test() -> None:
-    a = qubit()
-    b = qubit()
-    anc = qubit()
-    h(anc)
-    # ... prepare |a>, |b> however your problem encodes them ...
-    cx(anc, a)
-    cx(anc, b)
-    h(anc)
-    result("anc", measure(anc))
-    discard(a); discard(b)
+/// @title Provenance
+/// @notice Built during the Creative AI & Quantum Hackathon
+/// @notice organised by StreetKode Fam during Indian Krump Festival 14
+contract Provenance {
+    event Logged(address indexed author, string cid, uint256 at);
+
+    function log(string calldata cid) external {
+        emit Logged(msg.sender, cid, block.timestamp);
+    }
+}
 `;
 
-const DRIVER_SNIPPET = `# quantum/run.py — runs once at build time, writes real Selene output as JSON
-import json, pathlib
-from selene_sim import build, Quest
-from kernel import swap_test
+const DEPLOY_SNIPPET = `// scripts/deploy.ts — reads METAMASK_PRIVATE_KEY + ETHERSCAN_API_KEY from process.env
+import { ethers, run } from "hardhat";
 
-OUT = pathlib.Path("src/data/quantum-results.json")
-OUT.parent.mkdir(parents=True, exist_ok=True)
+async function main() {
+  const F = await ethers.getContractFactory("Provenance");
+  const c = await F.deploy();
+  await c.waitForDeployment();
+  const addr = await c.getAddress();
+  console.log("deployed:", addr);
 
-runner = build(swap_test)
-
-records = []
-for i in range(10):           # candidate axis
-    for j in range(10):       # reference axis
-        # bind your problem inputs here (state prep, parameters, etc.)
-        shots = list(runner.run_shots(Quest(), n_shots=256))
-        ones = sum(1 for s in shots if s.get_results().get("anc", [0])[0] == 1)
-        fidelity = max(0.0, 1.0 - 2.0 * ones / 256)
-        records.append({"input": {"i": i, "j": j}, "output": {"fidelity": fidelity}})
-
-OUT.write_text(json.dumps(records, indent=2))
-print(f"wrote {len(records)} records to {OUT}")
+  // verify on Etherscan
+  await run("verify:verify", { address: addr, constructorArguments: [] });
+}
+main();
 `;
 
-const READER_SNIPPET = `// src/routes/index.tsx — frontend just reads the JSON, no runtime Python
-import results from "@/data/quantum-results.json";
-
-// every number on screen traces back to a real Selene shot
-const top = [...results].sort((a, b) => b.output.fidelity - a.output.fidelity)[0];
+const PINATA_SNIPPET = `// src/lib/pinata.ts — pin a Blob to IPFS via Pinata JWT
+export async function pinToIPFS(file: Blob, name = "artifact") {
+  const fd = new FormData();
+  fd.append("file", file, name);
+  const r = await fetch("https://api.pinata.cloud/pinning/pinFileToIPFS", {
+    method: "POST",
+    headers: { Authorization: \`Bearer \${process.env.PINATA_JWT}\` },
+    body: fd,
+  });
+  const { IpfsHash } = await r.json();
+  return IpfsHash as string; // the CID
+}
 `;
 
-const FULL_RECIPE = `# 1. In the Lovable Linux sandbox during the build:
-pip install guppylang selene-sim
+const PRIVY_SNIPPET = `// src/main.tsx — Privy social login + sponsored transactions
+import { PrivyProvider } from "@privy-io/react-auth";
 
-# 2. Author the kernel as a REAL .py file:
-#    quantum/kernel.py  (see snippet)
+<PrivyProvider
+  appId={import.meta.env.VITE_PRIVY_APP_ID}
+  config={{
+    loginMethods: ["google", "email"],
+    embeddedWallets: { createOnLogin: "users-without-wallets" },
+    defaultChain: { id: 11155111, name: "Sepolia" },
+  }}
+>
+  <App />
+</PrivyProvider>
+`;
 
-# 3. Author a driver that runs the kernel over a small grid and writes JSON:
-#    quantum/run.py  (see snippet)
+const RECIPE = `# 1. In your Lovable project, add five secrets (Settings -> Secrets):
+METAMASK_PRIVATE_KEY=0x...
+ETHERSCAN_API_KEY=...
+PRIVY_APP_ID=...
+PINATA_JWT=eyJhbGciOi...
+SEPOLIA_RPC_URL=https://...   # optional, a public RPC is used otherwise
 
-# 4. Execute the driver ONCE during the build:
-python quantum/run.py
+# 2. Fund the MetaMask account on Sepolia:
+open https://cloud.google.com/application/web3/faucet/ethereum/sepolia
 
-# 5. The React app statically imports src/data/quantum-results.json.
-#    No Python runs at runtime. No backend. No Cloud. No auth.
+# 3. Copy a mega-prompt from this repo into Lovable. One paste:
+#    - scaffolds the React app
+#    - writes the Solidity contract (with hackathon credit in NatSpec)
+#    - deploys to Sepolia and verifies on Etherscan
+#    - wires Privy social login + sponsored tx
+#    - pins generated assets to IPFS via Pinata
+#    - exposes the contract address + Etherscan link in the UI
+
+# 4. Open the live Etherscan link. Your demo is provably onchain.
 `;
 
 function StrategyPage() {
   return (
     <SiteShell>
       <article className="max-w-3xl mx-auto px-5 pt-14 pb-20">
-        <div className="font-mono-q text-[11px] uppercase tracking-[0.2em] text-accent mb-4">
-          // build-strategy / free-tier
-        </div>
-        <h1 className="font-display text-4xl sm:text-5xl md:text-6xl font-bold leading-[0.95] tracking-tight">
-          Real quantum, <span className="text-accent">5 credits</span>, one build message.
+        <div className="eyebrow text-primary mb-4">build strategy · onchain</div>
+        <h1 className="font-display text-4xl sm:text-5xl md:text-6xl font-bold leading-[0.95] tracking-tight text-foreground">
+          Real onchain, <span className="text-primary italic">five secrets</span>, one build.
         </h1>
-        <p className="mt-6 text-lg text-muted-foreground leading-relaxed">
+        <p className="mt-6 text-lg text-muted-foreground leading-relaxed font-light">
           Every mega-prompt in this repo uses the same pattern, because it's the
-          only pattern that lets a free-tier Lovable account ship a real
-          Quantinuum demo in one shot.
+          only pattern that lets a Lovable account ship a verifiable Sepolia demo in one shot.
         </p>
 
-        <section className="mt-10 p-6 rounded-lg border border-accent/30 bg-accent/5">
-          <h2 className="font-display text-xl font-semibold">Why not run Guppy at runtime?</h2>
-          <p className="mt-3 text-sm text-muted-foreground leading-relaxed">
-            Lovable apps deploy to Cloudflare Workers (edge JavaScript). Workers
-            cannot run Python — so calling Selene from a server function at
-            runtime will fail. Don't burn credits trying. Instead, run the
-            quantum circuit <em>at build time</em> in the Lovable Linux sandbox,
-            commit the real output as JSON, and let the frontend read it.
+        <section className="mt-10 p-6 border border-primary/30 bg-card">
+          <h2 className="font-display text-xl font-semibold text-foreground italic">Why Sepolia and not mainnet?</h2>
+          <p className="mt-3 text-sm text-muted-foreground leading-relaxed font-light">
+            Sepolia is a real Ethereum testnet — the same EVM, the same Etherscan UI, the same wallets —
+            but funded by a free faucet. Every contract you deploy is publicly inspectable, but you
+            never spend real ETH and your demo can't accidentally drain a user. Move to mainnet
+            after the hackathon by swapping the RPC.
           </p>
         </section>
 
         <section className="mt-10">
-          <h2 className="font-display text-2xl font-semibold mb-3">The 5-step pattern</h2>
+          <h2 className="font-display text-2xl font-semibold mb-3 text-foreground italic">The recipe</h2>
           <div className="flex items-baseline justify-between mb-2">
-            <span className="font-mono-q text-[10px] uppercase text-accent tracking-wider">recipe</span>
-            <CopyButton text={FULL_RECIPE} label="Copy recipe" />
+            <span className="eyebrow text-primary">recipe</span>
+            <CopyButton text={RECIPE} label="Copy recipe" />
           </div>
-          <pre className="whitespace-pre-wrap font-mono-q text-[13px] leading-relaxed p-5 rounded-lg border border-border bg-card text-foreground/90">{FULL_RECIPE}</pre>
+          <pre className="whitespace-pre-wrap font-mono text-[13px] leading-relaxed p-5 border border-border bg-card text-foreground/90">{RECIPE}</pre>
         </section>
 
         <section className="mt-10">
-          <h2 className="font-display text-2xl font-semibold mb-3">1. The kernel — a real .py file</h2>
-          <p className="text-sm text-muted-foreground mb-3">
-            Guppy reads source via <code className="font-mono-q text-accent">inspect.getsource</code>,
-            so it must be on disk. REPL strings, exec(), and Jupyter cells all fail.
+          <h2 className="font-display text-2xl font-semibold mb-3 text-foreground italic">1. The contract — credit baked in</h2>
+          <p className="text-sm text-muted-foreground mb-3 font-light">
+            Every Solidity file deployed from a Creative Blockchain prompt MUST carry the hackathon credit in NatSpec,
+            so provenance lives onchain alongside the bytecode.
           </p>
           <div className="flex items-baseline justify-between mb-2">
-            <span className="font-mono-q text-[10px] uppercase text-accent tracking-wider">quantum/kernel.py</span>
-            <CopyButton text={KERNEL_SNIPPET} label="Copy" />
+            <span className="eyebrow text-primary">contracts/Provenance.sol</span>
+            <CopyButton text={CONTRACT_SNIPPET} label="Copy" />
           </div>
-          <pre className="whitespace-pre-wrap font-mono-q text-[12px] leading-relaxed p-5 rounded-lg border border-border bg-card text-foreground/90">{KERNEL_SNIPPET}</pre>
+          <pre className="whitespace-pre-wrap font-mono text-[12px] leading-relaxed p-5 border border-border bg-card text-foreground/90">{CONTRACT_SNIPPET}</pre>
         </section>
 
         <section className="mt-10">
-          <h2 className="font-display text-2xl font-semibold mb-3">2. The driver — runs once at build time</h2>
-          <p className="text-sm text-muted-foreground mb-3">
-            Keep the grid small (5–20 inputs, ≤8 qubits, ~256 shots). The
-            driver writes one JSON file the frontend reads.
-          </p>
+          <h2 className="font-display text-2xl font-semibold mb-3 text-foreground italic">2. Deploy + verify on Etherscan</h2>
           <div className="flex items-baseline justify-between mb-2">
-            <span className="font-mono-q text-[10px] uppercase text-accent tracking-wider">quantum/run.py</span>
-            <CopyButton text={DRIVER_SNIPPET} label="Copy" />
+            <span className="eyebrow text-primary">scripts/deploy.ts</span>
+            <CopyButton text={DEPLOY_SNIPPET} label="Copy" />
           </div>
-          <pre className="whitespace-pre-wrap font-mono-q text-[12px] leading-relaxed p-5 rounded-lg border border-border bg-card text-foreground/90">{DRIVER_SNIPPET}</pre>
+          <pre className="whitespace-pre-wrap font-mono text-[12px] leading-relaxed p-5 border border-border bg-card text-foreground/90">{DEPLOY_SNIPPET}</pre>
         </section>
 
         <section className="mt-10">
-          <h2 className="font-display text-2xl font-semibold mb-3">3. The frontend — pure static read</h2>
+          <h2 className="font-display text-2xl font-semibold mb-3 text-foreground italic">3. Pin assets to IPFS via Pinata</h2>
           <div className="flex items-baseline justify-between mb-2">
-            <span className="font-mono-q text-[10px] uppercase text-accent tracking-wider">src/routes/index.tsx</span>
-            <CopyButton text={READER_SNIPPET} label="Copy" />
+            <span className="eyebrow text-primary">src/lib/pinata.ts</span>
+            <CopyButton text={PINATA_SNIPPET} label="Copy" />
           </div>
-          <pre className="whitespace-pre-wrap font-mono-q text-[12px] leading-relaxed p-5 rounded-lg border border-border bg-card text-foreground/90">{READER_SNIPPET}</pre>
+          <pre className="whitespace-pre-wrap font-mono text-[12px] leading-relaxed p-5 border border-border bg-card text-foreground/90">{PINATA_SNIPPET}</pre>
         </section>
 
-        <section className="mt-10 p-6 rounded-lg border border-border bg-card">
-          <h2 className="font-display text-xl font-semibold">Credit budget rules</h2>
-          <ul className="mt-3 space-y-2 text-sm text-muted-foreground">
-            <li>· One mega-prompt = one build message. No iterative refinement loop.</li>
-            <li>· Hard scope cap: 1 page (the workspace) + an "About the quantum" strip.</li>
-            <li>· No accounts. No Lovable Cloud. No database. No auth.</li>
-            <li>· Add a "Quantum trace" disclosure that prints kernel.py inline so judges see it's real.</li>
-            <li>· Keep ~1 credit in reserve for a single fix-it pass after the first build.</li>
+        <section className="mt-10">
+          <h2 className="font-display text-2xl font-semibold mb-3 text-foreground italic">4. Sign in with Google via Privy</h2>
+          <div className="flex items-baseline justify-between mb-2">
+            <span className="eyebrow text-primary">src/main.tsx</span>
+            <CopyButton text={PRIVY_SNIPPET} label="Copy" />
+          </div>
+          <pre className="whitespace-pre-wrap font-mono text-[12px] leading-relaxed p-5 border border-border bg-card text-foreground/90">{PRIVY_SNIPPET}</pre>
+        </section>
+
+        <section className="mt-10 p-6 border border-border bg-card">
+          <h2 className="font-display text-xl font-semibold text-foreground italic">Hackathon rules of thumb</h2>
+          <ul className="mt-3 space-y-2 text-sm text-muted-foreground font-light">
+            <li>· One mega-prompt = one build message. Don't iterate the architecture, iterate the UI.</li>
+            <li>· Always show the live Etherscan link in the UI — that's your proof.</li>
+            <li>· Use Privy sponsored tx so judges don't need a wallet to try the demo.</li>
+            <li>· Pin every user-generated asset to IPFS the moment it's created.</li>
+            <li>· Add a "Built during the Creative AI &amp; Quantum Hackathon — StreetKode Fam · Indian Krump Festival 14" line to your footer.</li>
           </ul>
         </section>
 
         <div className="mt-10 flex flex-wrap gap-3">
-          <Link to="/themes" className="px-5 py-2.5 rounded-md bg-primary text-primary-foreground font-semibold hover:opacity-90 transition">
+          <Link to="/themes" className="px-5 py-2.5 bg-primary text-primary-foreground font-semibold hover:bg-foreground transition">
             Pick an idea →
           </Link>
-          <Link to="/quantum-primer" className="px-5 py-2.5 rounded-md border border-border hover:bg-secondary/60 transition">
-            Quantum primer
+          <Link to="/quantum-primer" className="px-5 py-2.5 border border-primary/40 text-foreground hover:bg-primary hover:text-primary-foreground transition">
+            Blockchain primer
           </Link>
         </div>
       </article>

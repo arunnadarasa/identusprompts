@@ -5,10 +5,10 @@ import { THEMES, IDEAS_BY_THEME } from "@/data/ideas";
 export const Route = createFileRoute("/themes/")({
   head: () => ({
     meta: [
-      { title: "All themes · Creative Quantum" },
-      { name: "description", content: "10 creative disciplines, 100 hackathon ideas each." },
-      { property: "og:title", content: "All themes · Creative Quantum" },
-      { property: "og:description", content: "10 creative disciplines, 100 hackathon ideas each." },
+      { title: "All themes · Creative Blockchain" },
+      { name: "description", content: "10 creative disciplines, 100 onchain hackathon ideas each." },
+      { property: "og:title", content: "All themes · Creative Blockchain" },
+      { property: "og:description", content: "10 creative disciplines, 100 onchain hackathon ideas each." },
     ],
   }),
   component: ThemesIndex,
@@ -24,10 +24,10 @@ function ThemesIndex() {
             <h1 className="font-display text-5xl sm:text-7xl md:text-8xl leading-[0.95] text-foreground">
               Ten <span className="italic text-primary">disciplines</span>,
               <br />
-              one quantum playground.
+              one onchain playground.
             </h1>
             <p className="mt-7 text-base sm:text-lg text-muted-foreground max-w-xl font-light leading-relaxed">
-              Each house holds one hundred buildable entries — every entry paired with a Lovable mega-prompt and a Quantinuum Guppy/Selene kernel.
+              Each house holds one hundred buildable entries — every entry paired with a Lovable mega-prompt and a verifiable Sepolia primitive.
             </p>
           </div>
           <div className="flex gap-10 font-display">
@@ -46,7 +46,6 @@ function ThemesIndex() {
         {THEMES.map((t, idx) => {
           const ideas = IDEAS_BY_THEME[t.slug];
           const hookCount = new Set(ideas.map((i) => i.quantumHookId)).size;
-          // Bento rhythm: feature every 5th, wide every 4th
           const isFeature = idx === 0;
           const isWide = idx === 5;
           const isGold = idx === 3;
@@ -70,7 +69,7 @@ function ThemesIndex() {
                   <div className="mt-4 flex items-center gap-3 text-[10px] tracking-[0.28em] uppercase font-semibold">
                     <span>{ideas.length} entries</span>
                     <span className="opacity-50">·</span>
-                    <span>{hookCount} kernels</span>
+                    <span>{hookCount} primitives</span>
                   </div>
                 </div>
               </Link>
@@ -91,7 +90,7 @@ function ThemesIndex() {
                 <span className="font-display italic text-primary/50 text-xs">House {String(idx + 1).padStart(2, "0")} / 10</span>
               </div>
               <div className="relative z-10">
-                <span className="eyebrow">{ideas.length} entries · {hookCount} kernels</span>
+                <span className="eyebrow">{ideas.length} entries · {hookCount} primitives</span>
                 <h2 className={`font-display mt-2 leading-tight text-foreground ${isFeature ? "text-4xl sm:text-5xl italic" : "text-2xl"}`}>
                   {t.name}
                 </h2>

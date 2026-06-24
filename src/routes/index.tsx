@@ -6,32 +6,32 @@ import { THEMES, ALL_IDEAS, HOOKS } from "@/data/ideas";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Creative Quantum — 1,000 hackathon ideas for Lovable + Quantinuum" },
-      { name: "description", content: "A browseable repo of 1,000 mega-prompts, quantum hooks, and TAM/SAM/SOM for the Creative Quantum hackathon. Built for dancers, musicians, artists, filmmakers and more." },
-      { property: "og:title", content: "Creative Quantum — 1,000 hackathon ideas" },
-      { property: "og:description", content: "Mega-prompts + quantum hooks across 10 creative disciplines, ready to paste into Lovable." },
+      { title: "Creative Blockchain — 1,000 web3 hackathon ideas for Lovable" },
+      { name: "description", content: "A browseable repo of 1,000 mega-prompts that wire MetaMask, Sepolia, Etherscan, Privy and Pinata into ten creative disciplines. Built during the Creative AI & Quantum Hackathon." },
+      { property: "og:title", content: "Creative Blockchain — 1,000 web3 hackathon ideas" },
+      { property: "og:description", content: "Mega-prompts + onchain primitives across 10 creative disciplines, ready to paste into Lovable." },
     ],
   }),
   component: Index,
 });
 
 function Index() {
-  const featured = ALL_IDEAS[42];
-  const portrait = ALL_IDEAS[317];
-  const wide = ALL_IDEAS[618];
+  const featured = ALL_IDEAS[42] ?? ALL_IDEAS[0];
+  const portrait = ALL_IDEAS[317] ?? ALL_IDEAS[1];
   return (
     <SiteShell>
       {/* HERO — editorial folio header */}
       <section className="max-w-7xl mx-auto px-5 sm:px-8 pt-12 sm:pt-24 pb-12 sm:pb-20 animate-fade-in">
         <header className="flex flex-col lg:flex-row justify-between items-start lg:items-end border-b border-border pb-10 lg:pb-12 gap-8">
           <div className="max-w-3xl">
-            <span className="eyebrow block mb-6">Collection No. 04 — One Thousand Entries</span>
+            <span className="eyebrow block mb-6">Collection No. 01 — 1,000 Blockchain Ideas</span>
             <h1 className="font-display text-[clamp(3.25rem,9vw,8.5rem)] leading-[0.92] tracking-tight text-foreground">
-              Creative <span className="italic text-primary">Quantum</span>
+              Creative <span className="italic text-primary">Blockchain</span>
             </h1>
             <p className="mt-8 max-w-xl text-base sm:text-lg text-muted-foreground leading-relaxed font-light">
-              An archive of one thousand conceptual threads where the world's creative
-              disciplines meet a real Quantinuum kernel — annotated, indexed, and ready
+              One thousand conceptual threads where the world's creative
+              disciplines meet a verifiable onchain primitive — MetaMask on
+              Sepolia, Etherscan, Privy sign-in, Pinata IPFS — each one ready
               to ship in a single Lovable build.
             </p>
           </div>
@@ -43,12 +43,12 @@ function Index() {
               Browse the Index
             </Link>
             <a
-              href="https://creativequantum.lovable.app/"
+              href="https://cloud.google.com/application/web3/faucet/ethereum/sepolia"
               target="_blank"
               rel="noreferrer"
               className="px-6 py-3 bg-primary text-primary-foreground hover:bg-foreground transition-colors duration-500"
             >
-              Open Hackathon ↗
+              Sepolia Faucet ↗
             </a>
           </div>
         </header>
@@ -103,7 +103,7 @@ function Index() {
           <div className="bg-primary text-primary-foreground p-8 flex flex-col justify-center items-center text-center relative overflow-hidden">
             <span className="font-display text-7xl italic leading-none">1k</span>
             <span className="eyebrow text-primary-foreground/80 mt-3" style={{ color: "var(--color-primary-foreground)", opacity: 0.85 }}>
-              Active Entries
+              Onchain Entries
             </span>
           </div>
 
@@ -114,15 +114,16 @@ function Index() {
           >
             <span className="eyebrow">Section II</span>
             <div>
-              <h3 className="font-display text-2xl leading-tight text-foreground italic">Ten quantum primitives.</h3>
+              <h3 className="font-display text-2xl leading-tight text-foreground italic">Four onchain primitives.</h3>
               <p className="text-[11px] text-muted-foreground leading-relaxed mt-3 font-light">
-                A reading guide to the kernels each entry leans on — kernel, signal, surface.
+                Sepolia deploys, IPFS pins, Privy sign-in, ERC-721 provenance — the four kernels every entry leans on.
               </p>
             </div>
             <div className="flex gap-1">
               <div className="w-1 h-1 rounded-full bg-primary" />
-              <div className="w-1 h-1 rounded-full bg-primary/30" />
-              <div className="w-1 h-1 rounded-full bg-primary/30" />
+              <div className="w-1 h-1 rounded-full bg-primary" />
+              <div className="w-1 h-1 rounded-full bg-primary" />
+              <div className="w-1 h-1 rounded-full bg-primary" />
             </div>
           </Link>
 
@@ -133,9 +134,9 @@ function Index() {
           >
             <div className="max-w-md">
               <span className="eyebrow">Appendix · Build Strategy</span>
-              <h3 className="font-display text-2xl sm:text-3xl mt-3 text-foreground">The Five-Credit Protocol</h3>
+              <h3 className="font-display text-2xl sm:text-3xl mt-3 text-foreground">The Five-Secret Protocol</h3>
               <p className="text-sm text-muted-foreground mt-2 font-light leading-relaxed">
-                Real Quantinuum results, one build message, zero runtime backend.
+                Five secrets, one Lovable build, every contract verified on Etherscan.
               </p>
             </div>
             <span className="w-12 h-12 shrink-0 rounded-full border border-primary flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-primary-foreground transition-all duration-500">
@@ -147,7 +148,7 @@ function Index() {
           <div className="bg-card border border-border p-7">
             <div className="h-full border-l border-primary/30 pl-5 flex flex-col justify-center">
               <span className="eyebrow mb-2">Status</span>
-              <p className="font-display text-2xl italic text-foreground leading-tight">In residence at the lab.</p>
+              <p className="font-display text-2xl italic text-foreground leading-tight">Live on Sepolia.</p>
             </div>
           </div>
         </div>
@@ -157,7 +158,7 @@ function Index() {
         <div className="flex items-end justify-between mb-10 gap-6 flex-wrap">
           <div>
             <span className="eyebrow block mb-3">Chapter I · Disciplines</span>
-            <h2 className="font-display text-4xl sm:text-5xl text-foreground italic">Ten houses, one craft.</h2>
+            <h2 className="font-display text-4xl sm:text-5xl text-foreground italic">Ten houses, one chain.</h2>
           </div>
           <Link to="/themes" className="story-gold text-sm tracking-[0.24em] uppercase text-primary">See full index →</Link>
         </div>
@@ -184,11 +185,11 @@ function Index() {
         <div className="flex items-end justify-between mb-10 gap-6 flex-wrap">
           <div>
             <span className="eyebrow block mb-3">Chapter II · Primitives</span>
-            <h2 className="font-display text-4xl sm:text-5xl text-foreground italic">The ten kernels.</h2>
+            <h2 className="font-display text-4xl sm:text-5xl text-foreground italic">The four kernels.</h2>
           </div>
           <Link to="/quantum-primer" className="story-gold text-sm tracking-[0.24em] uppercase text-primary">Read the primer →</Link>
         </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-px bg-border">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-px bg-border">
           {HOOKS.map((h, idx) => (
             <Link
               key={h.id}
@@ -201,7 +202,7 @@ function Index() {
                 <span className="font-display italic text-primary/50 text-xs">№ {String(idx + 1).padStart(2, "0")}</span>
               </div>
               <div className="font-display text-2xl leading-tight text-foreground">{h.name}</div>
-              <div className="text-[12px] text-muted-foreground line-clamp-2 font-light leading-relaxed">{h.kernel}</div>
+              <div className="text-[12px] text-muted-foreground line-clamp-3 font-light leading-relaxed">{h.kernel}</div>
             </Link>
           ))}
         </div>
@@ -212,11 +213,11 @@ function Index() {
         <h2 className="font-display text-4xl sm:text-5xl text-foreground italic max-w-2xl">Three movements, ten minutes.</h2>
         <ol className="mt-10 grid md:grid-cols-3 gap-px bg-border">
           <Step n={1} title="Choose a house" body="Skim ten disciplines. Open the one that suits your team." />
-          <Step n={2} title="Read an entry" body="Pitch, quantum kernel, plain-language proposition, market sizing." />
-          <Step n={3} title="Copy the mega-prompt" body="One paste into Lovable. Real Selene runs at build time. Ship." />
+          <Step n={2} title="Read an entry" body="Pitch, onchain primitive, plain-language proposition, market sizing." />
+          <Step n={3} title="Copy the mega-prompt" body="Add five secrets, paste into Lovable, deploy to Sepolia. Ship." />
         </ol>
         <p className="mt-10 eyebrow text-muted-foreground">
-          {ALL_IDEAS.length.toLocaleString()} entries indexed · zero backend · ready to publish
+          {ALL_IDEAS.length.toLocaleString()} entries indexed · zero backend · ready to publish onchain
         </p>
       </section>
     </SiteShell>
