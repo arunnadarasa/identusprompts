@@ -127,7 +127,7 @@ STACK
     module.exports = {{
       solidity: {{ version: "0.8.24", settings: {{ optimizer: {{ enabled: true, runs: 200 }} }} }},
       networks: {{ sepolia: {{
-        url: process.env.SEPOLIA_RPC_URL || "https://ethereum-sepolia-rpc.publicnode.com",
+        url: process.env.SEPOLIA_RPC_URL,                       // Alchemy HTTPS endpoint, REQUIRED
         accounts: [process.env.METAMASK_PRIVATE_KEY.startsWith("0x")
           ? process.env.METAMASK_PRIVATE_KEY : "0x" + process.env.METAMASK_PRIVATE_KEY],
         chainId: 11155111,
@@ -141,6 +141,9 @@ STACK
   On success Etherscan returns "Successfully verified contract … on the block explorer"
   and the source becomes readable at
   `https://sepolia.etherscan.io/address/<address>#code`.
+- Frontend reads: create a viem public client with the Alchemy URL too —
+  `createPublicClient({{ chain: sepolia, transport: http(import.meta.env.VITE_SEPOLIA_RPC_URL) }})`.
+  Expose SEPOLIA_RPC_URL to the client by also setting VITE_SEPOLIA_RPC_URL to the same value.
 - Write the deployed address to `src/data/contract.json` so the UI links to
   `https://sepolia.etherscan.io/address/<address>`.
 
