@@ -8,8 +8,8 @@ import { getPlainProposition } from "@/lib/plain-language";
 export const Route = createFileRoute("/ideas/$id")({
   head: ({ params }) => {
     const idea = getIdea(params.id);
-    const title = idea ? `${idea.title} · Creative Quantum idea` : "Idea · Creative Quantum";
-    const desc = idea ? idea.pitch : "A hackathon idea.";
+    const title = idea ? `${idea.title} · Creative Blockchain idea` : "Idea · Creative Blockchain";
+    const desc = idea ? idea.pitch : "An onchain hackathon idea.";
     return {
       meta: [
         { title },
@@ -30,6 +30,13 @@ export const Route = createFileRoute("/ideas/$id")({
   errorComponent: IdeaError,
   component: IdeaPage,
 });
+
+const SECRETS = [
+  { name: "METAMASK_PRIVATE_KEY", note: "Exported from MetaMask. Fund on Sepolia via the Google Cloud faucet.", href: "https://cloud.google.com/application/web3/faucet/ethereum/sepolia" },
+  { name: "ETHERSCAN_API_KEY", note: "Required for npx hardhat verify after deploy.", href: "https://etherscan.io/myapikey" },
+  { name: "PRIVY_APP_ID", note: "Enables Google sign-in and sponsored transactions.", href: "https://docs.privy.io/llms-full.txt" },
+  { name: "PINATA_JWT", note: "Pins images / JSON / manifests to IPFS.", href: "https://docs.pinata.cloud/llms-full.txt" },
+];
 
 function IdeaPage() {
   const { idea, theme, hook } = Route.useLoaderData();
@@ -65,8 +72,8 @@ function IdeaPage() {
           <div className="absolute -top-24 -right-24 w-72 h-72 rounded-full gold-bloom blur-3xl opacity-60 pointer-events-none" />
           <div className="relative flex items-baseline justify-between gap-4 mb-5">
             <div>
-              <span className="eyebrow block mb-2">Section · Quantum</span>
-              <h2 className="font-display text-3xl italic text-foreground">The hook.</h2>
+              <span className="eyebrow block mb-2">Section · Onchain</span>
+              <h2 className="font-display text-3xl italic text-foreground">The primitive.</h2>
             </div>
             <Link to="/quantum-primer" hash={idea.quantumHookId} className="story-gold eyebrow text-primary">
               full primer →
@@ -94,21 +101,39 @@ function IdeaPage() {
         </section>
 
         <section className="mt-12">
+          <span className="eyebrow block mb-2">Appendix · Secrets</span>
+          <h2 className="font-display text-3xl italic text-foreground mb-6">Required keys.</h2>
+          <div className="grid sm:grid-cols-2 gap-px bg-border">
+            {SECRETS.map((s) => (
+              <div key={s.name} className="p-6 bg-card">
+                <div className="font-mono text-[12px] tracking-wider text-primary">{s.name}</div>
+                <div className="text-sm text-foreground/80 mt-2 font-light leading-relaxed">{s.note}</div>
+                <a href={s.href} target="_blank" rel="noreferrer" className="story-gold eyebrow text-primary inline-block mt-3">
+                  open ↗
+                </a>
+              </div>
+            ))}
+          </div>
+          <p className="mt-4 eyebrow text-muted-foreground">
+            Add these in your Lovable project under Settings → Secrets before pasting the prompt below.
+          </p>
+        </section>
+
+        <section className="mt-12">
           <div className="flex items-baseline justify-between gap-4 mb-4">
             <div>
-              <span className="eyebrow block mb-2">Appendix A</span>
-              <h2 className="font-display text-3xl italic text-foreground">The mega-prompt.</h2>
+              <span className="eyebrow block mb-2">Appendix · Mega-prompt</span>
+              <h2 className="font-display text-3xl italic text-foreground">The build prompt.</h2>
             </div>
             <div className="flex items-center gap-2">
               <span className="hidden sm:inline-flex items-center gap-1 px-3 py-2 border border-primary/40 eyebrow text-primary">
-                budget · 1 message · ~5 credits
+                budget · 1 message
               </span>
               <CopyButton text={idea.megaPrompt} label="Copy prompt" />
             </div>
           </div>
           <p className="text-sm text-muted-foreground mb-4 font-light leading-relaxed">
-            This prompt is engineered to ship in a single Lovable build. Real Quantinuum Guppy/Selene circuit
-            runs in the Linux sandbox at build time and the results are baked in as JSON.{" "}
+            Paste into a fresh Lovable project. Make sure all five secrets above are set first.{" "}
             <Link to="/strategy" className="story-gold text-primary">read the build strategy →</Link>
           </p>
           <pre className="whitespace-pre-wrap font-mono text-[13px] leading-relaxed p-6 sm:p-8 border border-border bg-card text-foreground/90" style={{ fontFamily: "'JetBrains Mono', ui-monospace, monospace", letterSpacing: 0 }}>
@@ -124,18 +149,18 @@ function IdeaPage() {
               Open in Lovable ↗
             </a>
             <a
-              href="https://creativequantum.lovable.app/"
+              href="https://sepolia.etherscan.io/"
               target="_blank"
               rel="noreferrer"
               className="inline-flex items-center gap-2 px-6 py-3 border border-primary/40 text-foreground hover:bg-primary hover:text-primary-foreground transition-colors duration-500"
             >
-              Hackathon home ↗
+              Sepolia Etherscan ↗
             </a>
           </div>
         </section>
 
         <section className="mt-12">
-          <span className="eyebrow block mb-2">Appendix B</span>
+          <span className="eyebrow block mb-2">Appendix · Market</span>
           <h2 className="font-display text-3xl italic text-foreground mb-6">Market sizing.</h2>
           <div className="grid sm:grid-cols-3 gap-px bg-border">
             <MarketCard label="TAM" value={idea.tam} />
