@@ -5,10 +5,10 @@ import { THEMES, IDEAS_BY_THEME } from "@/data/ideas";
 export const Route = createFileRoute("/themes/")({
   head: () => ({
     meta: [
-      { title: "All themes · Creative Blockchain" },
-      { name: "description", content: "10 creative disciplines, 100 onchain hackathon ideas each." },
-      { property: "og:title", content: "All themes · Creative Blockchain" },
-      { property: "og:description", content: "10 creative disciplines, 100 onchain hackathon ideas each." },
+      { title: "All themes · Creative AI" },
+      { name: "description", content: "10 creative disciplines, 100 ElevenLabs hackathon ideas each." },
+      { property: "og:title", content: "All themes · Creative AI" },
+      { property: "og:description", content: "10 creative disciplines, 100 ElevenLabs hackathon ideas each." },
     ],
   }),
   component: ThemesIndex,
@@ -24,10 +24,10 @@ function ThemesIndex() {
             <h1 className="font-display text-5xl sm:text-7xl md:text-8xl leading-[0.95] text-foreground">
               Ten <span className="italic text-primary">disciplines</span>,
               <br />
-              one onchain playground.
+              one voice stack.
             </h1>
             <p className="mt-7 text-base sm:text-lg text-muted-foreground max-w-xl font-light leading-relaxed">
-              Each house holds one hundred buildable entries — every entry paired with a Lovable mega-prompt and a verifiable Sepolia primitive.
+              Each house holds one hundred buildable entries — every entry paired with a Lovable mega-prompt and a streaming ElevenLabs primitive.
             </p>
           </div>
           <div className="flex gap-10 font-display">
