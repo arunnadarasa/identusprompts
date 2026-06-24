@@ -19,7 +19,7 @@ CKPT = pathlib.Path(__file__).parent / ".regen-checkpoint.json"
 
 AISA_URL = "https://api.aisa.one/v1/chat/completions"
 AISA_KEY = os.environ.get("AISA_API_KEY")
-MODEL = os.environ.get("AISA_MODEL", "openai/gpt-5-mini")
+MODEL = os.environ.get("AISA_MODEL", "gpt-4.1-mini")
 
 if not AISA_KEY:
     print("ERROR: AISA_API_KEY not set", file=sys.stderr); sys.exit(1)
