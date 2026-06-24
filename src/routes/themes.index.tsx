@@ -17,44 +17,91 @@ export const Route = createFileRoute("/themes/")({
 function ThemesIndex() {
   return (
     <SiteShell>
-      <section className="max-w-6xl mx-auto px-5 pt-8 sm:pt-14 pb-6 sm:pb-10">
-        <span className="font-mono-q text-[11px] tracking-[0.2em] uppercase text-accent">// themes</span>
-        <h1 className="font-display text-[32px] leading-[1.05] sm:text-5xl font-bold mt-2 sm:mt-3">Ten disciplines, one quantum playground.</h1>
-        <p className="mt-3 sm:mt-4 text-sm sm:text-base text-muted-foreground max-w-2xl">
-          Each theme has 100 ready-to-build ideas with a Lovable mega-prompt and a Guppy/Selene quantum kernel. Tap a discipline to open its dedicated page.
-        </p>
+      <section className="max-w-7xl mx-auto px-5 sm:px-8 pt-12 sm:pt-20 pb-12 animate-fade-in">
+        <header className="flex flex-col md:flex-row md:items-end md:justify-between border-b border-border pb-8 gap-6">
+          <div className="max-w-3xl">
+            <span className="eyebrow block mb-4">Chapter I · The Index</span>
+            <h1 className="font-display text-5xl sm:text-7xl md:text-8xl leading-[0.95] text-foreground">
+              Ten <span className="italic text-primary">disciplines</span>,
+              <br />
+              one quantum playground.
+            </h1>
+            <p className="mt-7 text-base sm:text-lg text-muted-foreground max-w-xl font-light leading-relaxed">
+              Each house holds one hundred buildable entries — every entry paired with a Lovable mega-prompt and a Quantinuum Guppy/Selene kernel.
+            </p>
+          </div>
+          <div className="flex gap-10 font-display">
+            <div>
+              <div className="text-4xl italic text-primary leading-none">10</div>
+              <div className="eyebrow text-muted-foreground mt-2">Houses</div>
+            </div>
+            <div>
+              <div className="text-4xl italic text-primary leading-none">1k</div>
+              <div className="eyebrow text-muted-foreground mt-2">Entries</div>
+            </div>
+          </div>
+        </header>
       </section>
-      <section className="max-w-6xl mx-auto px-5 pb-12 sm:pb-16 grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4">
-        {THEMES.map((t) => {
+      <section className="max-w-7xl mx-auto px-5 sm:px-8 pb-20 grid grid-cols-1 md:grid-cols-4 auto-rows-[260px] gap-4 md:gap-5">
+        {THEMES.map((t, idx) => {
           const ideas = IDEAS_BY_THEME[t.slug];
-          const sample = [ideas[0], ideas[37], ideas[74]].filter(Boolean);
+          const hookCount = new Set(ideas.map((i) => i.quantumHookId)).size;
+          // Bento rhythm: feature every 5th, wide every 4th
+          const isFeature = idx === 0;
+          const isWide = idx === 5;
+          const isGold = idx === 3;
+          const span = isFeature
+            ? "md:col-span-2 md:row-span-2"
+            : isWide
+              ? "md:col-span-2"
+              : "";
+          if (isGold) {
+            return (
+              <Link
+                key={t.slug}
+                to="/themes/$theme"
+                params={{ theme: t.slug }}
+                className="group bg-primary text-primary-foreground p-7 flex flex-col justify-between relative overflow-hidden hover:bg-foreground transition-colors duration-500"
+              >
+                <span className="text-4xl">{t.emoji}</span>
+                <div>
+                  <span className="text-[10px] tracking-[0.32em] uppercase font-semibold opacity-80">House {String(idx + 1).padStart(2, "0")} / 10</span>
+                  <h2 className="font-display text-3xl mt-2 leading-tight">{t.name}</h2>
+                  <div className="mt-4 flex items-center gap-3 text-[10px] tracking-[0.28em] uppercase font-semibold">
+                    <span>{ideas.length} entries</span>
+                    <span className="opacity-50">·</span>
+                    <span>{hookCount} kernels</span>
+                  </div>
+                </div>
+              </Link>
+            );
+          }
           return (
             <Link
               key={t.slug}
               to="/themes/$theme"
               params={{ theme: t.slug }}
-              className="group p-4 sm:p-6 rounded-lg border border-border bg-card hover:border-accent/60 transition flex flex-col gap-3 sm:gap-4"
+              className={`group relative overflow-hidden bg-card border border-border p-7 sm:p-8 flex flex-col justify-between hover:border-primary/60 transition-all duration-500 ${span}`}
             >
-              <div className="flex items-start justify-between">
-                <div>
-                  <div className="text-2xl sm:text-3xl">{t.emoji}</div>
-                  <h2 className="font-display text-xl sm:text-2xl font-semibold mt-2 sm:mt-3 group-hover:text-primary">{t.name}</h2>
-                  <p className="text-xs text-muted-foreground mt-1.5 line-clamp-2">{t.audience}</p>
-                </div>
-                <span className="font-mono-q text-[11px] text-muted-foreground">{ideas.length} ideas</span>
+              {isFeature && (
+                <div className="absolute -top-20 -right-20 w-80 h-80 rounded-full gold-bloom blur-3xl opacity-50 group-hover:opacity-100 transition-opacity duration-700" />
+              )}
+              <div className="relative z-10 flex items-baseline justify-between">
+                <span className="text-3xl">{t.emoji}</span>
+                <span className="font-display italic text-primary/50 text-xs">House {String(idx + 1).padStart(2, "0")} / 10</span>
               </div>
-              <ul className="text-sm text-muted-foreground space-y-1.5 border-t border-border pt-3 sm:pt-4">
-                {sample.map((i, idx) => (
-                  <li key={i.id} className={`truncate ${idx === 2 ? "hidden sm:block" : ""}`}>· {i.title}</li>
-                ))}
-              </ul>
-              <div className="flex items-center justify-between gap-3 border-t border-border pt-3 mt-auto">
-                <span className="inline-flex items-center gap-1 px-3 py-1.5 rounded-full bg-primary/10 border border-primary/30 text-primary text-xs font-semibold group-hover:bg-accent/15 group-hover:border-accent/50 group-hover:text-accent transition">
-                  Open {t.name} page <span aria-hidden>→</span>
-                </span>
-                <span className="font-mono-q text-[10px] text-muted-foreground shrink-0">
-                  {new Set(ideas.map((i) => i.quantumHookId)).size} hooks
-                </span>
+              <div className="relative z-10">
+                <span className="eyebrow">{ideas.length} entries · {hookCount} kernels</span>
+                <h2 className={`font-display mt-2 leading-tight text-foreground ${isFeature ? "text-4xl sm:text-5xl italic" : "text-2xl"}`}>
+                  {t.name}
+                </h2>
+                {isFeature && (
+                  <p className="mt-4 text-sm text-muted-foreground max-w-md font-light leading-relaxed line-clamp-2">{t.audience}</p>
+                )}
+              </div>
+              <div className="relative z-10 flex items-center gap-3 border-t border-border pt-4">
+                <div className="w-8 h-px bg-primary" />
+                <span className="eyebrow text-primary">Open the house</span>
               </div>
             </Link>
           );
