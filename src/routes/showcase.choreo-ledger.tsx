@@ -187,7 +187,7 @@ function ChoreoLedgerDemo() {
                 <div className="font-mono text-[11px] text-muted-foreground">
                   {new Date(Number(e.at) * 1000).toISOString().slice(0, 16).replace("T", " ")}
                 </div>
-                <div className="font-mono text-sm break-all">{e.cid}</div>
+                <div className="font-mono text-sm [overflow-wrap:anywhere] break-all min-w-0">{e.cid}</div>
                 <a
                   href={`${contractCfg.explorer}/tx/${e.tx}`}
                   target="_blank"
