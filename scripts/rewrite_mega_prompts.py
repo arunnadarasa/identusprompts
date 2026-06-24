@@ -26,12 +26,19 @@ SECRETS = """REQUIRED SECRET (Lovable -> Project Settings -> Secrets):
                         Get it from https://elevenlabs.io/app/settings/api-keys
                         Free tier is enough for a hackathon weekend."""
 
-BUDGET = """LOVABLE BUDGET (ONE BUILD MESSAGE):
-- ONE TanStack Start app. Single page is fine; add a /how-it-works strip only if it helps the pitch.
-- ONE TanStack server function that proxies ElevenLabs and keeps the API key on the server.
-- ONE client surface (a button, a mic, a prompt box) for the chosen kernel.
-- No database, no Lovable Cloud unless the idea genuinely needs persistence.
-- Skip tests, skip docs pages. Ship the demo, nothing else."""
+BUDGET = """LOVABLE BUDGET (HARD CAP: ONE-SHOT, ~5 CREDITS TOTAL):
+The participant has FIVE Lovable credits for the whole build. This prompt MUST
+ship a working demo on the FIRST message with zero follow-ups. Engineer for that.
+- ONE TanStack Start app, ONE route (`src/routes/index.tsx`). No extra pages, no auth, no nav.
+- ONE TanStack server function in `src/lib/*.functions.ts` that proxies ElevenLabs
+  and keeps `ELEVENLABS_API_KEY` on the server. No other server fns.
+- ONE client surface (a button, a mic, or a prompt box) wired to that server fn.
+- NO database, NO Lovable Cloud, NO auth, NO file uploads, NO extra integrations.
+- NO tests, NO docs pages, NO settings screens, NO theming toggles.
+- Use ONLY libraries already in the template plus, if the kernel requires it,
+  a single `bun add @elevenlabs/react`. Nothing else.
+- Keep the diff small enough to land in one build pass. If a feature is not on
+  screen in the user flow below, do not build it. Cut scope before adding scope."""
 
 # ---------------------------------------------------------------------------
 # Legacy onchain hook id -> new ElevenLabs kernel id
@@ -251,7 +258,9 @@ def make_prompt(idea: dict, theme: dict) -> str:
     rationale = idea.get("quantumRationale") or RATIONALES[hid](sub, theme["name"])
     body = BODIES[hid].format(CREDIT=CREDIT, sub=sub)
 
-    return f"""Build "{title}" in ONE Lovable message. Single-page TanStack Start demo.
+    return f"""Build "{title}" as a ONE-SHOT Lovable build. The participant has only
+5 credits — this single message must produce a working demo with no follow-ups.
+Single-page TanStack Start app. Cut scope ruthlessly.
 
 CONCEPT
 {pitch}
@@ -270,7 +279,7 @@ STACK
 
 {body}
 
-USER FLOW
+USER FLOW (the entire app — nothing else exists)
 1. Land on page; the headline previews what the demo does for {sub}.
 2. The primary action ({hook['ui']}) is one tap away; the rest of the layout supports it.
 3. After the audio plays / the conversation ends / the transcript commits, the result stays on screen and can be retried or shared.
