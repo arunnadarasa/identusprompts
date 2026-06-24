@@ -21,10 +21,22 @@ HOOKS = {h["id"]: h for h in json.loads((DATA / "hooks.json").read_text())}
 CREDIT = ("Built during the Creative AI & Quantum Hackathon organised by "
           "StreetKode Fam during Indian Krump Festival 14")
 
-SECRETS = """REQUIRED SECRET (Lovable -> Project Settings -> Secrets):
-- ELEVENLABS_API_KEY    Single key for TTS, voice agents, scribe, music and SFX.
-                        Get it from https://elevenlabs.io/app/settings/api-keys
-                        Free tier is enough for a hackathon weekend."""
+SECRETS = """REQUIRED SECRET — `ELEVENLABS_API_KEY` (server-side only):
+Single key for TTS, voice agents, scribe, music and SFX.
+
+BEST PATH (recommended): use the Lovable ElevenLabs standard connector.
+It syncs `ELEVENLABS_API_KEY` into the project automatically and rotates
+from the dashboard. In Lovable, just say:
+    "Connect the ElevenLabs connector"
+and accept the prompt. No copy-pasting keys.
+
+FALLBACK (manual): grab a key from https://elevenlabs.io/app/settings/api-keys
+and add it as `ELEVENLABS_API_KEY` in Project Settings -> Secrets. Free tier
+is enough for a hackathon weekend.
+
+Either way, read it only on the server (`process.env.ELEVENLABS_API_KEY`
+inside a `createServerFn` handler). Never expose it to the client and never
+prefix it with `VITE_`."""
 
 BUDGET = """LOVABLE BUDGET (HARD CAP: ONE-SHOT, ~5 CREDITS TOTAL):
 The participant has FIVE Lovable credits for the whole build. This prompt MUST
