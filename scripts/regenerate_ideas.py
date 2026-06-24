@@ -204,7 +204,7 @@ CREDIT
 def slug(s: str) -> str:
     return re.sub(r"-+", "-", re.sub(r"[^a-z0-9]+", "-", s.lower())).strip("-")[:48] or "idea"
 
-def call_aisa(theme: dict, hook: dict, batch_idx: int, retries: int = 3) -> list:
+def call_aisa(theme: dict, hook: dict, batch_idx: int, retries: int = 6) -> list:
     prompt = f"""You are designing 25 distinct hackathon project ideas for the discipline "{theme['name']}"
 (audience: {theme['audience']}; market: {theme['market_anchor']}).
 
@@ -254,7 +254,7 @@ No markdown, no commentary. All 25 ideas must be meaningfully different from eac
         except Exception as e:
             last_err = e
             print(f"  [retry {attempt+1}/{retries}] {theme['slug']}/{hook['id']}: {e}", file=sys.stderr)
-            time.sleep(2 ** attempt)
+            time.sleep(3 + 4 * attempt)
     raise RuntimeError(f"AISA failed for {theme['slug']}/{hook['id']}: {last_err}")
 
 # ----------------------------------------------------------------------------- orchestration
@@ -301,7 +301,7 @@ def main():
 
     results: dict = {k: v for k, v in ckpt.items()}  # key -> list of raw ideas
 
-    with ThreadPoolExecutor(max_workers=5) as ex:
+    with ThreadPoolExecutor(max_workers=2) as ex:
         futs = {ex.submit(call_aisa, t, h, i): (t, h, key) for i, (t, h, key) in enumerate(tasks)}
         done = 0
         for f in as_completed(futs):
