@@ -14,6 +14,7 @@ import { Route as StrategyRouteImport } from './routes/strategy'
 import { Route as QuantumPrimerRouteImport } from './routes/quantum-primer'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as ThemesIndexRouteImport } from './routes/themes.index'
 import { Route as ThemesThemeRouteImport } from './routes/themes.$theme'
 import { Route as IdeasIdRouteImport } from './routes/ideas.$id'
 
@@ -42,6 +43,11 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ThemesIndexRoute = ThemesIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => ThemesRoute,
+} as any)
 const ThemesThemeRoute = ThemesThemeRouteImport.update({
   id: '/$theme',
   path: '/$theme',
@@ -61,15 +67,16 @@ export interface FileRoutesByFullPath {
   '/themes': typeof ThemesRouteWithChildren
   '/ideas/$id': typeof IdeasIdRoute
   '/themes/$theme': typeof ThemesThemeRoute
+  '/themes/': typeof ThemesIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/quantum-primer': typeof QuantumPrimerRoute
   '/strategy': typeof StrategyRoute
-  '/themes': typeof ThemesRouteWithChildren
   '/ideas/$id': typeof IdeasIdRoute
   '/themes/$theme': typeof ThemesThemeRoute
+  '/themes': typeof ThemesIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -80,6 +87,7 @@ export interface FileRoutesById {
   '/themes': typeof ThemesRouteWithChildren
   '/ideas/$id': typeof IdeasIdRoute
   '/themes/$theme': typeof ThemesThemeRoute
+  '/themes/': typeof ThemesIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -91,15 +99,16 @@ export interface FileRouteTypes {
     | '/themes'
     | '/ideas/$id'
     | '/themes/$theme'
+    | '/themes/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/about'
     | '/quantum-primer'
     | '/strategy'
-    | '/themes'
     | '/ideas/$id'
     | '/themes/$theme'
+    | '/themes'
   id:
     | '__root__'
     | '/'
@@ -109,6 +118,7 @@ export interface FileRouteTypes {
     | '/themes'
     | '/ideas/$id'
     | '/themes/$theme'
+    | '/themes/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -157,6 +167,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/themes/': {
+      id: '/themes/'
+      path: '/'
+      fullPath: '/themes/'
+      preLoaderRoute: typeof ThemesIndexRouteImport
+      parentRoute: typeof ThemesRoute
+    }
     '/themes/$theme': {
       id: '/themes/$theme'
       path: '/$theme'
@@ -176,10 +193,12 @@ declare module '@tanstack/react-router' {
 
 interface ThemesRouteChildren {
   ThemesThemeRoute: typeof ThemesThemeRoute
+  ThemesIndexRoute: typeof ThemesIndexRoute
 }
 
 const ThemesRouteChildren: ThemesRouteChildren = {
   ThemesThemeRoute: ThemesThemeRoute,
+  ThemesIndexRoute: ThemesIndexRoute,
 }
 
 const ThemesRouteWithChildren =

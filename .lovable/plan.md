@@ -1,34 +1,29 @@
 ## Goal
-Fix mobile UX issues visible on a ~384px viewport: header overflows off-screen (nav + Hackathon button), hero text is too large, CTAs and grids feel cramped.
+Make “View all 100 ideas” open a real dedicated theme page where the 100 idea cards are visible, instead of appearing to jump back to the top of the themes list.
 
-## Changes
+## Root cause
+`/themes/$theme` already exists, but `src/routes/themes.tsx` is acting as both the `/themes` page and the parent route for `/themes/$theme`. In TanStack Router, a parent route with children must render an `<Outlet />`; this file does not, so the child theme page can match but has nowhere to appear. That explains why clicking looks like it just scrolls to the top of the themes page.
 
-### 1. `src/components/site-shell.tsx` — responsive header
-- On mobile (`<md`): show logo + hamburger button only. Hide inline nav.
-- Tap hamburger → open shadcn `Sheet` (right side) with vertical nav links (Themes, Strategy, Quantum primer, About, Hackathon ↗). Close on link click.
-- On `md+`: keep current inline nav unchanged.
-- Shrink logo wordmark on mobile (`text-base md:text-lg`) and drop the `|0⟩+|1⟩` prefix below `sm` so the title doesn't wrap.
-- Footer: stack on mobile (already `flex-wrap`, OK) — minor: smaller text + `gap-2`.
+## Plan
+1. Convert `src/routes/themes.tsx` into a proper parent/layout route
+   - Import and render `<Outlet />` only.
+   - Keep route metadata for the broader themes section if appropriate.
 
-### 2. `src/routes/index.tsx` — hero + grids
-- Hero `h1`: `text-4xl sm:text-5xl md:text-7xl` (currently jumps straight to 6xl).
-- Hero padding: `pt-12 sm:pt-20`.
-- Lede paragraph: `text-base sm:text-lg`.
-- CTA buttons: full-width on mobile (`w-full sm:w-auto`) inside `flex-col sm:flex-row`.
-- Stats grid: keep 2-col on mobile but reduce number size to `text-3xl sm:text-4xl`.
-- Themes grid: already 2-col on mobile ✓.
-- Section vertical padding: `py-8 sm:py-12`.
+2. Move the current themes grid into a new dedicated index route
+   - Create `src/routes/themes.index.tsx` for the `/themes` page.
+   - Move the existing “Ten disciplines…” hero and theme cards there.
+   - Keep the “View all 100 ideas” links as typed TanStack links: `to="/themes/$theme"` with `params={{ theme: t.slug }}`.
 
-### 3. Other pages — quick parity pass
-Apply the same hero scale-down pattern (h1 starts at `text-4xl sm:text-5xl`) to:
-- `src/routes/themes.tsx`
-- `src/routes/themes.$theme.tsx`
-- `src/routes/ideas.$id.tsx`
-- `src/routes/strategy.tsx`
-- `src/routes/quantum-primer.tsx`
-- `src/routes/about.tsx`
+3. Keep `src/routes/themes.$theme.tsx` as the dedicated page for each theme
+   - `/themes/dance`, `/themes/music`, etc. will all render through this dynamic route.
+   - No need to create 10 separate near-duplicate files.
+   - Keep the 100-card grid and idea detail links intact.
 
-No structural/content changes — only Tailwind class adjustments + the Sheet-based mobile nav.
+4. Improve the destination page just enough for mobile clarity
+   - Add a clear “100 idea cards” count near the top.
+   - Keep the hero/filter compact so users immediately see they landed on the theme page.
 
-## Verification
-After build, set preview viewport to mobile and confirm: header fits, no horizontal scroll, hamburger opens drawer, hero readable, CTAs tappable.
+5. Verify
+   - Click “View all 100 ideas” from the mobile preview.
+   - Confirm the rendered page changes from the themes grid to the selected theme’s 100 ideas.
+   - Confirm idea cards open `/ideas/$id` and show the full mega-prompt.
