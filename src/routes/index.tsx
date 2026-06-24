@@ -18,17 +18,17 @@ export const Route = createFileRoute("/")({
 function Index() {
   return (
     <SiteShell>
-      <section className="max-w-6xl mx-auto px-5 pt-20 pb-16">
+      <section className="max-w-6xl mx-auto px-5 pt-12 sm:pt-20 pb-12 sm:pb-16">
         <div className="flex items-center gap-3 mb-6">
           <span className="font-mono-q text-[11px] tracking-[0.2em] uppercase text-accent">
             //  creative-quantum / hackathon-kit
           </span>
         </div>
-        <h1 className="font-display text-6xl md:text-7xl font-bold tracking-tight leading-[0.95] max-w-4xl">
+        <h1 className="font-display text-[2.75rem] sm:text-6xl md:text-7xl font-bold tracking-tight leading-[0.95] max-w-4xl">
           1,000 ideas where <span className="text-primary">creativity</span> meets a
           <span className="text-accent"> quantum kernel</span>.
         </h1>
-        <p className="mt-7 text-lg text-muted-foreground max-w-2xl leading-relaxed">
+        <p className="mt-6 sm:mt-7 text-base sm:text-lg text-muted-foreground max-w-2xl leading-relaxed">
           A copy-and-paste repo for the{" "}
           <a href="https://creativequantum.lovable.app/" target="_blank" rel="noreferrer" className="text-foreground underline decoration-accent/60 underline-offset-4 hover:decoration-accent">
             Creative Quantum hackathon
@@ -36,15 +36,15 @@ function Index() {
           . Every idea includes a Lovable mega-prompt, a Quantinuum Guppy/Selene hook, and TAM/SAM/SOM —
           so you can pick one in five minutes and start building.
         </p>
-        <div className="mt-9 flex flex-wrap gap-3">
-          <Link to="/themes" className="inline-flex items-center gap-2 px-5 py-2.5 rounded-md bg-primary text-primary-foreground font-semibold hover:opacity-90 transition">
+        <div className="mt-8 sm:mt-9 flex flex-col sm:flex-row sm:flex-wrap gap-3">
+          <Link to="/themes" className="inline-flex items-center justify-center gap-2 px-5 py-3 sm:py-2.5 rounded-md bg-primary text-primary-foreground font-semibold hover:opacity-90 transition">
             Browse 10 themes →
           </Link>
-          <Link to="/strategy" className="inline-flex items-center gap-2 px-5 py-2.5 rounded-md border border-accent/60 text-accent hover:bg-accent/10 transition">
+          <Link to="/strategy" className="inline-flex items-center justify-center gap-2 px-5 py-3 sm:py-2.5 rounded-md border border-accent/60 text-accent hover:bg-accent/10 transition">
             Build strategy (5-credit pattern) →
           </Link>
         </div>
-        <div className="mt-14 grid grid-cols-2 sm:grid-cols-4 gap-4 max-w-2xl">
+        <div className="mt-12 sm:mt-14 grid grid-cols-2 sm:grid-cols-4 gap-4 max-w-2xl">
           <Stat n="1,000" label="ideas" />
           <Stat n="10" label="disciplines" />
           <Stat n="10" label="quantum hooks" />
@@ -57,9 +57,9 @@ function Index() {
         </p>
       </section>
 
-      <section className="max-w-6xl mx-auto px-5 py-12 border-t border-border">
+      <section className="max-w-6xl mx-auto px-5 py-10 sm:py-12 border-t border-border">
         <div className="flex items-baseline justify-between mb-7">
-          <h2 className="font-display text-3xl font-semibold">Pick your discipline</h2>
+          <h2 className="font-display text-2xl sm:text-3xl font-semibold">Pick your discipline</h2>
           <Link to="/themes" className="text-sm text-muted-foreground hover:text-foreground">See all →</Link>
         </div>
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3">
@@ -78,8 +78,8 @@ function Index() {
         </div>
       </section>
 
-      <section className="max-w-6xl mx-auto px-5 py-12 border-t border-border">
-        <h2 className="font-display text-3xl font-semibold mb-7">The quantum hooks you can lean on</h2>
+      <section className="max-w-6xl mx-auto px-5 py-10 sm:py-12 border-t border-border">
+        <h2 className="font-display text-2xl sm:text-3xl font-semibold mb-7">The quantum hooks you can lean on</h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
           {HOOKS.map((h) => (
             <Link key={h.id} to="/quantum-primer" hash={h.id} className="p-4 rounded-lg border border-border bg-card hover:border-accent/60 transition">
@@ -91,8 +91,8 @@ function Index() {
         </div>
       </section>
 
-      <section className="max-w-6xl mx-auto px-5 py-12 border-t border-border">
-        <h2 className="font-display text-3xl font-semibold mb-3">How to use this repo</h2>
+      <section className="max-w-6xl mx-auto px-5 py-10 sm:py-12 border-t border-border">
+        <h2 className="font-display text-2xl sm:text-3xl font-semibold mb-3">How to use this repo</h2>
         <p className="text-muted-foreground max-w-2xl">Three steps, ten minutes to a buildable hackathon project.</p>
         <ol className="mt-7 grid md:grid-cols-3 gap-4">
           <Step n={1} title="Pick a discipline" body="Browse the 10 themes and skim 100 ideas in each." />
@@ -110,7 +110,7 @@ function Index() {
 function Stat({ n, label }: { n: string; label: string }) {
   return (
     <div>
-      <div className="font-display text-4xl font-bold text-primary">{n}</div>
+      <div className="font-display text-3xl sm:text-4xl font-bold text-primary">{n}</div>
       <div className="text-xs text-muted-foreground uppercase tracking-wider mt-1">{label}</div>
     </div>
   );
