@@ -1,0 +1,72 @@
+[
+  {
+    "id": "swap-test",
+    "name": "SWAP test",
+    "tag": "similarity",
+    "kernel": "a 2-register SWAP-test kernel returning fidelity in [0,1] between two amplitude-encoded vectors",
+    "ui": "a similarity score (0-100%) and a 'closest match' surface"
+  },
+  {
+    "id": "qtda",
+    "name": "QTDA",
+    "tag": "shape of data",
+    "kernel": "a Quantum Topological Data Analysis pipeline returning Betti numbers (b0, b1, b2) from a Vietoris-Rips filtration",
+    "ui": "a 'shape signature' visualization with connected-component, loop, and void counts"
+  },
+  {
+    "id": "amplitude-encoding",
+    "name": "Amplitude encoding",
+    "tag": "embeddings",
+    "kernel": "an amplitude-encoding kernel that loads a normalized feature vector into log2(d) qubits and measures expectation values",
+    "ui": "a low-dimensional embedding scatter that updates as inputs change"
+  },
+  {
+    "id": "grover",
+    "name": "Grover search",
+    "tag": "combinatorial search",
+    "kernel": "a Grover oracle that marks valid configurations and returns the sampled solution bitstring after sqrt(N) iterations",
+    "ui": "a 'found match' panel showing the chosen configuration and confidence"
+  },
+  {
+    "id": "qft",
+    "name": "QFT",
+    "tag": "periodicity / rhythm",
+    "kernel": "a Quantum Fourier Transform kernel that returns dominant frequency bins from a sampled signal",
+    "ui": "a spectral bars view that highlights dominant cycles"
+  },
+  {
+    "id": "quantum-walk",
+    "name": "Quantum walk",
+    "tag": "graph exploration",
+    "kernel": "a discrete-time quantum walk on a small graph returning a probability distribution over nodes after t steps",
+    "ui": "an animated graph where node opacity reflects walk probability"
+  },
+  {
+    "id": "vqe",
+    "name": "Variational ansatz",
+    "tag": "style optimization",
+    "kernel": "a VQE-style parameterized circuit optimized against a style cost Hamiltonian, returning the optimal parameter vector",
+    "ui": "a slider panel where each slider is one optimized parameter, plus a 'cost over iterations' chart"
+  },
+  {
+    "id": "sampling",
+    "name": "Quantum sampling",
+    "tag": "generative noise",
+    "kernel": "a parameterized circuit sampled for N shots, returning a bitstring distribution used as creative seed noise",
+    "ui": "a 'regenerate' button that pulls a fresh sample and morphs the output"
+  },
+  {
+    "id": "phase-estimation",
+    "name": "Phase estimation",
+    "tag": "resonance",
+    "kernel": "a Quantum Phase Estimation kernel returning the dominant eigenphase of a problem operator",
+    "ui": "a phase dial (0 to 2\u03c0) tied to a resonance/match indicator"
+  },
+  {
+    "id": "entanglement",
+    "name": "Entanglement",
+    "tag": "correlated co-creation",
+    "kernel": "a Bell-pair / GHZ entanglement kernel that returns correlated measurement outcomes for two players",
+    "ui": "a two-pane co-creation surface where one side's reveal updates the other in correlated steps"
+  }
+]
