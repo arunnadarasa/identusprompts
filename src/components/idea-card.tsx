@@ -1,26 +1,30 @@
 import { Link } from "@tanstack/react-router";
 import type { Idea } from "@/data/ideas";
-import { QuantumChip } from "./quantum-chip";
 
 export function IdeaCard({ idea }: { idea: Idea }) {
   return (
     <Link
       to="/ideas/$id"
       params={{ id: idea.id }}
-      className="group relative flex flex-col gap-2.5 p-4 sm:p-5 rounded-lg border border-border bg-card hover:border-accent/60 transition-all duration-300"
+      className="group relative flex flex-col gap-4 p-6 sm:p-7 bg-card border border-border hover:border-primary/60 transition-all duration-500"
     >
-      <div className="flex items-start justify-between gap-3">
-        <h3 className="font-display text-lg sm:text-xl font-semibold leading-tight text-foreground group-hover:text-primary transition-colors">
-          {idea.title}
-        </h3>
-        <span className="font-mono-q text-[10px] text-muted-foreground shrink-0 pt-1">
-          #{idea.id.slice(-3)}
+      <div className="flex items-baseline justify-between gap-3">
+        <span className="eyebrow capitalize tracking-[0.28em] text-primary">
+          {idea.subDiscipline}
         </span>
+        <span className="font-display text-xs italic text-primary/60 shrink-0">№ {idea.id.slice(-3)}</span>
       </div>
-      <p className="text-sm text-muted-foreground leading-relaxed line-clamp-2 sm:line-clamp-3">{idea.pitch}</p>
-      <div className="flex items-center justify-between gap-2 mt-auto pt-1 flex-wrap">
-        <QuantumChip hookId={idea.quantumHookId} label={idea.quantumHook} tag={idea.quantumTag} compact />
-        <span className="text-[11px] text-muted-foreground capitalize">{idea.subDiscipline}</span>
+      <h3 className="font-display text-2xl sm:text-[26px] leading-[1.1] text-foreground transition-colors duration-500">
+        {idea.title}
+      </h3>
+      <p className="text-[13px] text-muted-foreground leading-relaxed line-clamp-3 font-light">
+        {idea.pitch}
+      </p>
+      <div className="mt-auto pt-4 flex items-center justify-between gap-3 border-t border-border/70">
+        <span className="eyebrow text-muted-foreground group-hover:text-primary transition-colors duration-500">
+          {idea.quantumHook}
+        </span>
+        <span className="w-7 h-7 rounded-full border border-primary/40 flex items-center justify-center text-primary text-sm group-hover:bg-primary group-hover:text-primary-foreground transition-all duration-500">→</span>
       </div>
     </Link>
   );
