@@ -19,10 +19,14 @@ CKPT = pathlib.Path(__file__).parent / ".regen-checkpoint.json"
 
 AISA_URL = "https://api.aisa.one/v1/chat/completions"
 AISA_KEY = os.environ.get("AISA_API_KEY")
-MODEL = os.environ.get("AISA_MODEL", "gpt-4.1-mini")
+AISA_MODEL = os.environ.get("AISA_MODEL", "gpt-4.1-mini")
 
-if not AISA_KEY:
-    print("ERROR: AISA_API_KEY not set", file=sys.stderr); sys.exit(1)
+LOVABLE_URL = "https://ai.gateway.lovable.dev/v1/chat/completions"
+LOVABLE_KEY = os.environ.get("LOVABLE_API_KEY")
+LOVABLE_MODEL = "google/gemini-3-flash-preview"
+
+if not AISA_KEY and not LOVABLE_KEY:
+    print("ERROR: need AISA_API_KEY or LOVABLE_API_KEY", file=sys.stderr); sys.exit(1)
 
 THEMES = json.loads((DATA / "themes.json").read_text())
 HOOKS = json.loads((DATA / "hooks.json").read_text())
