@@ -1,75 +1,80 @@
-## Goal
-On every idea detail page, lead the "Quantum hook" section with a **plain-language product proposition** — "what this app actually does for a user" — before the existing quantum-jargon rationale.
+## Editorial Folio Noir — sleek, premium, WOW
 
-Example for *Field Drafting* (QTDA + dance):
-> **NEW (plain):** Choreography drafts get analyzed by a quantum kernel, and the results come back as a simple shape map — clusters, loops, and gaps — that a dancer can read at a glance to spot structure.
->
-> **EXISTING (technical):** QTDA is the right primitive here because choreography drafting reduces to a shape of data problem; the kernel returns a result you can drop straight into the UI.
+Re-skin the Creative Quantum repo as a leather-bound luxury folio. Same routes, same content, totally new visual register.
 
-The plain line never says "QTDA", "SWAP test", "amplitude encoding", etc. — it says what the user sees and does.
+### 1. Design tokens (src/styles.css)
 
-## Approach
-Derive the plain-language sentence at render time from three pieces of data we already have:
-- `idea.subDiscipline` (e.g. "choreography drafting")
-- `theme.audience` (e.g. "dancers, choreographers")
-- `hook.ui` from `hooks.json` (e.g. "a 'shape signature' visualization with connected-component, loop, and void counts")
+Swap the dark indigo/cyan palette for **Noir & Gold**:
 
-No JSON edits, no new content per idea — one template per hook produces a coherent sentence using the idea's specific subDiscipline and audience.
+- `--background` #0d0d0d, `--card` #1a1a1a, `--foreground` #f0d78c, `--muted-foreground` #f0d78c at 60% alpha
+- `--primary` #c9a84c (gold) on #0d0d0d, `--accent` #f0d78c (champagne)
+- `--border` #c9a84c at 10–20% alpha (gold hairlines)
+- Remove the blue grid-paper background-image; replace with a subtle warm grain / radial gold bloom
+- Add `--gradient-gold-bloom` and `--shadow-folio` tokens
 
-## Changes
+### 2. Typography
 
-### 1. New file: `src/lib/plain-language.ts`
-A function `getPlainProposition(idea, theme)` returning a one-sentence proposition keyed off `idea.quantumHookId`. Roughly:
+- Install `@fontsource/instrument-serif` and `@fontsource/work-sans`, import in `src/start.ts`
+- Set body to Work Sans, `.font-display` to Instrument Serif (with italic variant for accents)
+- Retire `font-mono-q` styling cues to small-caps Work Sans 600 with 0.3em tracking (gold)
 
-```ts
-const templates: Record<string, (ctx) => string> = {
-  "swap-test": ({ sub, who }) =>
-    `Two ${sub} candidates go into a quantum similarity check; the app shows ${who} a single 0–100% match score so they can pick the closest one in a tap.`,
-  "qtda": ({ sub, who }) =>
-    `${cap(sub)} gets fed into a quantum shape-finder; ${who} see clusters, loops, and gaps drawn on top of their work instead of having to spot structure by eye.`,
-  "amplitude-encoding": ({ sub, who }) =>
-    `${cap(sub)} is encoded as a quantum vector and projected onto a 2D map; ${who} navigate the option space visually instead of guessing parameters.`,
-  "grover": ({ sub, who }) =>
-    `Instead of trying every combination, a quantum search jumps to a valid ${sub} configuration in a fraction of the tries and shows ${who} the winning pick with a confidence score.`,
-  "qft": ({ sub, who }) =>
-    `A quantum frequency analyzer scans ${sub} and surfaces the dominant cycles — rhythms and repetitions ${who} would otherwise miss — as simple bars.`,
-  "quantum-walk": ({ sub, who }) =>
-    `${cap(sub)} is laid out as a graph; a quantum walker explores it and lights up the most promising next step for ${who} to take.`,
-  "vqe": ({ sub, who }) =>
-    `${who} set a creative goal; a quantum optimizer tunes the ${sub} parameters until they converge, and returns the dialed-in knobs.`,
-  "sampling": ({ sub, who }) =>
-    `A quantum circuit acts as a creative dice-roll; each "regenerate" feeds fresh quantum noise into the ${sub} so ${who} get genuinely novel variants instead of recycled outputs.`,
-  "phase-estimation": ({ sub, who }) =>
-    `${cap(sub)} is matched against a target resonance using quantum phase estimation; ${who} see a single dial that snaps when alignment is strongest.`,
-  "entanglement": ({ sub, who }) =>
-    `Two ${who} share an entangled session: when one makes a move on the ${sub}, the other's side updates in correlated lockstep.`,
-};
-```
+### 3. Site shell (src/components/site-shell.tsx)
 
-Plus a `cap()` helper for first-letter capitalization and a safe fallback string.
+- Header: thin gold hairline border, `Creative Quantum` in Instrument Serif, nav as small-caps Work Sans with gold underline-draw on hover
+- "Collection No." volume chip on the left, gold CTA button on the right
+- Footer: editorial colophon row (volume / series / Quantinuum credit)
 
-### 2. Update `src/routes/ideas.$id.tsx`
-In the "Quantum hook" `<section>`, insert the plain proposition as the lead paragraph, then the existing `quantumRationale` as a smaller secondary line.
+### 4. Home (src/routes/index.tsx)
 
-```tsx
-<h2 className="font-display text-xl font-semibold">Quantum hook</h2>
-{/* NEW: plain-language proposition */}
-<p className="text-base text-foreground/90 leading-relaxed mt-2">
-  {getPlainProposition(idea, theme)}
-</p>
-{/* EXISTING, demoted to secondary */}
-<p className="text-sm text-muted-foreground leading-relaxed mt-3">
-  <span className="font-mono-q text-[10px] uppercase tracking-wider text-accent mr-2">why this primitive</span>
-  {idea.quantumRationale}
-</p>
-```
+Editorial hero in the prototype's voice:
+- Eyebrow: `COLLECTION NO. 04 — 1000 IDEAS`
+- Display H1 (Instrument Serif, 6xl→8xl, mixed italic + roman): `Creative Quantum`
+- Lede paragraph + two CTAs (outlined "Browse themes" + solid gold "Open hackathon")
+- Below: a bento row featuring 1 large "primary directive" tile (rotating featured idea), 1 stats tile in solid gold (#themes / #ideas / #disciplines), 1 portrait tile linking to a discipline, 1 wide quote/manifesto tile
 
-This makes the plain line the primary read and the quantum-jargon line clearly labelled as the technical "why".
+### 5. Themes index (src/routes/themes.index.tsx)
 
-## Out of scope
-- No edits to any JSON data files
-- No changes to the idea card grid, theme pages, or routing
-- No new UI components — text + one tiny label chip only
+Bento grid of the 10 themes:
+- 4-col grid, `auto-rows-[280px]`, mixed spans (one feature tile spans 2×2, others 1×1 or 2×1)
+- Each tile: small-caps eyebrow (`THEME 01 / 10`), Instrument Serif title, sub-count, gold hairline footer with `View narrative →`
+- One tile is solid gold (#c9a84c) showing total idea count — high contrast pop
+- Soft gold radial glow on hover for feature tiles
 
-## Result
-Every idea detail page leads with a sentence a hackathon judge with zero quantum background can understand on first read, with the quantum rationale demoted to a labelled "why this primitive" follow-up.
+### 6. Theme detail (src/routes/themes.$theme.tsx)
+
+- Editorial header (eyebrow + giant serif theme name + lede + idea count)
+- Idea cards reflow into the same bento rhythm: first idea per page is the feature tile, rest are uniform
+- Sub-discipline filter chips as small-caps gold pills
+
+### 7. Idea card (src/components/idea-card.tsx)
+
+- Charcoal #1a1a1a card, gold hairline border, 10% opacity at rest → 40% on hover
+- Eyebrow `IDEA · {subDiscipline}` in gold small-caps
+- Title in Instrument Serif (2xl)
+- Pitch in Work Sans 60% champagne, 2-line clamp
+- Footer hairline + `Open entry →` micro-CTA + circled gold arrow
+
+### 8. Idea detail (src/routes/ideas.$id.tsx)
+
+- Volume breadcrumb in small-caps gold
+- Massive Instrument Serif title; italic accent on one keyword if natural
+- "Quantum hook" block: charcoal card with gold hairline; keep the plain-proposition lede + `why this primitive` sub-line
+- Mega-prompt block: framed as an "Appendix" with a gold corner bracket and the existing CopyButton restyled gold-on-charcoal
+- Market sizing: 3 bento tiles, one filled solid gold
+
+### 9. Other pages (about, strategy, quantum-primer)
+
+Apply the same shell: eyebrow + serif display heading + Work Sans body. No structural rewrites — just tokens + heading swaps so they feel part of the folio.
+
+### 10. Motion
+
+- 500ms ease transitions on borders/backgrounds (no bouncy)
+- `animate-fade-in` on route mounts
+- Gold hairline-draw underline on nav + card CTAs (`story-link` pattern but gold)
+- Slow gold radial bloom that brightens on hover for feature tiles only
+
+### Out of scope
+
+- No data, routing, server, or business-logic changes
+- No new dependencies beyond the two `@fontsource` packages
+- Quantum chip / copy button / sheet primitives stay; only their token colors shift via the new CSS variables
