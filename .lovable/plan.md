@@ -1,49 +1,75 @@
 ## Goal
-Tighten mobile UX across the theme detail page (and apply the same conventions to home, themes index, and idea detail) so content reads cleanly on a 384px viewport.
+On every idea detail page, lead the "Quantum hook" section with a **plain-language product proposition** — "what this app actually does for a user" — before the existing quantum-jargon rationale.
 
-## Issues visible in the screenshot
-1. Hook filter chips overflow off the right edge — "AMPLITUDE ENCODI…" gets clipped because the scroll row uses negative-margin overflow but no fade/scroll indicator, and chips are uppercase mono so they're wide.
-2. H1 (`Fashion & Textile Design`) wraps awkwardly next to the emoji; the emoji column eats horizontal space.
-3. The mono subhead (`100 ideas · 10 quantum hooks · for fashion designers…`) is dense uppercase text and dominates the viewport.
-4. The sticky search + filter section is tall on mobile, pushing idea cards below the fold.
-5. Idea cards have generous padding; only ~1 card fits per screen.
+Example for *Field Drafting* (QTDA + dance):
+> **NEW (plain):** Choreography drafts get analyzed by a quantum kernel, and the results come back as a simple shape map — clusters, loops, and gaps — that a dancer can read at a glance to spot structure.
+>
+> **EXISTING (technical):** QTDA is the right primitive here because choreography drafting reduces to a shape of data problem; the kernel returns a result you can drop straight into the UI.
 
-## Plan (mobile-first, no data/route changes)
+The plain line never says "QTDA", "SWAP test", "amplitude encoding", etc. — it says what the user sees and does.
 
-### 1. `src/routes/themes.$theme.tsx` — hero
-- Move emoji above the H1 on mobile (stacked), inline on `sm+`.
-- Drop H1 to `text-[26px] leading-[1.05]` on mobile, keep `sm:text-5xl`.
-- Replace the dense mono subhead with two small chips: `100 ideas` and `10 hooks`, plus an "Audience" line in normal sentence case (not mono uppercase) and `line-clamp-2`.
-- Breadcrumb stays but smaller (`text-[10px]`).
+## Approach
+Derive the plain-language sentence at render time from three pieces of data we already have:
+- `idea.subDiscipline` (e.g. "choreography drafting")
+- `theme.audience` (e.g. "dancers, choreographers")
+- `hook.ui` from `hooks.json` (e.g. "a 'shape signature' visualization with connected-component, loop, and void counts")
 
-### 2. Sticky filter bar
-- Make the bar non-sticky on mobile (sticky only `md+`) so it doesn't constantly cover content while scrolling.
-- Add a horizontal fade mask on the chip scroller (`mask-image` gradient) so the last chip clearly indicates "scroll for more".
-- Shorten chip labels: `ALL`, plus hook short names; lowercase the chips (not uppercase) so widths are reasonable.
-- Slightly smaller search input on mobile (`py-2.5 text-[15px]`).
+No JSON edits, no new content per idea — one template per hook produces a coherent sentence using the idea's specific subDiscipline and audience.
 
-### 3. Idea cards (`src/components/idea-card.tsx`)
-- Reduce mobile padding `p-5 → p-4`, gap-3 → gap-2.5.
-- Title `text-lg` on mobile (was `text-xl`).
-- Pitch `line-clamp-2` on mobile, `line-clamp-3` on `sm+`.
-- Make the whole row of meta wrap with smaller chip.
+## Changes
 
-### 4. Theme index cards (`src/routes/themes.index.tsx`)
-- Tighten mobile card padding, reduce sample list to 2 items on mobile (3 on `sm+`).
+### 1. New file: `src/lib/plain-language.ts`
+A function `getPlainProposition(idea, theme)` returning a one-sentence proposition keyed off `idea.quantumHookId`. Roughly:
 
-### 5. Home (`src/routes/index.tsx`)
-- Reduce hero top padding on mobile so the H1 lands above the fold without scrolling.
-- Stat grid: 2 cols stays, but reduce vertical gap.
+```ts
+const templates: Record<string, (ctx) => string> = {
+  "swap-test": ({ sub, who }) =>
+    `Two ${sub} candidates go into a quantum similarity check; the app shows ${who} a single 0–100% match score so they can pick the closest one in a tap.`,
+  "qtda": ({ sub, who }) =>
+    `${cap(sub)} gets fed into a quantum shape-finder; ${who} see clusters, loops, and gaps drawn on top of their work instead of having to spot structure by eye.`,
+  "amplitude-encoding": ({ sub, who }) =>
+    `${cap(sub)} is encoded as a quantum vector and projected onto a 2D map; ${who} navigate the option space visually instead of guessing parameters.`,
+  "grover": ({ sub, who }) =>
+    `Instead of trying every combination, a quantum search jumps to a valid ${sub} configuration in a fraction of the tries and shows ${who} the winning pick with a confidence score.`,
+  "qft": ({ sub, who }) =>
+    `A quantum frequency analyzer scans ${sub} and surfaces the dominant cycles — rhythms and repetitions ${who} would otherwise miss — as simple bars.`,
+  "quantum-walk": ({ sub, who }) =>
+    `${cap(sub)} is laid out as a graph; a quantum walker explores it and lights up the most promising next step for ${who} to take.`,
+  "vqe": ({ sub, who }) =>
+    `${who} set a creative goal; a quantum optimizer tunes the ${sub} parameters until they converge, and returns the dialed-in knobs.`,
+  "sampling": ({ sub, who }) =>
+    `A quantum circuit acts as a creative dice-roll; each "regenerate" feeds fresh quantum noise into the ${sub} so ${who} get genuinely novel variants instead of recycled outputs.`,
+  "phase-estimation": ({ sub, who }) =>
+    `${cap(sub)} is matched against a target resonance using quantum phase estimation; ${who} see a single dial that snaps when alignment is strongest.`,
+  "entanglement": ({ sub, who }) =>
+    `Two ${who} share an entangled session: when one makes a move on the ${sub}, the other's side updates in correlated lockstep.`,
+};
+```
 
-### 6. Global / shell (`src/components/site-shell.tsx`)
-- Tighten header `py-3 → py-2.5` on mobile so the sticky header doesn't claim as much vertical space.
-- Ensure `scroll-mt-16` on section anchors so they aren't covered by the header.
+Plus a `cap()` helper for first-letter capitalization and a safe fallback string.
+
+### 2. Update `src/routes/ideas.$id.tsx`
+In the "Quantum hook" `<section>`, insert the plain proposition as the lead paragraph, then the existing `quantumRationale` as a smaller secondary line.
+
+```tsx
+<h2 className="font-display text-xl font-semibold">Quantum hook</h2>
+{/* NEW: plain-language proposition */}
+<p className="text-base text-foreground/90 leading-relaxed mt-2">
+  {getPlainProposition(idea, theme)}
+</p>
+{/* EXISTING, demoted to secondary */}
+<p className="text-sm text-muted-foreground leading-relaxed mt-3">
+  <span className="font-mono-q text-[10px] uppercase tracking-wider text-accent mr-2">why this primitive</span>
+  {idea.quantumRationale}
+</p>
+```
+
+This makes the plain line the primary read and the quantum-jargon line clearly labelled as the technical "why".
 
 ## Out of scope
-- No data changes.
-- No route/layout changes.
-- No new design tokens or fonts — same palette, same Fraunces/Inter/JetBrains pairing.
+- No edits to any JSON data files
+- No changes to the idea card grid, theme pages, or routing
+- No new UI components — text + one tiny label chip only
 
-## Verify
-- Use the mobile preview at 384px, navigate Home → Themes → Fashion → an idea.
-- Confirm: hook chips no longer clip; H1 fits; at least one full idea card visible above the filter; idea detail page legible without horizontal scroll.
+## Result
+Every idea detail page leads with a sentence a hackathon judge with zero quantum background can understand on first read, with the quantum rationale demoted to a labelled "why this primitive" follow-up.

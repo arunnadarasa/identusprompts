@@ -3,6 +3,7 @@ import { SiteShell } from "@/components/site-shell";
 import { CopyButton } from "@/components/copy-button";
 import { QuantumChip } from "@/components/quantum-chip";
 import { getIdea, getTheme, getHook, IDEAS_BY_THEME } from "@/data/ideas";
+import { getPlainProposition } from "@/lib/plain-language";
 
 export const Route = createFileRoute("/ideas/$id")({
   head: ({ params }) => {
@@ -67,7 +68,13 @@ function IdeaPage() {
               full primer →
             </Link>
           </div>
-          <p className="text-sm text-muted-foreground leading-relaxed">{idea.quantumRationale}</p>
+          <p className="text-base text-foreground/90 leading-relaxed">
+            {getPlainProposition(idea, theme)}
+          </p>
+          <p className="text-sm text-muted-foreground leading-relaxed mt-3">
+            <span className="font-mono-q text-[10px] uppercase tracking-wider text-accent mr-2">why this primitive</span>
+            {idea.quantumRationale}
+          </p>
           {hook && (
             <div className="mt-4 grid sm:grid-cols-2 gap-4 text-sm">
               <div>
