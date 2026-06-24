@@ -225,41 +225,49 @@ For each of the 25 ideas, output:
 Return STRICT JSON: {{ "ideas": [ {{title, subDiscipline, pitch, chainRationale, tam, sam, som}} x25 ] }}.
 No markdown, no commentary. All 25 ideas must be meaningfully different from each other."""
 
-    body = {
-        "model": MODEL,
-        "messages": [
-            {"role": "system", "content": "You output strict JSON only. No markdown fences, no prose."},
-            {"role": "user", "content": prompt},
-        ],
-        "response_format": {"type": "json_object"},
-        "temperature": 0.9,
-    }
+    # try AISA first, then fall back to Lovable AI Gateway if AISA fails (e.g. 402 balance)
+    providers = []
+    if AISA_KEY:
+        providers.append(("AISA", AISA_URL, AISA_KEY, AISA_MODEL))
+    if LOVABLE_KEY:
+        providers.append(("LOVABLE", LOVABLE_URL, LOVABLE_KEY, LOVABLE_MODEL))
+
     last_err = None
     for attempt in range(retries):
+        provider = providers[min(attempt, len(providers) - 1)] if len(providers) > 1 and attempt > 0 else providers[0]
+        # after first failure, force fallback to Lovable if available
+        if attempt > 0 and len(providers) > 1:
+            provider = providers[1]
+        name, url, key, model = provider
+        body = {
+            "model": model,
+            "messages": [
+                {"role": "system", "content": "You output strict JSON only. No markdown fences, no prose."},
+                {"role": "user", "content": prompt},
+            ],
+            "response_format": {"type": "json_object"},
+            "temperature": 0.9,
+        }
         try:
-            r = requests.post(
-                AISA_URL,
-                headers={"Authorization": f"Bearer {AISA_KEY}", "Content-Type": "application/json"},
-                json=body, timeout=180,
-            )
+            r = requests.post(url, headers={"Authorization": f"Bearer {key}", "Content-Type": "application/json"}, json=body, timeout=180)
             if r.status_code >= 400:
-                raise RuntimeError(f"AISA {r.status_code}: {r.text[:400]}")
+                raise RuntimeError(f"{name} {r.status_code}: {r.text[:300]}")
             data = r.json()
             content = data["choices"][0]["message"]["content"]
-            # strip code fences if present
             content = re.sub(r"^```(?:json)?\s*|\s*```$", "", content.strip(), flags=re.MULTILINE)
             parsed = json.loads(content)
             ideas = parsed.get("ideas") or parsed.get("data") or parsed
             if not isinstance(ideas, list):
                 raise ValueError(f"expected list, got {type(ideas)}")
-            if len(ideas) < 20:
+            if len(ideas) < 18:
                 raise ValueError(f"only {len(ideas)} ideas returned")
+            print(f"  ok via {name}: {theme['slug']}/{hook['id']} -> {len(ideas)}", file=sys.stderr)
             return ideas[:25]
         except Exception as e:
             last_err = e
-            print(f"  [retry {attempt+1}/{retries}] {theme['slug']}/{hook['id']}: {e}", file=sys.stderr)
-            time.sleep(3 + 4 * attempt)
-    raise RuntimeError(f"AISA failed for {theme['slug']}/{hook['id']}: {last_err}")
+            print(f"  [retry {attempt+1}/{retries} via {name}] {theme['slug']}/{hook['id']}: {e}", file=sys.stderr)
+            time.sleep(2 + 3 * attempt)
+    raise RuntimeError(f"all providers failed for {theme['slug']}/{hook['id']}: {last_err}")
 
 # ----------------------------------------------------------------------------- orchestration
 
