@@ -32,10 +32,18 @@ function SiteHeader() {
           <NavLink to="/quantum-primer">Primer</NavLink>
           <NavLink to="/about">About</NavLink>
           <a
+            href="https://creativequantum.lovable.app/"
+            target="_blank"
+            rel="noreferrer"
+            className="ml-3 px-3 py-2 border border-border text-foreground text-[10px] font-semibold tracking-[0.28em] uppercase hover:border-primary/60 hover:text-primary transition-colors duration-500"
+          >
+            Hackathon ↗
+          </a>
+          <a
             href="https://sepolia.etherscan.io/"
             target="_blank"
             rel="noreferrer"
-            className="ml-3 px-4 py-2 bg-primary text-primary-foreground text-[10px] font-semibold tracking-[0.28em] uppercase hover:bg-foreground transition-colors duration-500"
+            className="ml-2 px-4 py-2 bg-primary text-primary-foreground text-[10px] font-semibold tracking-[0.28em] uppercase hover:bg-foreground transition-colors duration-500"
           >
             Etherscan ↗
           </a>
