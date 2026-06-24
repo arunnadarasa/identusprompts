@@ -1,4 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { Link } from "@tanstack/react-router";
 import { SiteShell } from "@/components/site-shell";
 
 export const Route = createFileRoute("/about")({
@@ -36,9 +37,16 @@ function About() {
           <li>Pick a discipline that matches your team's strengths.</li>
           <li>Skim the 100 ideas; click into 2–3 that grab you.</li>
           <li>Copy the mega-prompt into Lovable, open a new project.</li>
-          <li>Implement the Guppy kernel in a real .py file, run on Selene, wire the result into the UI.</li>
+          <li>The prompt instructs Lovable to <code>pip install guppylang selene-sim</code> in the Linux sandbox, run a real Selene kernel at build time, and bake the output in as JSON.</li>
           <li>Polish the demo, prep your TAM/SAM/SOM slide, present.</li>
         </ol>
+        <h2 className="font-display text-2xl font-semibold mt-10 mb-3">Built for 5 credits</h2>
+        <p className="text-muted-foreground">
+          Free-plan Lovable accounts get ~5 build credits. Every mega-prompt here is engineered to
+          ship a real-quantum demo in a single build message — no runtime Python, no backend, no
+          auth, no scope creep.{" "}
+          <Link to="/strategy" className="text-foreground underline decoration-accent">Read the build strategy →</Link>
+        </p>
         <h2 className="font-display text-2xl font-semibold mt-10 mb-3">Credits</h2>
         <p className="text-muted-foreground">
           Built for the{" "}
