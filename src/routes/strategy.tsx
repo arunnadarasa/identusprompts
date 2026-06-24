@@ -125,7 +125,7 @@ function StrategyPage() {
             <span className="eyebrow text-primary">recipe</span>
             <CopyButton text={RECIPE} label="Copy recipe" />
           </div>
-          <pre className="whitespace-pre-wrap font-mono text-[13px] leading-relaxed p-5 border border-border bg-card text-foreground/90">{RECIPE}</pre>
+          <pre className="whitespace-pre-wrap break-words [overflow-wrap:anywhere] font-mono text-[12px] sm:text-[13px] leading-relaxed p-4 sm:p-5 max-w-full overflow-x-hidden border border-border bg-card text-foreground/90">{RECIPE}</pre>
         </section>
 
         <section className="mt-10">
@@ -138,7 +138,7 @@ function StrategyPage() {
             <span className="eyebrow text-primary">contracts/Provenance.sol</span>
             <CopyButton text={CONTRACT_SNIPPET} label="Copy" />
           </div>
-          <pre className="whitespace-pre-wrap font-mono text-[12px] leading-relaxed p-5 border border-border bg-card text-foreground/90">{CONTRACT_SNIPPET}</pre>
+          <pre className="whitespace-pre-wrap break-words [overflow-wrap:anywhere] font-mono text-[11px] sm:text-[12px] leading-relaxed p-4 sm:p-5 max-w-full overflow-x-hidden border border-border bg-card text-foreground/90">{CONTRACT_SNIPPET}</pre>
         </section>
 
         <section className="mt-10">
@@ -147,7 +147,7 @@ function StrategyPage() {
             <span className="eyebrow text-primary">scripts/deploy.ts</span>
             <CopyButton text={DEPLOY_SNIPPET} label="Copy" />
           </div>
-          <pre className="whitespace-pre-wrap font-mono text-[12px] leading-relaxed p-5 border border-border bg-card text-foreground/90">{DEPLOY_SNIPPET}</pre>
+          <pre className="whitespace-pre-wrap break-words [overflow-wrap:anywhere] font-mono text-[11px] sm:text-[12px] leading-relaxed p-4 sm:p-5 max-w-full overflow-x-hidden border border-border bg-card text-foreground/90">{DEPLOY_SNIPPET}</pre>
         </section>
 
         <section className="mt-10">
@@ -156,7 +156,7 @@ function StrategyPage() {
             <span className="eyebrow text-primary">src/lib/pinata.ts</span>
             <CopyButton text={PINATA_SNIPPET} label="Copy" />
           </div>
-          <pre className="whitespace-pre-wrap font-mono text-[12px] leading-relaxed p-5 border border-border bg-card text-foreground/90">{PINATA_SNIPPET}</pre>
+          <pre className="whitespace-pre-wrap break-words [overflow-wrap:anywhere] font-mono text-[11px] sm:text-[12px] leading-relaxed p-4 sm:p-5 max-w-full overflow-x-hidden border border-border bg-card text-foreground/90">{PINATA_SNIPPET}</pre>
         </section>
 
         <section className="mt-10">
@@ -165,7 +165,7 @@ function StrategyPage() {
             <span className="eyebrow text-primary">src/main.tsx</span>
             <CopyButton text={PRIVY_SNIPPET} label="Copy" />
           </div>
-          <pre className="whitespace-pre-wrap font-mono text-[12px] leading-relaxed p-5 border border-border bg-card text-foreground/90">{PRIVY_SNIPPET}</pre>
+          <pre className="whitespace-pre-wrap break-words [overflow-wrap:anywhere] font-mono text-[11px] sm:text-[12px] leading-relaxed p-4 sm:p-5 max-w-full overflow-x-hidden border border-border bg-card text-foreground/90">{PRIVY_SNIPPET}</pre>
         </section>
 
         <section className="mt-10 p-6 border border-border bg-card">

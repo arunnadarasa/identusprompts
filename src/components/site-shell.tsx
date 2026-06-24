@@ -5,9 +5,9 @@ import { Sheet, SheetContent, SheetTrigger, SheetTitle } from "@/components/ui/s
 
 export function SiteShell({ children }: { children: ReactNode }) {
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="min-h-screen flex flex-col overflow-x-hidden">
       <SiteHeader />
-      <main className="flex-1">{children}</main>
+      <main className="flex-1 overflow-x-hidden">{children}</main>
       <SiteFooter />
     </div>
   );
@@ -21,7 +21,7 @@ function SiteHeader() {
       <div className="max-w-7xl mx-auto px-5 sm:px-8 py-3 sm:py-5 flex items-center justify-between gap-3">
         <Link to="/" className="flex items-center gap-2 min-w-0 group">
           <span className="hidden sm:inline eyebrow shrink-0">Vol. 01</span>
-          <span className="font-display text-xl sm:text-2xl truncate text-foreground">
+          <span className="font-display text-lg sm:text-2xl truncate text-foreground">
             Creative <span className="italic text-primary">Blockchain</span>
           </span>
         </Link>
