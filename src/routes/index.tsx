@@ -72,7 +72,7 @@ function Index() {
             >
               <div className="text-2xl mb-2">{t.emoji}</div>
               <div className="font-display text-base font-semibold leading-tight group-hover:text-primary">{t.name}</div>
-              <div className="mt-2 text-[11px] text-muted-foreground font-mono-q">100 ideas</div>
+              <div className="mt-2 text-[11px] text-muted-foreground font-mono-q group-hover:text-accent transition">100 ideas →</div>
             </Link>
           ))}
         </div>
