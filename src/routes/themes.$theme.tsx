@@ -56,7 +56,7 @@ function ThemePage() {
         <div className="flex items-end justify-between gap-6 mt-4 flex-wrap">
           <div>
             <div className="text-3xl">{theme.emoji}</div>
-            <h1 className="font-display text-5xl font-bold mt-2">{theme.name}</h1>
+            <h1 className="font-display text-4xl sm:text-5xl font-bold mt-2">{theme.name}</h1>
             <p className="text-muted-foreground mt-2 max-w-2xl">For {theme.audience}.</p>
           </div>
           <span className="font-mono-q text-xs text-muted-foreground">{ideas.length} ideas</span>

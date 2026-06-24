@@ -19,7 +19,7 @@ function ThemesIndex() {
     <SiteShell>
       <section className="max-w-6xl mx-auto px-5 pt-14 pb-10">
         <span className="font-mono-q text-[11px] tracking-[0.2em] uppercase text-accent">// themes</span>
-        <h1 className="font-display text-5xl font-bold mt-3">Ten disciplines, one quantum playground.</h1>
+        <h1 className="font-display text-4xl sm:text-5xl font-bold mt-3">Ten disciplines, one quantum playground.</h1>
         <p className="mt-4 text-muted-foreground max-w-2xl">
           Each theme has 100 ready-to-build ideas with a Lovable mega-prompt and a Guppy/Selene quantum kernel.
         </p>
