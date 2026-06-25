@@ -123,11 +123,11 @@ function SiteFooter() {
       <div className="max-w-7xl mx-auto px-5 sm:px-8 py-10 flex flex-col gap-3 text-[10px] tracking-[0.32em] uppercase text-muted-foreground">
         <div className="flex flex-wrap items-center justify-between gap-4">
           <span>Vol. 01 · 1,000 entries · 10 disciplines</span>
-          <span className="font-display normal-case tracking-normal text-base italic text-primary">Lovable × ElevenLabs</span>
-          <span>Voice · Scribe · Agents · Music · MMXXVI</span>
+          <span className="font-display normal-case tracking-normal text-base italic text-primary">Lovable × AIsa</span>
+          <span>Chat · Image · Video · Skills · MMXXVI</span>
         </div>
         <div className="border-t border-border/60 pt-3 normal-case tracking-normal text-[11px] font-light leading-relaxed text-muted-foreground/80">
-          Built during the Creative AI &amp; Quantum Hackathon — organised by{" "}
+          Built during the AIsa Creative Hackathon — organised by{" "}
           <span className="text-primary">StreetKode Fam</span> during Indian Krump Festival 14.
         </div>
       </div>
