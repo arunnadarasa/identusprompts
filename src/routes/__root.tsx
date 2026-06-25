@@ -87,8 +87,8 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { name: "twitter:site", content: "@Lovable" },
       { name: "twitter:title", content: "AIsa Creative — 1,000 AIsa hackathon ideas" },
       { name: "twitter:description", content: "An archive of 1,000 copy-paste Lovable mega-prompts that wire AIsa chat completions, AIsa chat, live web skills, and video reels into ten creative disciplines." },
-      { property: "og:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/attachments/og-images/b4587290-910d-4d03-a16c-b7aae90c9c56" },
-      { name: "twitter:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/attachments/og-images/b4587290-910d-4d03-a16c-b7aae90c9c56" },
+      { property: "og:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/attachments/og-images/eb0dd360-4ce8-4bd4-9b6b-671b442c6989" },
+      { name: "twitter:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/attachments/og-images/eb0dd360-4ce8-4bd4-9b6b-671b442c6989" },
     ],
     links: [
       {
