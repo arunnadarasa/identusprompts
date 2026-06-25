@@ -22,7 +22,7 @@ function SiteHeader() {
         <Link to="/" className="flex items-center gap-2 min-w-0 group">
           <span className="hidden sm:inline eyebrow shrink-0">Vol. 01</span>
           <span className="font-display text-lg sm:text-2xl truncate text-foreground">
-            Creative <span className="italic text-primary">AI</span>
+            AIsa <span className="italic text-primary">Creative</span>
           </span>
         </Link>
         <nav className="hidden md:flex items-center gap-1 text-sm">
@@ -40,12 +40,12 @@ function SiteHeader() {
             Hackathon ↗
           </a>
           <a
-            href="https://elevenlabs.io/docs"
+            href="https://aisa.one/docs"
             target="_blank"
             rel="noreferrer"
             className="ml-2 px-4 py-2 bg-primary text-primary-foreground text-[10px] font-semibold tracking-[0.28em] uppercase hover:bg-foreground transition-colors duration-500"
           >
-            ElevenLabs Docs ↗
+            AIsa Docs ↗
           </a>
         </nav>
         <Sheet open={open} onOpenChange={setOpen}>
