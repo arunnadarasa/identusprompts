@@ -12,14 +12,14 @@ function audienceWord(audience: string): string {
 type Ctx = { sub: string; who: string };
 
 const templates: Record<string, (ctx: Ctx) => string> = {
-  "tts-narration": ({ sub, who }) =>
-    `${cap(sub)} gets its own broadcast voice: a server function streams ElevenLabs text-to-speech back to the page, and ${who} hear lifelike narration without leaving the app.`,
-  "voice-agent": ({ sub, who }) =>
-    `${cap(who)} press a microphone button and hold a real-time, back-and-forth conversation with an ElevenLabs agent tuned for ${sub} — WebRTC under the hood, no transcripts to read.`,
-  "realtime-stt": ({ sub, who }) =>
-    `${cap(who)} speak; the ElevenLabs scribe model streams live captions back as they go, finalizing each line during the natural pauses in ${sub}.`,
-  "music-sfx": ({ sub, who }) =>
-    `${cap(who)} type a short prompt and ElevenLabs conjures a fitting sound effect or music bed for ${sub} on demand, ready to drop into the timeline.`,
+  "aisa-chat": ({ sub, who }) =>
+    `${cap(sub)} gets a frontier-model brain: a server function calls AIsa's LLM router and ${who} read a tailored, on-brand answer they can act on.`,
+  "aisa-image": ({ sub, who }) =>
+    `${cap(who)} type a brief and AIsa renders a fresh image for ${sub} in seconds — moodboard, cover, scene, or poster, ready to drop into the work.`,
+  "aisa-video": ({ sub, who }) =>
+    `${cap(who)} describe the moment and AIsa's video models stitch a short reel for ${sub} — motion sketch, loop, or scene block — playable on the page.`,
+  "aisa-skills": ({ sub, who }) =>
+    `${cap(who)} ask a question and AIsa pulls live web/search signal first, then has an LLM synthesise a sourced answer for ${sub} — research, not invention.`,
 };
 
 export function getPlainProposition(idea: Idea, theme: Theme): string {
@@ -29,5 +29,5 @@ export function getPlainProposition(idea: Idea, theme: Theme): string {
   };
   const tmpl = templates[idea.quantumHookId];
   if (tmpl) return tmpl(ctx);
-  return `The voice primitive runs at the right moment in the flow and gives ${ctx.who} an audible, real-time result they can act on without leaving the app.`;
+  return `AIsa runs the kernel server-side and ${ctx.who} get a result they can act on without leaving the app.`;
 }
