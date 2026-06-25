@@ -214,10 +214,10 @@ function Index() {
         <ol className="mt-10 grid md:grid-cols-3 gap-px bg-border">
           <Step n={1} title="Choose a house" body="Skim ten disciplines. Open the one that suits your team." />
           <Step n={2} title="Read an entry" body="Pitch, AIsa kernels, plain-language proposition, market sizing." />
-          <Step n={3} title="Copy the mega-prompt" body="Add one secret, paste into Lovable, stream real AIsa. Ship." />
+          <Step n={3} title="Copy the mega-prompt" body="Add one secret, paste into Lovable, call real AIsa. Ship." />
         </ol>
         <p className="mt-10 eyebrow text-muted-foreground">
-          {ALL_IDEAS.length.toLocaleString()} entries indexed · zero infra · ready to stream
+          {ALL_IDEAS.length.toLocaleString()} entries indexed · zero infra · ready to ship
         </p>
       </section>
     </SiteShell>
