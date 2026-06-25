@@ -25,7 +25,8 @@ function ShowcaseIndex() {
           Pitch Critic — critique any pitch live.
         </h2>
         <p className="mt-4 text-sm text-muted-foreground leading-relaxed max-w-2xl">
-          Six curated pitches, one AIsa button each. Built in a single Lovable
+          Paste any pitch, get a sharp markdown critique back. One TanStack
+          server function calls AIsa chat completions — built in a single Lovable
           prompt to prove the 5-credit budget is real.
         </p>
         <span className="mt-5 inline-block text-[11px] tracking-[0.28em] uppercase font-semibold text-primary">
