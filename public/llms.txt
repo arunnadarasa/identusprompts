@@ -7,3 +7,9 @@ effects. One API key (`ELEVENLABS_API_KEY`), one Lovable build per idea.
 
 Built during the Creative AI & Quantum Hackathon — StreetKode Fam · Indian
 Krump Festival 14.
+
+## Live demos
+
+- /showcase/pitch-reader — Pitch Reader. Six curated ideas, each spoken aloud
+  via ElevenLabs TTS streaming. Built in one Lovable prompt as proof of the
+  5-credit budget.
