@@ -7,7 +7,7 @@ export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
       { title: "AIsa Creative — 1,000 AIsa hackathon ideas for Lovable" },
-      { name: "description", content: "A browseable repo of 1,000 mega-prompts that wire AIsa AIsa Chat, AIsa chat, live web skills, and video reels into ten creative disciplines. Built during the AIsa Creative Hackathon." },
+      { name: "description", content: "A browseable repo of 1,000 mega-prompts that wire AIsa Chat, AIsa chat, live web skills, and video reels into ten creative disciplines. Built during the AIsa Creative Hackathon." },
       { property: "og:title", content: "AIsa Creative — 1,000 AIsa hackathon ideas" },
       { property: "og:description", content: "Mega-prompts + AIsa kernels across 10 creative disciplines, ready to paste into Lovable." },
     ],

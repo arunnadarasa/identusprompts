@@ -27,7 +27,7 @@ function About() {
         <h2 className="font-display text-2xl font-semibold mt-10 mb-3 text-foreground italic">What's inside</h2>
         <ul className="space-y-2 text-muted-foreground font-light">
           <li>· <strong className="text-foreground">10 creative disciplines</strong> — dance, music, visual art, video, photo, writing, film/animation, games, theater, fashion.</li>
-          <li>· <strong className="text-foreground">100 ideas per discipline</strong> — each combining a sub-discipline with one of four AIsa AIsa kernels.</li>
+          <li>· <strong className="text-foreground">100 ideas per discipline</strong> — each combining a sub-discipline with one of four AIsa kernels.</li>
           <li>· <strong className="text-foreground">A Lovable mega-prompt</strong> per idea — paste, build, ship.</li>
           <li>· <strong className="text-foreground">A AIsa kernels</strong> — frontier chat, conversational AIsa chat, live skills, or video reels.</li>
           <li>· <strong className="text-foreground">TAM / SAM / SOM</strong> — indicative market sizing for your pitch slide.</li>

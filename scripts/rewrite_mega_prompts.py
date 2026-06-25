@@ -297,7 +297,7 @@ Single-page TanStack Start app. Cut scope ruthlessly.
 CONCEPT
 {pitch}
 Discipline: {theme['name']} ({sub}).
-Recipe: AIsa {hook['name']} ({hook['tag']}) as the single creative surface.
+Recipe: {hook['name']} ({hook['tag']}) as the single creative surface.
 Why this kernel: {rationale}
 
 {BUDGET}

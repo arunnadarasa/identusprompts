@@ -1,7 +1,7 @@
 # AIsa Creative
 
 1,000 copy-paste Lovable mega-prompts pairing ten creative disciplines with the
-four AIsa AIsa kernels: frontier chat, conversational
+four AIsa kernels: frontier chat, conversational
 AIsa chat, realtime speech-to-text (skills), and generative music + sound
 effects. One API key (`AISA_API_KEY`), one Lovable build per idea.
 
@@ -11,5 +11,5 @@ Krump Festival 14.
 ## Live demos
 
 - /showcase/pitch-critic — Pitch Critic. Six curated ideas, each spoken aloud
-  via AIsa AIsa Chat streaming. Built in one Lovable prompt as proof of the
+  via AIsa Chat streaming. Built in one Lovable prompt as proof of the
   5-credit budget.
