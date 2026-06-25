@@ -103,7 +103,7 @@ export const ask = createServerFn({ method: "POST" })
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        model: "openai/gpt-4o-mini",
+        model: "gpt-4o-mini",
         messages: [
           { role: "system", content: `You are an expert helper for {sub}. ` +
               `Reply in friendly markdown, under 180 words, with concrete next steps.` },
@@ -139,8 +139,9 @@ const onAsk = async () => {
 };
 ```
 
-Swap the model to `anthropic/claude-3-5-sonnet`, `google/gemini-2.5-flash`, or
-`qwen/qwen2.5-72b` from https://aisa.one/models — same endpoint, same body."""
+Use BARE model ids (e.g. `gpt-4o-mini`, `claude-3-5-sonnet`, `gemini-2.5-flash`,
+`qwen2.5-72b`) — NO `openai/`, `anthropic/`, or `google/` prefix. Browse the live
+list at https://aisa.one/models."""
 
 IMAGE_BODY = """SERVER FUNCTION (src/lib/aisa.functions.ts) — AIsa image generation:
 ```ts
@@ -158,7 +159,7 @@ export const render = createServerFn({ method: "POST" })
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        model: "bytedance/seedream-3.0",
+        model: "seedream-3.0",
         prompt: `Concept art for {sub}: ${data.brief}. Editorial, high detail.`,
         size: "1024x1024",
         n: 1,
@@ -175,8 +176,8 @@ export const render = createServerFn({ method: "POST" })
 CLIENT: textarea + "Render" button. On success, show `<img src={url} />` and a
 download link. Keep one canvas on screen, replace it on the next render.
 
-Other models: `openai/gpt-image-1` (text-fidelity), `bytedance/seedream-3.0`
-(default, fast + artistic). Browse https://aisa.one/models for the live list."""
+Use BARE model ids — `gpt-image-1` (text fidelity) or `seedream-3.0` (default,
+fast + artistic). NO vendor prefix. Browse https://aisa.one/models."""
 
 VIDEO_BODY = """SERVER FUNCTION (src/lib/aisa.functions.ts) — AIsa video gen (Wan / Seed):
 ```ts
@@ -195,7 +196,7 @@ export const animate = createServerFn({ method: "POST" })
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        model: "bytedance/seedance-pro",
+        model: "seedance-pro",
         type: "video",
         prompt: `{sub} reel: ${data.brief}. 6 seconds, cinematic.`,
         duration: 6,
@@ -254,7 +255,7 @@ export const research = createServerFn({ method: "POST" })
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        model: "openai/gpt-4o-mini",
+        model: "gpt-4o-mini",
         messages: [
           { role: "system", content: `You are a research aide for {sub}. ` +
               `Synthesise the supplied sources into a sourced, markdown answer ` +
