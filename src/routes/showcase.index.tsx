@@ -9,7 +9,7 @@ function ShowcaseIndex() {
     <div className="max-w-5xl mx-auto px-5 sm:px-8 py-16 sm:py-24">
       <span className="eyebrow">Showcase · Vol. 01</span>
       <h1 className="font-display text-4xl sm:text-6xl mt-4 leading-[1.05]">
-        Working <span className="italic text-primary">demos</span>, speaking aloud.
+        Working <span className="italic text-primary">demos</span>, built in one prompt.
       </h1>
       <p className="mt-6 text-muted-foreground max-w-2xl leading-relaxed">
         Reference builds from the prompt library. Each demo calls real AIsa
