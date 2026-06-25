@@ -8,8 +8,8 @@ import { getPlainProposition } from "@/lib/plain-language";
 export const Route = createFileRoute("/ideas/$id")({
   head: ({ params }) => {
     const idea = getIdea(params.id);
-    const title = idea ? `${idea.title} · Creative AI idea` : "Idea · Creative AI";
-    const desc = idea ? idea.pitch : "An ElevenLabs hackathon idea.";
+    const title = idea ? `${idea.title} · AIsa Creative idea` : "Idea · AIsa Creative";
+    const desc = idea ? idea.pitch : "An AIsa hackathon idea.";
     return {
       meta: [
         { title },
@@ -32,7 +32,7 @@ export const Route = createFileRoute("/ideas/$id")({
 });
 
 const SECRETS = [
-  { name: "ELEVENLABS_API_KEY", note: "Single key for TTS, voice agents, scribe, music and SFX. Free tier covers a hackathon weekend.", href: "https://elevenlabs.io/app/settings/api-keys" },
+  { name: "AISA_API_KEY", note: "Single key for AIsa Chat, AIsa chat, skills, music and SFX. Free tier covers a hackathon weekend.", href: "https://console.aisa.one" },
 ];
 
 function IdeaPage() {
@@ -146,12 +146,12 @@ function IdeaPage() {
               Open in Lovable ↗
             </a>
             <a
-              href="https://elevenlabs.io/docs"
+              href="https://aisa.one/docs"
               target="_blank"
               rel="noreferrer"
               className="inline-flex items-center gap-2 px-6 py-3 border border-primary/40 text-foreground hover:bg-primary hover:text-primary-foreground transition-colors duration-500"
             >
-              ElevenLabs Docs ↗
+              AIsa Docs ↗
             </a>
           </div>
         </section>

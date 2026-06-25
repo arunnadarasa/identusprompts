@@ -1,15 +1,15 @@
-# Creative AI
+# AIsa Creative
 
 1,000 copy-paste Lovable mega-prompts pairing ten creative disciplines with the
-four ElevenLabs voice primitives: streaming text-to-speech, conversational
-voice agents, realtime speech-to-text (scribe), and generative music + sound
-effects. One API key (`ELEVENLABS_API_KEY`), one Lovable build per idea.
+four AIsa AIsa kernels: frontier chat, conversational
+AIsa chat, realtime speech-to-text (skills), and generative music + sound
+effects. One API key (`AISA_API_KEY`), one Lovable build per idea.
 
-Built during the Creative AI & Quantum Hackathon — StreetKode Fam · Indian
+Built during the AIsa Creative Hackathon — StreetKode Fam · Indian
 Krump Festival 14.
 
 ## Live demos
 
-- /showcase/pitch-reader — Pitch Reader. Six curated ideas, each spoken aloud
-  via ElevenLabs TTS streaming. Built in one Lovable prompt as proof of the
+- /showcase/pitch-critic — Pitch Critic. Six curated ideas, each spoken aloud
+  via AIsa AIsa Chat streaming. Built in one Lovable prompt as proof of the
   5-credit budget.
