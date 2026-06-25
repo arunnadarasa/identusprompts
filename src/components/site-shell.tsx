@@ -76,13 +76,13 @@ function SiteHeader() {
                 Hackathon ↗
               </a>
               <a
-                href="https://elevenlabs.io/docs"
+                href="https://aisa.one/docs"
                 target="_blank"
                 rel="noreferrer"
                 onClick={close}
                 className="mt-2 px-4 py-3 bg-primary text-primary-foreground text-[11px] tracking-[0.28em] uppercase font-semibold text-center"
               >
-                ElevenLabs Docs ↗
+                AIsa Docs ↗
               </a>
             </nav>
           </SheetContent>
