@@ -255,7 +255,7 @@ export const research = createServerFn({ method: "POST" })
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        model: "openai/gpt-4o-mini",
+        model: "gpt-4o-mini",
         messages: [
           { role: "system", content: `You are a research aide for {sub}. ` +
               `Synthesise the supplied sources into a sourced, markdown answer ` +
