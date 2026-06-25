@@ -46,24 +46,47 @@ def slug(s: str) -> str:
     return re.sub(r"-+", "-", re.sub(r"[^a-z0-9]+", "-", s.lower())).strip("-")[:48] or "idea"
 
 def call_aisa(theme: dict, hook: dict, batch_idx: int, retries: int = 6) -> list:
-    prompt = f"""You are designing 25 distinct hackathon project ideas for the discipline "{theme['name']}"
+    prompt = f"""You are designing 25 distinct Creative AI hackathon ideas for the discipline "{theme['name']}"
 (audience: {theme['audience']}; market: {theme['market_anchor']}).
 
-EVERY idea must be built around this single ElevenLabs voice primitive:
-  {hook['name']} — {hook['kernel']}
+EVERY idea follows this single recipe:
+  Lovable AI (LLM via Lovable AI Gateway) acts as the BRAIN — it generates,
+  rewrites, coaches, plans, critiques, or composes content for the user.
+  ElevenLabs is the VOICE SURFACE — exactly one of these primitives:
+      {hook['name']} — {hook['kernel']}
+  The voice primitive must be the centre of the user experience.
 
-The idea must put that primitive at the centre of the user experience. No blockchain, no NFTs,
-no wallets, no smart contracts — this is a voice + audio app.
+STRICTLY FORBIDDEN — do not produce any idea that mentions or implies any of:
+  blockchain, NFT, web3, smart contract, wallet, gas, onchain, ledger,
+  provenance, royalties, DAO, token, crypto, mint, Sepolia, Ethereum, IPFS.
+These ideas are voice-first creative AI tools, never web3 apps.
+
+Each idea must feel like a CREATIVE COMPANION for a real person in
+{theme['name']} — coaching, drafting, narrating, scoring, transcribing,
+rehearsing, performing, journalling, teaching, etc. Branch into adjacent
+creative-life territory where natural (nutrition, mindset, audience
+experience, rehearsal aids, language reach, accessibility).
+
+Worked example to anchor the tone (for "Dance & Movement" / TTS):
+  title:  "Krump Fuel Coach"
+  pitch:  "Lovable AI writes tonight's nutrition plan for your krump set;
+           ElevenLabs reads it back so you can listen while stretching."
 
 For each of the 25 ideas, output:
-- title: 2-4 words, evocative, voice/audio flavoured (e.g. "Spoken Storyboard", "Live Caption Stage"), NOT generic
-- subDiscipline: short noun phrase naming the creative sub-area (e.g. "live-set sampling", "color study")
-- pitch: ONE short sentence (max 22 words) describing the user value in plain language
-- chainRationale: one short sentence explaining why THIS voice primitive (not another) fits this idea
-- tam, sam, som: each is a string "{{$X}} — {{one-line context}}" (e.g. "$5B — global dance studio software")
+- title: 2-4 evocative words, voice/audio flavoured. NOT generic, NOT
+  enterprise-sounding, NOT a feature name. Examples: "Loom Whisper",
+  "Manuscript Doctor", "Scene Scorer", "Lyric Catcher", "Krump Fuel Coach".
+- subDiscipline: short noun phrase naming the creative sub-area
+  (e.g. "session nutrition", "color study", "live-set sampling")
+- pitch: ONE sentence (max 26 words) in the form
+    "Lovable AI <does X> so <user>; ElevenLabs <speaks/captures/scores> it."
+- chainRationale: one short sentence explaining why THIS voice primitive
+  (not another) fits this idea
+- tam, sam, som: each is a string "{{$X}} — {{one-line context}}"
+  (e.g. "$5B — global dance studio software"). NO crypto/NFT markets.
 
 Return STRICT JSON: {{ "ideas": [ {{title, subDiscipline, pitch, chainRationale, tam, sam, som}} x25 ] }}.
-No markdown, no commentary. All 25 ideas must be meaningfully different from each other."""
+No markdown, no commentary. All 25 ideas must be meaningfully different."""
 
     # try AISA first, then fall back to Lovable AI Gateway if AISA fails (e.g. 402 balance)
     providers = []
