@@ -32,7 +32,7 @@ export const Route = createFileRoute("/ideas/$id")({
 });
 
 const SECRETS = [
-  { name: "AISA_API_KEY", note: "Single key for AIsa Chat, AIsa chat, skills, music and SFX. Free tier covers a hackathon weekend.", href: "https://console.aisa.one" },
+  { name: "AISA_API_KEY", note: "Single key for AIsa chat completions, image generation, video generation and live skills. Free tier covers a hackathon weekend.", href: "https://console.aisa.one" },
 ];
 
 function IdeaPage() {
