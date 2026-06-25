@@ -159,7 +159,7 @@ export const render = createServerFn({ method: "POST" })
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        model: "bytedance/seedream-3.0",
+        model: "seedream-3.0",
         prompt: `Concept art for {sub}: ${data.brief}. Editorial, high detail.`,
         size: "1024x1024",
         n: 1,
