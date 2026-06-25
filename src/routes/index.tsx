@@ -7,7 +7,7 @@ export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
       { title: "AIsa Creative — 1,000 AIsa hackathon ideas for Lovable" },
-      { name: "description", content: "A browseable repo of 1,000 mega-prompts that wire AIsa Chat, AIsa chat, live web skills, and video reels into ten creative disciplines. Built during the AIsa Creative Hackathon." },
+      { name: "description", content: "A browseable repo of 1,000 mega-prompts that wire AIsa chat completions, image generation, video generation and live web skills into ten creative disciplines. Built during the AIsa Creative Hackathon." },
       { property: "og:title", content: "AIsa Creative — 1,000 AIsa hackathon ideas" },
       { property: "og:description", content: "Mega-prompts + AIsa kernels across 10 creative disciplines, ready to paste into Lovable." },
     ],
@@ -26,13 +26,13 @@ function Index() {
           <div className="max-w-3xl">
             <span className="eyebrow block mb-6">Collection No. 01 — 1,000 AIsa Ideas</span>
             <h1 className="font-display text-[clamp(3.25rem,9vw,8.5rem)] leading-[0.92] tracking-tight text-foreground">
-              Creative <span className="italic text-primary">AI</span>
+              AIsa <span className="italic text-primary">Creative</span>
             </h1>
             <p className="mt-8 max-w-xl text-base sm:text-lg text-muted-foreground leading-relaxed font-light">
               One thousand conceptual threads where the world's creative
-              disciplines meet a real AIsa kernels — AIsa chat completions,
-              conversational agents, live web skills, generative music
-              and SFX — each one ready to ship in a single Lovable build.
+              disciplines meet four AIsa kernels — chat completions, image
+              generation, video generation, and live web skills — each one
+              ready to ship in a single Lovable build.
             </p>
           </div>
           <div className="flex flex-wrap gap-3 text-[10px] uppercase tracking-[0.28em]">
