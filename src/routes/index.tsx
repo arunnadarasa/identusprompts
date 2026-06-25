@@ -136,7 +136,7 @@ function Index() {
               <span className="eyebrow">Appendix · Build Strategy</span>
               <h3 className="font-display text-2xl sm:text-3xl mt-3 text-foreground">The One-Key Protocol</h3>
               <p className="text-sm text-muted-foreground mt-2 font-light leading-relaxed">
-                One API key, one Lovable build, every demo streaming real AIsa voice.
+                One API key, one Lovable build, every demo calling real AIsa frontier models.
               </p>
             </div>
             <span className="w-12 h-12 shrink-0 rounded-full border border-primary flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-primary-foreground transition-all duration-500">
