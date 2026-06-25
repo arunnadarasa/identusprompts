@@ -148,7 +148,7 @@ function Index() {
           <div className="bg-card border border-border p-7">
             <div className="h-full border-l border-primary/30 pl-5 flex flex-col justify-center">
               <span className="eyebrow mb-2">Status</span>
-              <p className="font-display text-2xl italic text-foreground leading-tight">Streaming on AIsa.</p>
+              <p className="font-display text-2xl italic text-foreground leading-tight">Running on AIsa.</p>
             </div>
           </div>
         </div>
