@@ -103,7 +103,7 @@ export const ask = createServerFn({ method: "POST" })
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        model: "openai/gpt-4o-mini",
+        model: "gpt-4o-mini",
         messages: [
           { role: "system", content: `You are an expert helper for {sub}. ` +
               `Reply in friendly markdown, under 180 words, with concrete next steps.` },
