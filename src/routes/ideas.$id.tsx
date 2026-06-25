@@ -69,8 +69,8 @@ function IdeaPage() {
           <div className="absolute -top-24 -right-24 w-72 h-72 rounded-full gold-bloom blur-3xl opacity-60 pointer-events-none" />
           <div className="relative flex items-baseline justify-between gap-4 mb-5">
             <div>
-              <span className="eyebrow block mb-2">Section · Voice</span>
-              <h2 className="font-display text-3xl italic text-foreground">The primitive.</h2>
+              <span className="eyebrow block mb-2">Section · AIsa</span>
+              <h2 className="font-display text-3xl italic text-foreground">The kernel.</h2>
             </div>
             <Link to="/quantum-primer" hash={idea.quantumHookId} className="story-gold eyebrow text-primary">
               full primer →
