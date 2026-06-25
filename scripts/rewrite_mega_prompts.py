@@ -139,8 +139,9 @@ const onAsk = async () => {
 };
 ```
 
-Swap the model to `anthropic/claude-3-5-sonnet`, `google/gemini-2.5-flash`, or
-`qwen/qwen2.5-72b` from https://aisa.one/models — same endpoint, same body."""
+Use BARE model ids (e.g. `gpt-4o-mini`, `claude-3-5-sonnet`, `gemini-2.5-flash`,
+`qwen2.5-72b`) — NO `openai/`, `anthropic/`, or `google/` prefix. Browse the live
+list at https://aisa.one/models."""
 
 IMAGE_BODY = """SERVER FUNCTION (src/lib/aisa.functions.ts) — AIsa image generation:
 ```ts
