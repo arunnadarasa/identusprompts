@@ -196,7 +196,7 @@ export const animate = createServerFn({ method: "POST" })
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        model: "bytedance/seedance-pro",
+        model: "seedance-pro",
         type: "video",
         prompt: `{sub} reel: ${data.brief}. 6 seconds, cinematic.`,
         duration: 6,
