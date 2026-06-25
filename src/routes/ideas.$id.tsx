@@ -8,8 +8,8 @@ import { getPlainProposition } from "@/lib/plain-language";
 export const Route = createFileRoute("/ideas/$id")({
   head: ({ params }) => {
     const idea = getIdea(params.id);
-    const title = idea ? `${idea.title} · Creative AI idea` : "Idea · Creative AI";
-    const desc = idea ? idea.pitch : "An ElevenLabs hackathon idea.";
+    const title = idea ? `${idea.title} · AIsa Creative idea` : "Idea · AIsa Creative";
+    const desc = idea ? idea.pitch : "An AIsa hackathon idea.";
     return {
       meta: [
         { title },
@@ -32,7 +32,7 @@ export const Route = createFileRoute("/ideas/$id")({
 });
 
 const SECRETS = [
-  { name: "ELEVENLABS_API_KEY", note: "Single key for TTS, voice agents, scribe, music and SFX. Free tier covers a hackathon weekend.", href: "https://elevenlabs.io/app/settings/api-keys" },
+  { name: "AISA_API_KEY", note: "Single key for AIsa chat completions, image generation, video generation and live skills. Free tier covers a hackathon weekend.", href: "https://console.aisa.one" },
 ];
 
 function IdeaPage() {
@@ -69,8 +69,8 @@ function IdeaPage() {
           <div className="absolute -top-24 -right-24 w-72 h-72 rounded-full gold-bloom blur-3xl opacity-60 pointer-events-none" />
           <div className="relative flex items-baseline justify-between gap-4 mb-5">
             <div>
-              <span className="eyebrow block mb-2">Section · Voice</span>
-              <h2 className="font-display text-3xl italic text-foreground">The primitive.</h2>
+              <span className="eyebrow block mb-2">Section · AIsa</span>
+              <h2 className="font-display text-3xl italic text-foreground">The kernel.</h2>
             </div>
             <Link to="/quantum-primer" hash={idea.quantumHookId} className="story-gold eyebrow text-primary">
               full primer →
@@ -146,12 +146,12 @@ function IdeaPage() {
               Open in Lovable ↗
             </a>
             <a
-              href="https://elevenlabs.io/docs"
+              href="https://aisa.one/docs"
               target="_blank"
               rel="noreferrer"
               className="inline-flex items-center gap-2 px-6 py-3 border border-primary/40 text-foreground hover:bg-primary hover:text-primary-foreground transition-colors duration-500"
             >
-              ElevenLabs Docs ↗
+              AIsa Docs ↗
             </a>
           </div>
         </section>

@@ -9,23 +9,24 @@ function ShowcaseIndex() {
     <div className="max-w-5xl mx-auto px-5 sm:px-8 py-16 sm:py-24">
       <span className="eyebrow">Showcase · Vol. 01</span>
       <h1 className="font-display text-4xl sm:text-6xl mt-4 leading-[1.05]">
-        Working <span className="italic text-primary">demos</span>, speaking aloud.
+        Working <span className="italic text-primary">demos</span>, built in one prompt.
       </h1>
       <p className="mt-6 text-muted-foreground max-w-2xl leading-relaxed">
-        Reference builds from the prompt library. Each demo streams real ElevenLabs voice
+        Reference builds from the prompt library. Each demo calls real AIsa
         from one Lovable build — single API key, no infra, no setup.
       </p>
 
       <Link
-        to="/showcase/pitch-reader"
+        to="/showcase/pitch-critic"
         className="mt-12 block p-6 sm:p-8 border border-primary/50 bg-card hover:bg-primary/5 transition-colors duration-300 group"
       >
         <span className="eyebrow text-primary">Vol. 01 · No. 01 · Live</span>
         <h2 className="font-display text-2xl sm:text-3xl mt-3 italic group-hover:text-primary transition-colors">
-          Pitch Reader — hear any idea spoken aloud.
+          Pitch Critic — critique any pitch live.
         </h2>
         <p className="mt-4 text-sm text-muted-foreground leading-relaxed max-w-2xl">
-          Six curated pitches, one ElevenLabs button each. Built in a single Lovable
+          Paste any pitch, get a sharp markdown critique back. One TanStack
+          server function calls AIsa chat completions — built in a single Lovable
           prompt to prove the 5-credit budget is real.
         </p>
         <span className="mt-5 inline-block text-[11px] tracking-[0.28em] uppercase font-semibold text-primary">
@@ -40,7 +41,7 @@ function ShowcaseIndex() {
         </h2>
         <p className="mt-4 text-sm text-muted-foreground leading-relaxed max-w-2xl">
           Pick any entry from the <Link to="/themes" className="text-primary hover:underline">index</Link>,
-          paste its mega-prompt into Lovable with your <code className="text-foreground">ELEVENLABS_API_KEY</code> set,
+          paste its mega-prompt into Lovable with your <code className="text-foreground">AISA_API_KEY</code> set,
           and your build will join the showcase.
         </p>
         <div className="mt-6 flex flex-wrap gap-3">

@@ -1,30 +1,30 @@
 [
   {
-    "id": "tts-narration",
-    "name": "ElevenLabs Text-to-Speech",
-    "tag": "streaming voice",
-    "kernel": "an /audio/speech call to ElevenLabs (model eleven_turbo_v2_5 for streaming, eleven_multilingual_v2 for quality) that returns MP3 / PCM and plays it as the user reads or interacts",
-    "ui": "a 'play' button (or auto-play) that streams lifelike narration of any text the app generates"
+    "id": "aisa-chat",
+    "name": "AIsa Chat (LLM Router)",
+    "tag": "frontier reasoning",
+    "kernel": "an OpenAI-compatible `POST /v1/chat/completions` against https://api.aisa.one/v1 — pick any frontier model (openai/gpt-4o-mini, anthropic/claude-3-5-sonnet, google/gemini-2.5-flash, qwen/qwen2.5-72b, deepseek/deepseek-chat) through one endpoint, one key",
+    "ui": "a prompt box or chat surface that returns markdown the user can read, copy, or act on"
   },
   {
-    "id": "voice-agent",
-    "name": "Conversational Voice Agent",
-    "tag": "live conversation",
-    "kernel": "an ElevenLabs Agent over WebRTC via the @elevenlabs/react useConversation hook — server mints a single-use conversation token, client speaks and listens in real time",
-    "ui": "a microphone button that opens a back-and-forth voice conversation with an agent tuned for the discipline"
+    "id": "aisa-image",
+    "name": "AIsa Image Generation",
+    "tag": "visual generation",
+    "kernel": "an OpenAI-compatible `POST /v1/images/generations` against https://api.aisa.one/v1 (Seedream + GPT image backends) — returns a hosted URL the client renders straight into an <img>",
+    "ui": "a prompt-driven canvas that renders covers, moodboards, posters or scene art on demand"
   },
   {
-    "id": "realtime-stt",
-    "name": "Realtime Speech-to-Text",
-    "tag": "live transcription",
-    "kernel": "the @elevenlabs/react useScribe hook on scribe_v2_realtime — server mints a single-use scribe token, client streams microphone audio and receives partial + committed transcripts with word timestamps",
-    "ui": "a live caption strip that types itself as the user speaks, with finalized lines saved as the user pauses"
+    "id": "aisa-video",
+    "name": "AIsa Video Generation",
+    "tag": "motion generation",
+    "kernel": "the AIsa Media Gen skill (Wan / Seed video models) submitted via `POST /v1/skills/mediagen` — returns a task id, the client polls until an MP4 URL is ready",
+    "ui": "a prompt → progress bar → playable MP4 surface for short motion sketches, loops, or scene reels"
   },
   {
-    "id": "music-sfx",
-    "name": "Generative Music & SFX",
-    "tag": "audio generation",
-    "kernel": "ElevenLabs /v1/sound-generation (\u22642022s SFX) and /v1/music (studio tracks) — server takes a text prompt and returns an MP3 the client plays or downloads",
-    "ui": "a prompt box that conjures a sound effect, sting, or short track on demand and pipes it into the workspace"
+    "id": "aisa-skills",
+    "name": "AIsa Skills & Live Data",
+    "tag": "real-world signal",
+    "kernel": "AIsa Agent Skills (`POST /v1/skills/{skill_id}`) — web search (Tavily / Perplexity), YouTube SERP, Twitter, scholar, markets, trends — typed JSON results fed back into the LLM for grounded answers",
+    "ui": "a search/topic box that returns citation-grade results, trend signals, or research the user can drop into the work"
   }
 ]
