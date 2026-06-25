@@ -18,6 +18,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as ThemesIndexRouteImport } from './routes/themes.index'
 import { Route as ShowcaseIndexRouteImport } from './routes/showcase.index'
 import { Route as ThemesThemeRouteImport } from './routes/themes.$theme'
+import { Route as ShowcasePitchCriticRouteImport } from './routes/showcase.pitch-critic'
 import { Route as IdeasIdRouteImport } from './routes/ideas.$id'
 
 const ThemesRoute = ThemesRouteImport.update({
@@ -65,6 +66,11 @@ const ThemesThemeRoute = ThemesThemeRouteImport.update({
   path: '/$theme',
   getParentRoute: () => ThemesRoute,
 } as any)
+const ShowcasePitchCriticRoute = ShowcasePitchCriticRouteImport.update({
+  id: '/pitch-critic',
+  path: '/pitch-critic',
+  getParentRoute: () => ShowcaseRoute,
+} as any)
 const IdeasIdRoute = IdeasIdRouteImport.update({
   id: '/ideas/$id',
   path: '/ideas/$id',
@@ -79,6 +85,7 @@ export interface FileRoutesByFullPath {
   '/strategy': typeof StrategyRoute
   '/themes': typeof ThemesRouteWithChildren
   '/ideas/$id': typeof IdeasIdRoute
+  '/showcase/pitch-critic': typeof ShowcasePitchCriticRoute
   '/themes/$theme': typeof ThemesThemeRoute
   '/showcase/': typeof ShowcaseIndexRoute
   '/themes/': typeof ThemesIndexRoute
@@ -89,6 +96,7 @@ export interface FileRoutesByTo {
   '/quantum-primer': typeof QuantumPrimerRoute
   '/strategy': typeof StrategyRoute
   '/ideas/$id': typeof IdeasIdRoute
+  '/showcase/pitch-critic': typeof ShowcasePitchCriticRoute
   '/themes/$theme': typeof ThemesThemeRoute
   '/showcase': typeof ShowcaseIndexRoute
   '/themes': typeof ThemesIndexRoute
@@ -102,6 +110,7 @@ export interface FileRoutesById {
   '/strategy': typeof StrategyRoute
   '/themes': typeof ThemesRouteWithChildren
   '/ideas/$id': typeof IdeasIdRoute
+  '/showcase/pitch-critic': typeof ShowcasePitchCriticRoute
   '/themes/$theme': typeof ThemesThemeRoute
   '/showcase/': typeof ShowcaseIndexRoute
   '/themes/': typeof ThemesIndexRoute
@@ -116,6 +125,7 @@ export interface FileRouteTypes {
     | '/strategy'
     | '/themes'
     | '/ideas/$id'
+    | '/showcase/pitch-critic'
     | '/themes/$theme'
     | '/showcase/'
     | '/themes/'
@@ -126,6 +136,7 @@ export interface FileRouteTypes {
     | '/quantum-primer'
     | '/strategy'
     | '/ideas/$id'
+    | '/showcase/pitch-critic'
     | '/themes/$theme'
     | '/showcase'
     | '/themes'
@@ -138,6 +149,7 @@ export interface FileRouteTypes {
     | '/strategy'
     | '/themes'
     | '/ideas/$id'
+    | '/showcase/pitch-critic'
     | '/themes/$theme'
     | '/showcase/'
     | '/themes/'
@@ -218,6 +230,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ThemesThemeRouteImport
       parentRoute: typeof ThemesRoute
     }
+    '/showcase/pitch-critic': {
+      id: '/showcase/pitch-critic'
+      path: '/pitch-critic'
+      fullPath: '/showcase/pitch-critic'
+      preLoaderRoute: typeof ShowcasePitchCriticRouteImport
+      parentRoute: typeof ShowcaseRoute
+    }
     '/ideas/$id': {
       id: '/ideas/$id'
       path: '/ideas/$id'
@@ -229,10 +248,12 @@ declare module '@tanstack/react-router' {
 }
 
 interface ShowcaseRouteChildren {
+  ShowcasePitchCriticRoute: typeof ShowcasePitchCriticRoute
   ShowcaseIndexRoute: typeof ShowcaseIndexRoute
 }
 
 const ShowcaseRouteChildren: ShowcaseRouteChildren = {
+  ShowcasePitchCriticRoute: ShowcasePitchCriticRoute,
   ShowcaseIndexRoute: ShowcaseIndexRoute,
 }
 
