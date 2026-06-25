@@ -176,8 +176,8 @@ export const render = createServerFn({ method: "POST" })
 CLIENT: textarea + "Render" button. On success, show `<img src={url} />` and a
 download link. Keep one canvas on screen, replace it on the next render.
 
-Other models: `openai/gpt-image-1` (text-fidelity), `bytedance/seedream-3.0`
-(default, fast + artistic). Browse https://aisa.one/models for the live list."""
+Use BARE model ids — `gpt-image-1` (text fidelity) or `seedream-3.0` (default,
+fast + artistic). NO vendor prefix. Browse https://aisa.one/models."""
 
 VIDEO_BODY = """SERVER FUNCTION (src/lib/aisa.functions.ts) — AIsa video gen (Wan / Seed):
 ```ts
