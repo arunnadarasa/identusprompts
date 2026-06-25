@@ -87,8 +87,8 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { name: "twitter:site", content: "@Lovable" },
       { name: "twitter:title", content: "Creative AI — 1,000 ElevenLabs hackathon ideas" },
       { name: "twitter:description", content: "An archive of 1,000 copy-paste Lovable mega-prompts that wire ElevenLabs text-to-speech, voice agents, realtime transcription, and music + SFX into ten creative disciplines." },
-      { property: "og:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/attachments/og-images/60c6be5c-ef40-4d85-beb8-7633cb220b49" },
-      { name: "twitter:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/attachments/og-images/60c6be5c-ef40-4d85-beb8-7633cb220b49" },
+      { property: "og:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/attachments/og-images/b4587290-910d-4d03-a16c-b7aae90c9c56" },
+      { name: "twitter:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/attachments/og-images/b4587290-910d-4d03-a16c-b7aae90c9c56" },
     ],
     links: [
       {
