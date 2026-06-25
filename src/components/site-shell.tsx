@@ -58,7 +58,7 @@ function SiteHeader() {
           <SheetContent side="right" className="w-80 bg-background border-l border-border p-0">
             <SheetTitle className="sr-only">Navigation</SheetTitle>
             <div className="flex items-center justify-between px-6 py-5 border-b border-border">
-              <span className="font-display text-xl">Creative <span className="italic text-primary">AI</span></span>
+              <span className="font-display text-xl">AIsa <span className="italic text-primary">Creative</span></span>
             </div>
             <nav className="flex flex-col p-4 gap-1 text-base">
               <MobileLink to="/themes" onClick={close}>Themes</MobileLink>
