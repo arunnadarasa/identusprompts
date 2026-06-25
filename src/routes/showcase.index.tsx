@@ -16,10 +16,27 @@ function ShowcaseIndex() {
         from one Lovable build — single API key, no infra, no setup.
       </p>
 
-      <div className="mt-12 p-6 sm:p-8 border border-dashed border-border bg-card">
+      <Link
+        to="/showcase/pitch-reader"
+        className="mt-12 block p-6 sm:p-8 border border-primary/50 bg-card hover:bg-primary/5 transition-colors duration-300 group"
+      >
+        <span className="eyebrow text-primary">Vol. 01 · No. 01 · Live</span>
+        <h2 className="font-display text-2xl sm:text-3xl mt-3 italic group-hover:text-primary transition-colors">
+          Pitch Reader — hear any idea spoken aloud.
+        </h2>
+        <p className="mt-4 text-sm text-muted-foreground leading-relaxed max-w-2xl">
+          Six curated pitches, one ElevenLabs button each. Built in a single Lovable
+          prompt to prove the 5-credit budget is real.
+        </p>
+        <span className="mt-5 inline-block text-[11px] tracking-[0.28em] uppercase font-semibold text-primary">
+          Open the demo →
+        </span>
+      </Link>
+
+      <div className="mt-8 p-6 sm:p-8 border border-dashed border-border bg-card">
         <span className="eyebrow text-primary">Vol. 01 · in production</span>
         <h2 className="font-display text-2xl sm:text-3xl mt-3 italic">
-          Live showcases land here as builders ship them.
+          More showcases land here as builders ship them.
         </h2>
         <p className="mt-4 text-sm text-muted-foreground leading-relaxed max-w-2xl">
           Pick any entry from the <Link to="/themes" className="text-primary hover:underline">index</Link>,

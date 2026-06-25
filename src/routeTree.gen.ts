@@ -18,6 +18,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as ThemesIndexRouteImport } from './routes/themes.index'
 import { Route as ShowcaseIndexRouteImport } from './routes/showcase.index'
 import { Route as ThemesThemeRouteImport } from './routes/themes.$theme'
+import { Route as ShowcasePitchReaderRouteImport } from './routes/showcase.pitch-reader'
 import { Route as IdeasIdRouteImport } from './routes/ideas.$id'
 
 const ThemesRoute = ThemesRouteImport.update({
@@ -65,6 +66,11 @@ const ThemesThemeRoute = ThemesThemeRouteImport.update({
   path: '/$theme',
   getParentRoute: () => ThemesRoute,
 } as any)
+const ShowcasePitchReaderRoute = ShowcasePitchReaderRouteImport.update({
+  id: '/pitch-reader',
+  path: '/pitch-reader',
+  getParentRoute: () => ShowcaseRoute,
+} as any)
 const IdeasIdRoute = IdeasIdRouteImport.update({
   id: '/ideas/$id',
   path: '/ideas/$id',
@@ -79,6 +85,7 @@ export interface FileRoutesByFullPath {
   '/strategy': typeof StrategyRoute
   '/themes': typeof ThemesRouteWithChildren
   '/ideas/$id': typeof IdeasIdRoute
+  '/showcase/pitch-reader': typeof ShowcasePitchReaderRoute
   '/themes/$theme': typeof ThemesThemeRoute
   '/showcase/': typeof ShowcaseIndexRoute
   '/themes/': typeof ThemesIndexRoute
@@ -89,6 +96,7 @@ export interface FileRoutesByTo {
   '/quantum-primer': typeof QuantumPrimerRoute
   '/strategy': typeof StrategyRoute
   '/ideas/$id': typeof IdeasIdRoute
+  '/showcase/pitch-reader': typeof ShowcasePitchReaderRoute
   '/themes/$theme': typeof ThemesThemeRoute
   '/showcase': typeof ShowcaseIndexRoute
   '/themes': typeof ThemesIndexRoute
@@ -102,6 +110,7 @@ export interface FileRoutesById {
   '/strategy': typeof StrategyRoute
   '/themes': typeof ThemesRouteWithChildren
   '/ideas/$id': typeof IdeasIdRoute
+  '/showcase/pitch-reader': typeof ShowcasePitchReaderRoute
   '/themes/$theme': typeof ThemesThemeRoute
   '/showcase/': typeof ShowcaseIndexRoute
   '/themes/': typeof ThemesIndexRoute
@@ -116,6 +125,7 @@ export interface FileRouteTypes {
     | '/strategy'
     | '/themes'
     | '/ideas/$id'
+    | '/showcase/pitch-reader'
     | '/themes/$theme'
     | '/showcase/'
     | '/themes/'
@@ -126,6 +136,7 @@ export interface FileRouteTypes {
     | '/quantum-primer'
     | '/strategy'
     | '/ideas/$id'
+    | '/showcase/pitch-reader'
     | '/themes/$theme'
     | '/showcase'
     | '/themes'
@@ -138,6 +149,7 @@ export interface FileRouteTypes {
     | '/strategy'
     | '/themes'
     | '/ideas/$id'
+    | '/showcase/pitch-reader'
     | '/themes/$theme'
     | '/showcase/'
     | '/themes/'
@@ -218,6 +230,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ThemesThemeRouteImport
       parentRoute: typeof ThemesRoute
     }
+    '/showcase/pitch-reader': {
+      id: '/showcase/pitch-reader'
+      path: '/pitch-reader'
+      fullPath: '/showcase/pitch-reader'
+      preLoaderRoute: typeof ShowcasePitchReaderRouteImport
+      parentRoute: typeof ShowcaseRoute
+    }
     '/ideas/$id': {
       id: '/ideas/$id'
       path: '/ideas/$id'
@@ -229,10 +248,12 @@ declare module '@tanstack/react-router' {
 }
 
 interface ShowcaseRouteChildren {
+  ShowcasePitchReaderRoute: typeof ShowcasePitchReaderRoute
   ShowcaseIndexRoute: typeof ShowcaseIndexRoute
 }
 
 const ShowcaseRouteChildren: ShowcaseRouteChildren = {
+  ShowcasePitchReaderRoute: ShowcasePitchReaderRoute,
   ShowcaseIndexRoute: ShowcaseIndexRoute,
 }
 
