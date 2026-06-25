@@ -34,7 +34,7 @@ export const critiquePitch = createServerFn({ method: "POST" })
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        model: "openai/gpt-4o-mini",
+        model: "gpt-4o-mini",
         temperature: 0.6,
         messages: [
           { role: "system", content: SYSTEM },
