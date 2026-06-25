@@ -116,7 +116,7 @@ function Index() {
             <div>
               <h3 className="font-display text-2xl leading-tight text-foreground italic">Four AIsa kernels.</h3>
               <p className="text-[11px] text-muted-foreground leading-relaxed mt-3 font-light">
-                AIsa Chat, conversational agents, live skills, video reels — the four kernels every entry leans on.
+                Chat, image, video and live skills — the four AIsa kernels every entry leans on.
               </p>
             </div>
             <div className="flex gap-1">
