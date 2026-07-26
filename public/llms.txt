@@ -1,15 +1,15 @@
-# AIsa Creative
+# Sprites Creative
 
 1,000 copy-paste Lovable mega-prompts pairing ten creative disciplines with the
-four AIsa kernels: frontier chat, conversational
-AIsa chat, realtime speech-to-text (skills), and generative music + sound
-effects. One API key (`AISA_API_KEY`), one Lovable build per idea.
+four fly.io Sprites primitives: Sprite Sandbox (public micro-VM), Filesystem
+Drop, Long-running Service, and One-shot Exec. One API token (`SPRITES_TOKEN`
+from sprites.dev/account), one Lovable build per idea.
 
-Built during the AIsa Creative Hackathon — StreetKode Fam · Indian
+Built during the Sprites Creative Hackathon — StreetKode Fam · Indian
 Krump Festival 14.
 
-## Live demos
+## Reference implementation
 
-- /showcase/pitch-critic — Pitch Critic. Six curated ideas, each spoken aloud
-  via AIsa Chat streaming. Built in one Lovable prompt as proof of the
-  5-credit budget.
+- https://github.com/arunnadarasa/sprite-sandbox-fun — end-to-end example: a
+  single Lovable build that creates a public Sprite, writes to /root/www, runs
+  a wake-on-request service on port 8080, and warm-polls the URL.

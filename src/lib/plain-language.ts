@@ -12,14 +12,14 @@ function audienceWord(audience: string): string {
 type Ctx = { sub: string; who: string };
 
 const templates: Record<string, (ctx: Ctx) => string> = {
-  "aisa-chat": ({ sub, who }) =>
-    `${cap(sub)} gets a frontier-model brain: a server function calls AIsa's LLM router and ${who} read a tailored, on-brand answer they can act on.`,
-  "aisa-image": ({ sub, who }) =>
-    `${cap(who)} type a brief and AIsa renders a fresh image for ${sub} in seconds — moodboard, cover, scene, or poster, ready to drop into the work.`,
-  "aisa-video": ({ sub, who }) =>
-    `${cap(who)} describe the moment and AIsa's video models stitch a short reel for ${sub} — motion sketch, loop, or scene block — playable on the page.`,
-  "aisa-skills": ({ sub, who }) =>
-    `${cap(who)} ask a question and AIsa pulls live web/search signal first, then has an LLM synthesise a sourced answer for ${sub} — research, not invention.`,
+  "sprite-create": ({ sub, who }) =>
+    `${cap(who)} tap once and a fresh public micro-VM spins up for ${sub} — the app hands them a shareable Sprite URL in seconds, no infra to configure.`,
+  "sprite-fs": ({ sub, who }) =>
+    `${cap(who)} compose the piece for ${sub}, the app writes the finished HTML and assets straight into a running Sprite, and everyone opens a real live URL.`,
+  "sprite-service": ({ sub, who }) =>
+    `${cap(who)} boot a long-running service inside a Sprite for ${sub} — the process wakes on the first visit, streams to the browser, and sleeps when the room clears.`,
+  "sprite-exec": ({ sub, who }) =>
+    `${cap(who)} run a shell command inside a Sprite for ${sub} and watch the stdout stream back — ffmpeg, imagemagick, a python one-liner — in an isolated micro-VM they never had to install.`,
 };
 
 export function getPlainProposition(idea: Idea, theme: Theme): string {
@@ -29,5 +29,5 @@ export function getPlainProposition(idea: Idea, theme: Theme): string {
   };
   const tmpl = templates[idea.quantumHookId];
   if (tmpl) return tmpl(ctx);
-  return `AIsa runs the kernel server-side and ${ctx.who} get a result they can act on without leaving the app.`;
+  return `Sprites runs the primitive server-side and ${ctx.who} get a live sandbox URL they can share without leaving the app.`;
 }

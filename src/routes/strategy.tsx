@@ -3,109 +3,141 @@ import { createFileRoute } from "@tanstack/react-router";
 export const Route = createFileRoute("/strategy")({
   head: () => ({
     meta: [
-      { title: "Build strategy — ship a real AIsa demo in one Lovable build" },
+      { title: "Build strategy — ship a real Sprites demo in one Lovable build" },
       {
         name: "description",
         content:
-          "How to ship a real AIsa demo in one Lovable build: one secret, one paste, a TanStack server function calling AIsa chat / image / video / skills, no infra.",
+          "How to ship a real fly.io Sprites demo in one Lovable build: one token, one paste, a TanStack server function calling api.sprites.dev to create, drop files, run services or exec — no infra.",
       },
-      { property: "og:title", content: "Real AIsa in one Lovable build" },
+      { property: "og:title", content: "Real Sprites in one Lovable build" },
       {
         property: "og:description",
-        content: "Build-time pattern for Lovable + AIsa hackathon entries.",
+        content: "Build-time pattern for Lovable + fly.io Sprites hackathon entries.",
       },
     ],
   }),
   component: Strategy,
 });
 
-const CHAT_SNIPPET = `// src/lib/aisa.functions.ts — TanStack server function calling AIsa chat completions
-// Built during the AIsa Creative Hackathon — StreetKode Fam · Indian Krump Festival 14
+const CREATE_SNIPPET = `// src/lib/sprites.functions.ts — spin up a public Sprite
+// Built during the Sprites Creative Hackathon — StreetKode Fam · Indian Krump Festival 14
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 
-export const ask = createServerFn({ method: "POST" })
-  .inputValidator((d) => z.object({ topic: z.string().min(1).max(2000) }).parse(d))
+const API = "https://api.sprites.dev/v1";
+const auth = () => ({ Authorization: \`Bearer \${process.env.SPRITES_TOKEN!}\` });
+
+export const launch = createServerFn({ method: "POST" })
+  .inputValidator((d) => z.object({ name: z.string().min(1).max(48) }).parse(d))
   .handler(async ({ data }) => {
-    const r = await fetch("https://api.aisa.one/v1/chat/completions", {
-      method: "POST",
-      headers: {
-        "Authorization": \`Bearer \${process.env.AISA_API_KEY!}\`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        model: "openai/gpt-4o-mini",
-        messages: [{ role: "user", content: data.topic }],
-      }),
+    const r = await fetch(\`\${API}/sprites\`, {
+      method: "POST",                        // NOTE: POST-only. PUT returns 404.
+      headers: { ...auth(), "Content-Type": "application/json" },
+      body: JSON.stringify({ name: data.name, url_settings: { auth: "public" } }),
     });
-    if (!r.ok) throw new Error(\`AIsa failed: \${r.status}\`);
-    const j = await r.json();
-    return { reply: j.choices[0].message.content as string };
+    if (!r.ok && r.status !== 409) throw new Error(\`create failed: \${r.status}\`);
+    return { url: \`https://\${data.name}.sprites.run\` };
   });`;
 
-const IMAGE_SNIPPET = `// src/lib/aisa.functions.ts — same key, generate an image
-export const render = createServerFn({ method: "POST" })
-  .inputValidator((d) => z.object({ brief: z.string().min(1).max(800) }).parse(d))
+const FS_SNIPPET = `// src/lib/sprites.functions.ts — drop an index.html into a live Sprite
+export const publish = createServerFn({ method: "POST" })
+  .inputValidator((d) => z.object({ name: z.string(), html: z.string().min(1) }).parse(d))
   .handler(async ({ data }) => {
-    const r = await fetch("https://api.aisa.one/v1/images/generations", {
-      method: "POST",
-      headers: {
-        "Authorization": \`Bearer \${process.env.AISA_API_KEY!}\`,
-        "Content-Type": "application/json",
-      },
+    // fs/write auto-creates parent dirs. Serve from /root/www — /home/sprite may not exist.
+    const w = await fetch(
+      \`\${API}/sprites/\${data.name}/fs/write?path=/root/www/index.html&workingDir=/\`,
+      { method: "PUT", headers: { ...auth(), "Content-Type": "application/octet-stream" }, body: data.html },
+    );
+    if (!w.ok) throw new Error(\`fs write failed: \${w.status}\`);
+    return { ok: true };
+  });`;
+
+const SERVICE_SNIPPET = `// src/lib/sprites.functions.ts — long-running service + warm-poll
+export const serve = createServerFn({ method: "POST" })
+  .inputValidator((d) => z.object({ name: z.string() }).parse(d))
+  .handler(async ({ data }) => {
+    // Reset stale, then PUT the new service. http_port is REQUIRED for wake-on-request.
+    await fetch(\`\${API}/sprites/\${data.name}/services/webapp\`, { method: "DELETE", headers: auth() });
+    await fetch(\`\${API}/sprites/\${data.name}/services/webapp\`, {
+      method: "PUT",
+      headers: { ...auth(), "Content-Type": "application/json" },
       body: JSON.stringify({
-        model: "bytedance/seedream-3.0",
-        prompt: data.brief,
-        size: "1024x1024",
+        cmd: "python3", args: ["-m", "http.server", "8080"],
+        dir: "/root/www", needs: [], http_port: 8080,
       }),
     });
-    if (!r.ok) throw new Error(\`AIsa image failed: \${r.status}\`);
-    const j = await r.json();
-    return { url: j.data[0].url as string };
+    await fetch(\`\${API}/sprites/\${data.name}/services/webapp/start\`, {
+      method: "POST", headers: { ...auth(), Accept: "application/x-ndjson" },
+    });
+    // Warm-poll so the first user hits a live URL, not a cold-boot 502.
+    const url = \`https://\${data.name}.sprites.run\`;
+    for (let i = 0; i < 12; i++) {
+      try { if ((await fetch(url, { signal: AbortSignal.timeout(4000) })).ok) return { url }; } catch {}
+      await new Promise((r) => setTimeout(r, 1000));
+    }
+    return { url };
+  });`;
+
+const EXEC_SNIPPET = `// src/lib/sprites.functions.ts — one-shot exec inside a Sprite
+export const run = createServerFn({ method: "POST" })
+  .inputValidator((d) => z.object({ name: z.string(), script: z.string().min(1) }).parse(d))
+  .handler(async ({ data }) => {
+    const qs = new URLSearchParams();
+    qs.append("cmd", "bash"); qs.append("cmd", "-lc"); qs.append("cmd", data.script);
+    const res = await fetch(\`\${API}/sprites/\${data.name}/exec?\${qs}\`, {
+      method: "POST",
+      headers: auth(),                       // Authorization ONLY. No Accept, or 406.
+    });
+    const bytes = new Uint8Array(await res.arrayBuffer());
+    // Response ends with 0x03 <exitCode>.
+    const exit = bytes.length >= 2 && bytes[bytes.length - 2] === 3 ? bytes[bytes.length - 1] : null;
+    const end = exit === null ? bytes.length : bytes.length - 2;
+    return { stdout: new TextDecoder().decode(bytes.slice(0, end)), exit };
   });`;
 
 const ENV_SNIPPET = `# .env (Lovable -> Project Settings -> Secrets)
-AISA_API_KEY=sk-aisa-...      # https://console.aisa.one
+SPRITES_TOKEN=<org-slug>/<org-id>/<token-id>/<token-value>   # https://sprites.dev/account
 
 # How Lovable wires this up in one prompt:
 # 1. Paste a mega-prompt from this archive.
 # 2. Lovable
-#    - writes a server function that proxies AIsa (chat / image / video / skills)
-#    - wires the client surface (textarea, prompt-to-canvas, search box, etc.)
-#    - keeps your key on the server via process.env.AISA_API_KEY
-# 3. Run it. Your demo is calling real AIsa frontier models.`;
+#    - writes a server function that proxies Sprites (create / fs / service / exec)
+#    - wires the client surface (launch button, compose form, console box, etc.)
+#    - keeps your token on the server via process.env.SPRITES_TOKEN
+# 3. Run it. Your demo is spinning up real fly.io micro-VMs.`;
 
 function Strategy() {
   return (
     <div className="max-w-6xl mx-auto px-5 sm:px-8 py-16 sm:py-24">
       <div className="max-w-3xl">
-        <div className="eyebrow text-primary mb-4">build strategy · AIsa</div>
+        <div className="eyebrow text-primary mb-4">build strategy · sprites</div>
         <h1 className="font-display text-4xl sm:text-6xl text-foreground italic leading-[1.05] mb-8">
-          Real AIsa, <span className="text-primary italic">one key</span>, one build.
+          Real Sprites, <span className="text-primary italic">one token</span>, one build.
         </h1>
         <p className="text-base sm:text-lg leading-relaxed text-muted-foreground font-light">
           Every mega-prompt in this archive collapses into the same shape: a single TanStack server
-          function calling api.aisa.one with one secret. It's the only pattern that lets a Lovable
-          account ship a working AIsa demo in one shot, inside the 5-credit budget.
+          function calling <code>api.sprites.dev/v1</code> with one secret. It's the only pattern
+          that lets a Lovable account ship a working Sprites demo in one shot, inside the 5-credit budget.
         </p>
       </div>
 
       <section className="mt-16 grid gap-8 md:grid-cols-2">
         <div className="border border-border bg-card p-8">
-          <h2 className="font-display text-xl font-semibold text-foreground italic">Why AIsa and not a single provider?</h2>
+          <h2 className="font-display text-xl font-semibold text-foreground italic">Why Sprites and not a normal deploy?</h2>
           <p className="mt-3 text-sm leading-relaxed text-muted-foreground font-light">
-            AIsa gives you one OpenAI-compatible endpoint and one API key in front of every frontier
-            model — OpenAI, Anthropic, Google, Qwen, DeepSeek for chat; Seedream + GPT image for
-            stills; Wan + Seed for video; Tavily, YouTube, scholar and more as Skills. Swap models
-            by changing one string, never touch infra.
+            Sprites are fly.io micro-VMs behind one REST API: create a fresh sandbox in a second,
+            drop files into it, run any command or long-running service, hand the user a public URL,
+            let it sleep. No CI, no Dockerfile, no Kubernetes — every demo gets its own throwaway
+            server on demand.
           </p>
         </div>
         <div className="border border-border bg-card p-8">
           <h2 className="font-display text-xl font-semibold text-foreground italic">Why TanStack server functions?</h2>
           <p className="mt-3 text-sm leading-relaxed text-muted-foreground font-light">
             Lovable's TanStack Start template makes secrets trivial. <code>createServerFn</code> runs
-            on the server, reads <code>process.env.AISA_API_KEY</code>, hits AIsa, and returns typed
-            JSON. The key never reaches the browser, no edge functions or extra infra needed.
+            on the server, reads <code>process.env.SPRITES_TOKEN</code>, hits <code>api.sprites.dev</code>,
+            and returns typed JSON. The token never reaches the browser, no edge functions or extra
+            infra needed.
           </p>
         </div>
       </section>
@@ -115,15 +147,27 @@ function Strategy() {
 
         <div className="space-y-6">
           <div>
-            <span className="eyebrow text-primary">src/lib/aisa.functions.ts — chat</span>
+            <span className="eyebrow text-primary">src/lib/sprites.functions.ts — create a Sprite</span>
             <pre className="mt-2 border border-border bg-card p-4 sm:p-5 text-[12px] sm:text-xs leading-relaxed overflow-x-auto whitespace-pre-wrap break-all">
-              <code className="text-foreground/85 font-mono">{CHAT_SNIPPET}</code>
+              <code className="text-foreground/85 font-mono">{CREATE_SNIPPET}</code>
             </pre>
           </div>
           <div>
-            <span className="eyebrow text-primary">src/lib/aisa.functions.ts — image</span>
+            <span className="eyebrow text-primary">src/lib/sprites.functions.ts — filesystem drop</span>
             <pre className="mt-2 border border-border bg-card p-4 sm:p-5 text-[12px] sm:text-xs leading-relaxed overflow-x-auto whitespace-pre-wrap break-all">
-              <code className="text-foreground/85 font-mono">{IMAGE_SNIPPET}</code>
+              <code className="text-foreground/85 font-mono">{FS_SNIPPET}</code>
+            </pre>
+          </div>
+          <div>
+            <span className="eyebrow text-primary">src/lib/sprites.functions.ts — long-running service</span>
+            <pre className="mt-2 border border-border bg-card p-4 sm:p-5 text-[12px] sm:text-xs leading-relaxed overflow-x-auto whitespace-pre-wrap break-all">
+              <code className="text-foreground/85 font-mono">{SERVICE_SNIPPET}</code>
+            </pre>
+          </div>
+          <div>
+            <span className="eyebrow text-primary">src/lib/sprites.functions.ts — one-shot exec</span>
+            <pre className="mt-2 border border-border bg-card p-4 sm:p-5 text-[12px] sm:text-xs leading-relaxed overflow-x-auto whitespace-pre-wrap break-all">
+              <code className="text-foreground/85 font-mono">{EXEC_SNIPPET}</code>
             </pre>
           </div>
           <div>
@@ -138,17 +182,27 @@ function Strategy() {
       <section className="mt-16 border-t border-border pt-10">
         <h2 className="font-display text-2xl sm:text-3xl text-foreground italic mb-4">Shipping a 5-credit demo</h2>
         <ul className="space-y-2 text-sm text-muted-foreground font-light leading-relaxed">
-          <li>· Pick one idea. Paste its mega-prompt. Add <code>AISA_API_KEY</code>. That's the whole build.</li>
+          <li>· Pick one idea. Paste its mega-prompt. Add <code>SPRITES_TOKEN</code>. That's the whole build.</li>
           <li>· Keep it to ONE route and ONE server function. No auth, no DB, no extra integrations.</li>
-          <li>· Switch model with one string: <code>openai/gpt-4o-mini</code>, <code>anthropic/claude-3-5-sonnet</code>, <code>google/gemini-2.5-flash</code>, <code>qwen/qwen2.5-72b</code>.</li>
-          <li>· Add the footer credit: "Built during the AIsa Creative Hackathon — StreetKode Fam · Indian Krump Festival 14".</li>
+          <li>· Pick the right primitive for the demo: create-only launcher, filesystem publisher, long-running service, or exec console.</li>
+          <li>· Serve services from <code>/root/www</code> with <code>http_port: 8080</code>. Warm-poll before returning the URL.</li>
+          <li>· Never send <code>Accept: application/octet-stream</code> on <code>/exec</code>. Sprites returns 406.</li>
+          <li>· Add the footer credit: "Built during the Sprites Creative Hackathon — StreetKode Fam · Indian Krump Festival 14".</li>
         </ul>
         <div className="mt-8 flex flex-wrap gap-3">
           <a href="/quantum-primer" className="px-5 py-2.5 bg-primary text-primary-foreground text-[10px] tracking-[0.32em] uppercase font-semibold">
-            AIsa primer
+            Sprites primer
           </a>
           <a href="/themes" className="px-5 py-2.5 border border-border text-foreground text-[10px] tracking-[0.32em] uppercase font-semibold hover:border-primary/60">
             Browse 1,000 ideas
+          </a>
+          <a
+            href="https://github.com/arunnadarasa/sprite-sandbox-fun"
+            target="_blank"
+            rel="noreferrer"
+            className="px-5 py-2.5 border border-primary/40 text-foreground text-[10px] tracking-[0.32em] uppercase font-semibold hover:border-primary"
+          >
+            Reference repo ↗
           </a>
         </div>
       </section>
