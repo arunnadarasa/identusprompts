@@ -450,22 +450,23 @@ def rewrite_pitch(idea: dict) -> str:
     return PITCH_TEMPLATES[hid](idea["title"], idea["subDiscipline"])
 
 
+ORDER = ["sprite-create", "sprite-fs", "sprite-service", "sprite-exec"]
+
+
 def main():
     total = 0
     for t in THEMES:
         p = DATA / f"{t['slug']}.json"
         doc = json.loads(p.read_text())
-        for idea in doc["ideas"]:
+        for i, idea in enumerate(doc["ideas"]):
             idea["theme"] = t["slug"]
-            hid = remap_kernel(idea)
+            hid = ORDER[i % len(ORDER)]
             hook = HOOKS[hid]
             idea["quantumHookId"] = hid
             idea["quantumHook"] = hook["name"]
             idea["quantumTag"] = hook["tag"]
-            existing_rat = idea.get("quantumRationale") or ""
-            if not existing_rat or STALE_RATIONALE_MARKERS.search(existing_rat):
-                idea["quantumRationale"] = RATIONALES[hid](idea["subDiscipline"], t["name"])
-            idea["pitch"] = rewrite_pitch(idea)
+            idea["quantumRationale"] = RATIONALES[hid](idea["subDiscipline"], t["name"])
+            idea["pitch"] = PITCH_TEMPLATES[hid](idea["title"], idea["subDiscipline"])
             idea["megaPrompt"] = make_prompt(idea, t)
             total += 1
         p.write_text(json.dumps(doc, indent=2, ensure_ascii=False))
