@@ -42,6 +42,39 @@ ship a working demo on the FIRST message with zero follow-ups. Engineer for that
 - Keep the diff small enough to land in one build pass. If a feature is not on
   screen in the user flow below, do not build it. Cut scope before adding scope."""
 
+PRIMER = """SPRITES PRIMER (assume the reader has never used Sprites)
+- What they are: fly.io micro-sandboxes (tiny disposable Linux VMs) managed via
+  a REST API at `https://api.sprites.dev/v1`. Each sprite gets a public URL at
+  `https://{name}.sprites.run` when created with `url_settings.auth: "public"`.
+- Sign-up: create a free account at https://sprites.dev, then copy the 4-part
+  token (`org-slug/org-id/token-id/token-value`) from https://sprites.dev/account.
+- Full API docs: https://docs.sprites.dev/ (only needed if you go beyond the
+  snippet below).
+- Sprite name rules: lowercase letters, digits, and hyphens only. Max ~63 chars.
+- Auth: every request sends `Authorization: Bearer <SPRITES_TOKEN>`. Server-side
+  only — the token is a bearer secret, never ship it to the browser.
+- Four primitives exist (create / fs.write / services / exec). This build uses
+  exactly one, wired end-to-end in the snippet below."""
+
+GOTCHAS = """GOTCHAS (universal — apply to every Sprites call in this build)
+- Token MUST be the 4-part `org-slug/org-id/token-id/token-value` from
+  sprites.dev/account. A raw Fly.io org token returns 401 authentication failed.
+- Create is POST-only: `POST /sprites`. `PUT /sprites/{name}` returns 404.
+- Services are PUT-addressed at `/sprites/{name}/services/{service}`. `POST`ing
+  the services collection returns 405.
+- `http_port` is REQUIRED in the service PUT body. Omit it and the sprite shows
+  "Running" but every request 502s.
+- Serve files from `/root/www`. `/home/sprite` may not exist — services fail to
+  start with `cd: No such file or directory`.
+- `/exec`: send `Authorization` ONLY. Adding `Accept: application/octet-stream`
+  returns 406. The response body ends with `0x03 <exitCode>` — strip those two
+  bytes before decoding stdout.
+- Cold boot: after `services/{name}/start`, warm-poll the public URL (up to
+  ~12x @ 1s, 4s fetch timeout) before returning it, or the user's first click
+  hits a 502.
+- Never call `api.sprites.dev` from the browser. Every fetch lives inside a
+  `createServerFn` handler so `SPRITES_TOKEN` stays server-side."""
+
 # ---------------------------------------------------------------------------
 # Legacy hook id -> new Sprites primitive.
 LEGACY_MAP = {
