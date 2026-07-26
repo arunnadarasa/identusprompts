@@ -1,66 +1,59 @@
-## Goal
+# Pivot: AIsa → fly.io Sprites (full swap)
 
-Strip every reference to ElevenLabs / Lovable AI / blockchain from the site, the catalog, and the showcase. The whole project becomes AIsa-native: one API key (`AISA_API_KEY`), one base URL (`https://api.aisa.one/v1`), four creative kernels.
+Rebrand the entire archive from "AIsa Creative — 1,000 AIsa hackathon ideas" to a Sprites-native archive. Keep the 10 creative disciplines and the editorial folio design; swap every primitive, mega-prompt, and copy surface to sprites.dev, and point the working showcase at the reference repo `github.com/arunnadarasa/sprite-sandbox-fun`.
 
-## Four AIsa kernels
+## 1. New primitives (`src/data/ideas/hooks.json`)
 
-Each idea is mapped (deterministically, by current hook id) to one kernel:
+Replace the four AIsa kernels with four Sprites primitives, matching the skill's invariants:
 
-1. **aisa-chat** — LLM router (`/chat/completions`, OpenAI-compatible). Models like `openai/gpt-4o-mini`, `anthropic/claude-haiku`, `google/gemini-flash`, `qwen/qwen-2.5`. The "brain" for coaches, critics, planners, story engines.
-2. **aisa-image** — Image generation (`/images/generations`, OpenAI-compatible, Seedream backend). Covers, moodboards, posters, scene art.
-3. **aisa-video** — Video generation (Wan / Seed, async pattern). Short clips, ambient loops, motion sketches. Prompt warns about polling + cost; used sparingly.
-4. **aisa-skills** — Agent Skills / data APIs (web search, scholar, YouTube SERP, Twitter, market/crypto, perplexity research). Powers research-flavoured ideas (trends, comps, citations).
+1. **Sprite Sandbox** — `POST /sprites` creates a public micro-VM with a hosted URL; the disposable canvas every idea ships on.
+2. **Filesystem Drop** — `PUT /sprites/{name}/fs/write` places `index.html`, assets, scripts under `/root/www` (parents auto-created).
+3. **Long-running Service** — `PUT /sprites/{name}/services/{svc}` + `/start` runs `python3 -m http.server 8080` (or any cmd) with `http_port` for wake-on-request.
+4. **One-shot Exec** — `POST /sprites/{name}/exec?cmd=...` streams stdout back; the "run this shell command inside the sandbox" primitive.
 
-Mapping rule in `scripts/rewrite_mega_prompts.py`: prior voice/blockchain hook ids fall back to `aisa-chat` by default; ideas whose discipline naturally implies visuals → `aisa-image`; motion/film/dance subset → `aisa-video`; research/marketing/finance subset → `aisa-skills`. Roughly 55 / 25 / 5 / 15 split.
+Each hook keeps the existing shape (`id`, `name`, `tag`, `kernel`, `ui`) so downstream code doesn't change.
 
-## Catalog regeneration
+## 2. Regenerate 1,000 ideas around Sprites
 
-- `scripts/regenerate_ideas.py`: keep AIsa-only mode (8 parallel workers, 40 batches × 25 ideas). Update the system/user prompt to demand AIsa-native concepts — no audio surfaces, no contracts, no Privy, just chat/image/video/skills + UI.
-- `scripts/rewrite_mega_prompts.py`: full rewrite. Each mega-prompt:
-  - **Header**: "ONE-SHOT, ~5 CREDITS" budget rule.
-  - **Stack**: TanStack Start, single page, one `createServerFn`, no DB, no auth.
-  - **AIsa setup**: `AISA_API_KEY` secret, `https://api.aisa.one/v1`, kernel-specific endpoint + minimal code snippet.
-  - **Kernel-specific scaffold**:
-    - chat → `fetch /chat/completions` with chosen model
-    - image → `fetch /images/generations`, render returned URL
-    - video → submit + poll task id, show progress, render final mp4
-    - skills → call the relevant skill endpoint, render structured result
-  - **UX**: one form, one result surface, loading + error states (handle 402/429).
-  - **Footer**: hackathon credit + link to `https://creativequantum.lovable.app/`.
+Rewrite `scripts/regenerate_ideas.py` prompts so every idea:
+- keeps its creative discipline + audience + market anchor
+- centers exactly one Sprites primitive as the user surface
+- describes an ephemeral micro-app the user (or their AI agent) spins up on demand — moodboards, rehearsal timers, generative canvases, per-scene sandboxes, share-links that self-destruct
+- drops all AIsa/LLM language; replaces `chainRationale` semantics with "why Sprites vs. a normal deploy"
 
-Run order: `regenerate_ideas.py` → `rewrite_mega_prompts.py` → quick scrub for stale "ElevenLabs / Voice / TTS / Privy / Sepolia / blockchain" terms in titles/pitches.
+`scripts/rewrite_mega_prompts.py` gets the same treatment: each mega-prompt becomes a single Lovable build using one TanStack server function calling `api.sprites.dev/v1` with one `SPRITES_TOKEN`, following the skill's minimal recipe (create → fs/write → service PUT → start → warm-poll URL).
 
-## UI rebrand (text + nav only, keep gold/cream)
+Delete `.regen-checkpoint.json` before running. Output overwrites `src/data/ideas/<theme>.json`. No schema changes to `src/data/ideas.ts` or `<Idea>` type.
 
-- `src/routes/__root.tsx` — site name, default title/description/OG.
-- `src/components/site-shell.tsx` — wordmark "AIsa AI Creative", nav copy.
-- `src/routes/index.tsx` — hero, kernel cards (Chat / Image / Video / Skills), copy.
-- `src/routes/about.tsx`, `src/routes/strategy.tsx`, `src/routes/quantum-primer.tsx` (rename to `aisa-primer.tsx` + add redirect-free route) — rewrite copy + code snippets for AIsa endpoints.
-- `src/lib/plain-language.ts` — propositions phrased around AIsa kernels.
-- `src/data/ideas/hooks.json` — replace hook entries with the four AIsa kernels.
-- `public/llms.txt` — re-author for AIsa Creative.
-- Delete remnants: `src/lib/tts.functions.ts`, ElevenLabs-flavoured copy, voice-only badges.
+## 3. Copy + route rewrites
 
-## Showcase — replace Pitch Reader with Pitch Critic
+- `src/routes/index.tsx` — hero, tiles, section headers, stat tile ("1k Sprite Entries"), status ("Running on Sprites"), "Get an API Key" → `https://sprites.dev/account`.
+- `src/routes/quantum-primer.tsx` — replace with a Sprites primer: what a sprite is, the four primitives, the token shape gotcha, the `/root/www` gotcha, the `http_port` gotcha (mined from the skill).
+- `src/routes/strategy.tsx` — swap AIsa snippets for Sprites snippets: create-sprite server fn, fs/write server fn, service+start server fn, warm-poll pattern. Env block shows `SPRITES_TOKEN` from `sprites.dev/account`.
+- `src/routes/about.tsx`, `src/components/site-shell.tsx`, `src/routes/themes.tsx`, `src/routes/themes.index.tsx`, `src/routes/themes.$theme.tsx`, `src/routes/ideas.$id.tsx`, `src/routes/__root.tsx` — swap AIsa → Sprites in nav, headings, meta tags, footer credit.
+- Footer credit becomes: "Built during the Sprites Creative Hackathon — StreetKode Fam · Indian Krump Festival 14" (or whatever variant the user prefers; I'll keep the current festival credit and swap only the tool name).
+- Per-route `head()` meta: unique Sprites-oriented title/description/og for `/`, `/themes`, `/themes/$theme`, `/ideas/$id`, `/quantum-primer`, `/strategy`, `/about`, `/showcase`.
 
-- Delete `src/routes/showcase.pitch-reader.tsx` and the ElevenLabs server fn.
-- New `src/lib/aisa-chat.functions.ts`: `createServerFn` POST → AIsa `/chat/completions` with a hard-coded critic system prompt; reads `process.env.AISA_API_KEY`; returns `{ critique: string }`; surfaces 402/429 errors cleanly.
-- New `src/routes/showcase.pitch-critic.tsx`: textarea + "Critique" button → renders streamed/returned markdown critique. No persistence.
-- Update `src/routes/showcase.index.tsx` to feature Pitch Critic and remove all ElevenLabs language.
+## 4. Showcase
 
-## Secrets
+Retire the AIsa pitch-critic:
+- Delete `src/routes/showcase.pitch-critic.tsx` and `src/lib/aisa-chat.functions.ts`.
+- Rewrite `src/routes/showcase.index.tsx` and `src/routes/showcase.tsx` as a "Reference implementation" page: explains the Sprites deploy flow from the skill, embeds the four code snippets, and links prominently to **`https://github.com/arunnadarasa/sprite-sandbox-fun`** as the working end-to-end example. No live launcher, no `SPRITES_TOKEN` secret needed in this project.
 
-`AISA_API_KEY` already set. No new secrets required.
+## 5. Secrets + docs
 
-## Verification
-
-1. Run regen + rewrite scripts; spot-check 5 random ideas (one per kernel + multilingual variant).
-2. `grep -ri "elevenlabs\|privy\|sepolia\|blockchain\|voice agent\|tts\|stt\b" src public` returns no business-logic hits.
-3. Playwright smoke at 1280px and 384px: home, /themes, one idea page (mega-prompt wraps), /showcase, /showcase/pitch-critic (submit a short pitch, get a critique).
-4. `stack_modern--invoke-server-function` POST to the critic server fn end-to-end.
+- No new secret required (showcase is docs-only).
+- `AISA_API_KEY` reference stays only inside the regeneration script (used locally to regenerate ideas), not in app code.
+- Update `public/llms.txt` and `AGENTS.md` to describe the Sprites archive.
 
 ## Out of scope
 
-- Visual redesign / palette change (text + nav only, per your answer).
-- Per-user OAuth, persistence, or DB.
-- Any new secrets beyond `AISA_API_KEY`.
+- The 10 theme slugs, emojis, and market anchors stay unchanged.
+- Editorial visual design, tokens in `styles.css`, and component structure stay unchanged.
+- No new routes, no auth, no DB.
+
+## Technical details
+
+- Uses the `fly-sprites` skill's minimal recipe verbatim for snippet code (create → fs/write → service PUT → start → warm-poll), including the "no `Accept` header on exec" and "serve from `/root/www`" gotchas.
+- Regeneration runs locally via `AISA_API_KEY=... python3 scripts/regenerate_ideas.py` — Sprites are the *subject* of the ideas; AIsa still generates the text.
+- `<Idea>`/`<Hook>`/`<Theme>` TS types unchanged; only string values swap, so `src/data/ideas.ts` and all consumers keep compiling.

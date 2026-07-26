@@ -4,10 +4,10 @@ import { SiteShell } from "@/components/site-shell";
 export const Route = createFileRoute("/showcase")({
   head: () => ({
     meta: [
-      { title: "Showcase — Creative Blockchain" },
-      { name: "description", content: "Live working demos built from the Creative Blockchain prompts." },
-      { property: "og:title", content: "Showcase — Creative Blockchain" },
-      { property: "og:description", content: "Live working demos built from the Creative Blockchain prompts." },
+      { title: "Showcase — Sprites Creative" },
+      { name: "description", content: "Reference implementations built from the Sprites Creative prompts." },
+      { property: "og:title", content: "Showcase — Sprites Creative" },
+      { property: "og:description", content: "Reference implementations built from the Sprites Creative prompts." },
     ],
   }),
   component: () => (
