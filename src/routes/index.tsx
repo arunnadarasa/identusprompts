@@ -8,8 +8,8 @@ export const Route = createFileRoute("/")({
     meta: [
       { title: "Sprites Creative — 1,000 fly.io Sprites hackathon ideas for Lovable" },
       { name: "description", content: "A browseable repo of 1,000 mega-prompts that wire fly.io Sprites — create, filesystem drops, long-running services and exec — into ten creative disciplines. Built during the Sprites Creative Hackathon." },
-      { property: "og:title", content: "Sprites Creative — 1,000 fly.io Sprites hackathon ideas" },
-      { property: "og:description", content: "Mega-prompts + Sprites primitives across 10 creative disciplines, ready to paste into Lovable." },
+      { property: "og:title", content: "Sprites Creative — 1,000 fly.io Sprites hackathon ideas for Lovable" },
+      { property: "og:description", content: "A browseable repo of 1,000 mega-prompts that wire fly.io Sprites — create, filesystem drops, long-running services and exec — into ten creative disciplines. Built during the Sprites Creative Hackathon." },
     ],
   }),
   component: Index,
