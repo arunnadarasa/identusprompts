@@ -1,30 +1,30 @@
 [
   {
-    "id": "aisa-chat",
-    "name": "AIsa Chat (LLM Router)",
-    "tag": "frontier reasoning",
-    "kernel": "an OpenAI-compatible `POST /v1/chat/completions` against https://api.aisa.one/v1 — pick any frontier model (openai/gpt-4o-mini, anthropic/claude-3-5-sonnet, google/gemini-2.5-flash, qwen/qwen2.5-72b, deepseek/deepseek-chat) through one endpoint, one key",
-    "ui": "a prompt box or chat surface that returns markdown the user can read, copy, or act on"
+    "id": "sprite-create",
+    "name": "Sprite Sandbox",
+    "tag": "public micro-VM",
+    "kernel": "a `POST https://api.sprites.dev/v1/sprites` with `{ name, url_settings: { auth: \"public\" } }` — fly.io mints a fresh isolated micro-VM and returns a public URL you can hand straight to a user",
+    "ui": "a launch button that spins up a disposable, shareable sandbox on demand"
   },
   {
-    "id": "aisa-image",
-    "name": "AIsa Image Generation",
-    "tag": "visual generation",
-    "kernel": "an OpenAI-compatible `POST /v1/images/generations` against https://api.aisa.one/v1 (Seedream + GPT image backends) — returns a hosted URL the client renders straight into an <img>",
-    "ui": "a prompt-driven canvas that renders covers, moodboards, posters or scene art on demand"
+    "id": "sprite-fs",
+    "name": "Filesystem Drop",
+    "tag": "instant asset push",
+    "kernel": "`PUT https://api.sprites.dev/v1/sprites/{name}/fs/write?path=/root/www/index.html` with an octet-stream body — writes files (index.html, JSON, generated assets) straight into the sandbox and auto-creates parent dirs",
+    "ui": "a compose surface that pushes freshly-authored HTML, JSON, or media into the live sandbox"
   },
   {
-    "id": "aisa-video",
-    "name": "AIsa Video Generation",
-    "tag": "motion generation",
-    "kernel": "the AIsa Media Gen skill (Wan / Seed video models) submitted via `POST /v1/skills/mediagen` — returns a task id, the client polls until an MP4 URL is ready",
-    "ui": "a prompt → progress bar → playable MP4 surface for short motion sketches, loops, or scene reels"
+    "id": "sprite-service",
+    "name": "Long-running Service",
+    "tag": "wake-on-request server",
+    "kernel": "`PUT /sprites/{name}/services/{svc}` with `{ cmd, args, dir: \"/root/www\", http_port: 8080, needs: [] }` then `POST /services/{svc}/start` — runs any long-running process (python http.server, ffmpeg loop, socket relay) that wakes on the first request",
+    "ui": "a launcher that boots a running process — HTTP server, streaming loop, playback engine — and hands the user its public URL"
   },
   {
-    "id": "aisa-skills",
-    "name": "AIsa Skills & Live Data",
-    "tag": "real-world signal",
-    "kernel": "AIsa Agent Skills (`POST /v1/skills/{skill_id}`) — web search (Tavily / Perplexity), YouTube SERP, Twitter, scholar, markets, trends — typed JSON results fed back into the LLM for grounded answers",
-    "ui": "a search/topic box that returns citation-grade results, trend signals, or research the user can drop into the work"
+    "id": "sprite-exec",
+    "name": "One-shot Exec",
+    "tag": "run any shell command",
+    "kernel": "`POST /sprites/{name}/exec?cmd=bash&cmd=-lc&cmd=<script>` with only an `Authorization` header — runs a shell command inside the sandbox and streams stdout back, terminated by 0x03 + exit code",
+    "ui": "a prompt-driven console that runs a shell command in the sandbox and streams the output back to the user"
   }
 ]
