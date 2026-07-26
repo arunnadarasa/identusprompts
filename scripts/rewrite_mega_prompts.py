@@ -411,6 +411,8 @@ Discipline: {theme['name']} ({sub}).
 Recipe: {hook['name']} ({hook['tag']}) as the single Sprites primitive.
 Why Sprites: {rationale}
 
+{PRIMER}
+
 {BUDGET}
 
 STACK
@@ -430,11 +432,14 @@ USER FLOW (the entire app — nothing else exists)
 3. Sprites runs the primitive server-side, the URL or stdout lands on screen, the user
    can share, retry, or copy.
 
+{GOTCHAS}
+
 {SECRETS}
 
 CREDIT (must appear in UI footer AND as JSDoc on the server function):
 {CREDIT}
 """
+
 
 
 def rewrite_pitch(idea: dict) -> str:
