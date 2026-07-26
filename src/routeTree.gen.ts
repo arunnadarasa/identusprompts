@@ -9,35 +9,20 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as ThemesRouteImport } from './routes/themes'
-import { Route as StrategyRouteImport } from './routes/strategy'
-import { Route as ShowcaseRouteImport } from './routes/showcase'
-import { Route as QuantumPrimerRouteImport } from './routes/quantum-primer'
-import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
-import { Route as ThemesIndexRouteImport } from './routes/themes.index'
-import { Route as ShowcaseIndexRouteImport } from './routes/showcase.index'
-import { Route as ThemesThemeRouteImport } from './routes/themes.$theme'
+import { Route as AboutRouteImport } from './routes/about'
+import { Route as QuantumPrimerRouteImport } from './routes/quantum-primer'
+import { Route as ShowcaseRouteImport } from './routes/showcase'
+import { Route as StrategyRouteImport } from './routes/strategy'
+import { Route as ThemesRouteImport } from './routes/themes'
 import { Route as IdeasIdRouteImport } from './routes/ideas.$id'
+import { Route as ShowcaseIndexRouteImport } from './routes/showcase.index'
+import { Route as ThemesIndexRouteImport } from './routes/themes.index'
+import { Route as ThemesThemeRouteImport } from './routes/themes.$theme'
 
-const ThemesRoute = ThemesRouteImport.update({
-  id: '/themes',
-  path: '/themes',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const StrategyRoute = StrategyRouteImport.update({
-  id: '/strategy',
-  path: '/strategy',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ShowcaseRoute = ShowcaseRouteImport.update({
-  id: '/showcase',
-  path: '/showcase',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const QuantumPrimerRoute = QuantumPrimerRouteImport.update({
-  id: '/quantum-primer',
-  path: '/quantum-primer',
+const IndexRoute = IndexRouteImport.update({
+  id: '/',
+  path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AboutRoute = AboutRouteImport.update({
@@ -45,30 +30,45 @@ const AboutRoute = AboutRouteImport.update({
   path: '/about',
   getParentRoute: () => rootRouteImport,
 } as any)
-const IndexRoute = IndexRouteImport.update({
-  id: '/',
-  path: '/',
+const QuantumPrimerRoute = QuantumPrimerRouteImport.update({
+  id: '/quantum-primer',
+  path: '/quantum-primer',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ThemesIndexRoute = ThemesIndexRouteImport.update({
-  id: '/',
-  path: '/',
-  getParentRoute: () => ThemesRoute,
+const ShowcaseRoute = ShowcaseRouteImport.update({
+  id: '/showcase',
+  path: '/showcase',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const StrategyRoute = StrategyRouteImport.update({
+  id: '/strategy',
+  path: '/strategy',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ThemesRoute = ThemesRouteImport.update({
+  id: '/themes',
+  path: '/themes',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const IdeasIdRoute = IdeasIdRouteImport.update({
+  id: '/ideas/$id',
+  path: '/ideas/$id',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const ShowcaseIndexRoute = ShowcaseIndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => ShowcaseRoute,
 } as any)
+const ThemesIndexRoute = ThemesIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => ThemesRoute,
+} as any)
 const ThemesThemeRoute = ThemesThemeRouteImport.update({
   id: '/$theme',
   path: '/$theme',
   getParentRoute: () => ThemesRoute,
-} as any)
-const IdeasIdRoute = IdeasIdRouteImport.update({
-  id: '/ideas/$id',
-  path: '/ideas/$id',
-  getParentRoute: () => rootRouteImport,
 } as any)
 
 export interface FileRoutesByFullPath {
@@ -155,32 +155,11 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/themes': {
-      id: '/themes'
-      path: '/themes'
-      fullPath: '/themes'
-      preLoaderRoute: typeof ThemesRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/strategy': {
-      id: '/strategy'
-      path: '/strategy'
-      fullPath: '/strategy'
-      preLoaderRoute: typeof StrategyRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/showcase': {
-      id: '/showcase'
-      path: '/showcase'
-      fullPath: '/showcase'
-      preLoaderRoute: typeof ShowcaseRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/quantum-primer': {
-      id: '/quantum-primer'
-      path: '/quantum-primer'
-      fullPath: '/quantum-primer'
-      preLoaderRoute: typeof QuantumPrimerRouteImport
+    '/': {
+      id: '/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/about': {
@@ -190,19 +169,40 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AboutRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/': {
-      id: '/'
-      path: '/'
-      fullPath: '/'
-      preLoaderRoute: typeof IndexRouteImport
+    '/quantum-primer': {
+      id: '/quantum-primer'
+      path: '/quantum-primer'
+      fullPath: '/quantum-primer'
+      preLoaderRoute: typeof QuantumPrimerRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/themes/': {
-      id: '/themes/'
-      path: '/'
-      fullPath: '/themes/'
-      preLoaderRoute: typeof ThemesIndexRouteImport
-      parentRoute: typeof ThemesRoute
+    '/showcase': {
+      id: '/showcase'
+      path: '/showcase'
+      fullPath: '/showcase'
+      preLoaderRoute: typeof ShowcaseRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/strategy': {
+      id: '/strategy'
+      path: '/strategy'
+      fullPath: '/strategy'
+      preLoaderRoute: typeof StrategyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/themes': {
+      id: '/themes'
+      path: '/themes'
+      fullPath: '/themes'
+      preLoaderRoute: typeof ThemesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/ideas/$id': {
+      id: '/ideas/$id'
+      path: '/ideas/$id'
+      fullPath: '/ideas/$id'
+      preLoaderRoute: typeof IdeasIdRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/showcase/': {
       id: '/showcase/'
@@ -211,19 +211,19 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ShowcaseIndexRouteImport
       parentRoute: typeof ShowcaseRoute
     }
+    '/themes/': {
+      id: '/themes/'
+      path: '/'
+      fullPath: '/themes/'
+      preLoaderRoute: typeof ThemesIndexRouteImport
+      parentRoute: typeof ThemesRoute
+    }
     '/themes/$theme': {
       id: '/themes/$theme'
       path: '/$theme'
       fullPath: '/themes/$theme'
       preLoaderRoute: typeof ThemesThemeRouteImport
       parentRoute: typeof ThemesRoute
-    }
-    '/ideas/$id': {
-      id: '/ideas/$id'
-      path: '/ideas/$id'
-      fullPath: '/ideas/$id'
-      preLoaderRoute: typeof IdeasIdRouteImport
-      parentRoute: typeof rootRouteImport
     }
   }
 }
