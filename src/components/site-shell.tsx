@@ -32,10 +32,18 @@ function SiteHeader() {
           <NavLink to="/quantum-primer">Primer</NavLink>
           <NavLink to="/about">About</NavLink>
           <a
-            href="https://github.com/arunnadarasa/sprite-sandbox-fun"
+            href="https://docs.sprites.dev/"
             target="_blank"
             rel="noreferrer"
             className="ml-3 px-3 py-2 border border-border text-foreground text-[10px] font-semibold tracking-[0.28em] uppercase hover:border-primary/60 hover:text-primary transition-colors duration-500"
+          >
+            Docs ↗
+          </a>
+          <a
+            href="https://github.com/arunnadarasa/sprite-sandbox-fun"
+            target="_blank"
+            rel="noreferrer"
+            className="ml-2 px-3 py-2 border border-border text-foreground text-[10px] font-semibold tracking-[0.28em] uppercase hover:border-primary/60 hover:text-primary transition-colors duration-500"
           >
             Reference repo ↗
           </a>
@@ -67,11 +75,20 @@ function SiteHeader() {
               <MobileLink to="/quantum-primer" onClick={close}>Primer</MobileLink>
               <MobileLink to="/about" onClick={close}>About</MobileLink>
               <a
-                href="https://github.com/arunnadarasa/sprite-sandbox-fun"
+                href="https://docs.sprites.dev/"
                 target="_blank"
                 rel="noreferrer"
                 onClick={close}
                 className="mt-3 px-4 py-3 border border-border text-foreground text-[11px] tracking-[0.28em] uppercase font-semibold text-center"
+              >
+                Docs ↗
+              </a>
+              <a
+                href="https://github.com/arunnadarasa/sprite-sandbox-fun"
+                target="_blank"
+                rel="noreferrer"
+                onClick={close}
+                className="mt-2 px-4 py-3 border border-border text-foreground text-[11px] tracking-[0.28em] uppercase font-semibold text-center"
               >
                 Reference repo ↗
               </a>
