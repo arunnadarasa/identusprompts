@@ -1,59 +1,81 @@
-# Pivot: AIsa → fly.io Sprites (full swap)
 
-Rebrand the entire archive from "AIsa Creative — 1,000 AIsa hackathon ideas" to a Sprites-native archive. Keep the 10 creative disciplines and the editorial folio design; swap every primitive, mega-prompt, and copy surface to sprites.dev, and point the working showcase at the reference repo `github.com/arunnadarasa/sprite-sandbox-fun`.
+## Goal
 
-## 1. New primitives (`src/data/ideas/hooks.json`)
+Hackathon participants won't have the internal `fly-sprites` skill, so every one of the 1,000 mega-prompts must carry enough Sprites knowledge to succeed on the first Lovable message. Today each prompt embeds the code snippet + a few primitive-specific gotchas, but assumes the reader already knows what Sprites is, the base URL, the token shape, the URL pattern, and the cross-primitive pitfalls.
 
-Replace the four AIsa kernels with four Sprites primitives, matching the skill's invariants:
+## Changes to `scripts/rewrite_mega_prompts.py`
 
-1. **Sprite Sandbox** — `POST /sprites` creates a public micro-VM with a hosted URL; the disposable canvas every idea ships on.
-2. **Filesystem Drop** — `PUT /sprites/{name}/fs/write` places `index.html`, assets, scripts under `/root/www` (parents auto-created).
-3. **Long-running Service** — `PUT /sprites/{name}/services/{svc}` + `/start` runs `python3 -m http.server 8080` (or any cmd) with `http_port` for wake-on-request.
-4. **One-shot Exec** — `POST /sprites/{name}/exec?cmd=...` streams stdout back; the "run this shell command inside the sandbox" primitive.
+Add two new blocks that get inlined into every generated mega-prompt, then re-run the script to regenerate all 12 theme JSON files (1,000 ideas).
 
-Each hook keeps the existing shape (`id`, `name`, `tag`, `kernel`, `ui`) so downstream code doesn't change.
+### 1. New `SPRITES_PRIMER` block (inserted right after the `CONCEPT` section)
 
-## 2. Regenerate 1,000 ideas around Sprites
+Compact "assume the reader has never used Sprites" briefing:
 
-Rewrite `scripts/regenerate_ideas.py` prompts so every idea:
-- keeps its creative discipline + audience + market anchor
-- centers exactly one Sprites primitive as the user surface
-- describes an ephemeral micro-app the user (or their AI agent) spins up on demand — moodboards, rehearsal timers, generative canvases, per-scene sandboxes, share-links that self-destruct
-- drops all AIsa/LLM language; replaces `chainRationale` semantics with "why Sprites vs. a normal deploy"
+- What Sprites are: fly.io micro-sandboxes managed via a REST API at `https://api.sprites.dev/v1`.
+- Sign-up path: create an account at https://sprites.dev, generate a token at https://sprites.dev/account.
+- Public URL pattern: `https://{name}.sprites.run` (auto-issued for `url_settings.auth: "public"`).
+- Docs: https://docs.sprites.dev/ for anything beyond this prompt.
+- Sprite name rules: lowercase, digits, hyphens only.
+- Auth header: `Authorization: Bearer <SPRITES_TOKEN>`, server-side only.
 
-`scripts/rewrite_mega_prompts.py` gets the same treatment: each mega-prompt becomes a single Lovable build using one TanStack server function calling `api.sprites.dev/v1` with one `SPRITES_TOKEN`, following the skill's minimal recipe (create → fs/write → service PUT → start → warm-poll URL).
+### 2. New `GOTCHAS` block (inserted right before the `KEY` / secrets section)
 
-Delete `.regen-checkpoint.json` before running. Output overwrites `src/data/ideas/<theme>.json`. No schema changes to `src/data/ideas.ts` or `<Idea>` type.
+Universal pitfalls that apply regardless of primitive, mined from the skill:
 
-## 3. Copy + route rewrites
+- Token must be the 4-part `org-slug/org-id/token-id/token-value` — a raw Fly.io token returns 401.
+- `POST /sprites` only — `PUT /sprites/{name}` returns 404.
+- Services are PUT-addressed at `/sprites/{name}/services/{service}` — `POST` returns 405.
+- `http_port` is REQUIRED on service PUTs, else every request 502s despite "Running".
+- Serve from `/root/www` — `/home/sprite` may not exist.
+- `/exec`: `Authorization` header only; adding `Accept: application/octet-stream` returns 406. Response stream ends with `0x03 <exitCode>`.
+- Cold-boot: warm-poll the public URL before returning it to the user.
+- Never call Sprites from the browser — the token is a bearer secret; always go through `createServerFn`.
 
-- `src/routes/index.tsx` — hero, tiles, section headers, stat tile ("1k Sprite Entries"), status ("Running on Sprites"), "Get an API Key" → `https://sprites.dev/account`.
-- `src/routes/quantum-primer.tsx` — replace with a Sprites primer: what a sprite is, the four primitives, the token shape gotcha, the `/root/www` gotcha, the `http_port` gotcha (mined from the skill).
-- `src/routes/strategy.tsx` — swap AIsa snippets for Sprites snippets: create-sprite server fn, fs/write server fn, service+start server fn, warm-poll pattern. Env block shows `SPRITES_TOKEN` from `sprites.dev/account`.
-- `src/routes/about.tsx`, `src/components/site-shell.tsx`, `src/routes/themes.tsx`, `src/routes/themes.index.tsx`, `src/routes/themes.$theme.tsx`, `src/routes/ideas.$id.tsx`, `src/routes/__root.tsx` — swap AIsa → Sprites in nav, headings, meta tags, footer credit.
-- Footer credit becomes: "Built during the Sprites Creative Hackathon — StreetKode Fam · Indian Krump Festival 14" (or whatever variant the user prefers; I'll keep the current festival credit and swap only the tool name).
-- Per-route `head()` meta: unique Sprites-oriented title/description/og for `/`, `/themes`, `/themes/$theme`, `/ideas/$id`, `/quantum-primer`, `/strategy`, `/about`, `/showcase`.
+### 3. Wire both blocks into `make_prompt(...)`
 
-## 4. Showcase
+Update the f-string in `make_prompt` so the assembled prompt reads:
 
-Retire the AIsa pitch-critic:
-- Delete `src/routes/showcase.pitch-critic.tsx` and `src/lib/aisa-chat.functions.ts`.
-- Rewrite `src/routes/showcase.index.tsx` and `src/routes/showcase.tsx` as a "Reference implementation" page: explains the Sprites deploy flow from the skill, embeds the four code snippets, and links prominently to **`https://github.com/arunnadarasa/sprite-sandbox-fun`** as the working end-to-end example. No live launcher, no `SPRITES_TOKEN` secret needed in this project.
+```text
+CONCEPT
+...
 
-## 5. Secrets + docs
+SPRITES PRIMER
+...
 
-- No new secret required (showcase is docs-only).
-- `AISA_API_KEY` reference stays only inside the regeneration script (used locally to regenerate ideas), not in app code.
-- Update `public/llms.txt` and `AGENTS.md` to describe the Sprites archive.
+LOVABLE BUDGET
+...
+
+STACK
+...
+
+<primitive-specific SERVER FUNCTION + CLIENT body>
+
+USER FLOW
+...
+
+GOTCHAS (universal — apply to every Sprites call in this build)
+...
+
+KEY — only ONE secret is required
+...
+
+CREDIT
+...
+```
+
+### 4. Firm up the "docs link" line
+
+The showcase already links to https://docs.sprites.dev/; the primer block references the same URL so participants can dig deeper without our skill.
+
+## Execution
+
+1. Edit `scripts/rewrite_mega_prompts.py` — add the two constants and update `make_prompt`.
+2. Run `python3 scripts/rewrite_mega_prompts.py` to rewrite all 1,000 `megaPrompt` fields across the 12 theme JSONs.
+3. Spot-check one idea per primitive (`sprite-create`, `sprite-fs`, `sprite-service`, `sprite-exec`) to confirm the primer + gotchas render correctly.
+4. Type-check.
 
 ## Out of scope
 
-- The 10 theme slugs, emojis, and market anchors stay unchanged.
-- Editorial visual design, tokens in `styles.css`, and component structure stay unchanged.
-- No new routes, no auth, no DB.
-
-## Technical details
-
-- Uses the `fly-sprites` skill's minimal recipe verbatim for snippet code (create → fs/write → service PUT → start → warm-poll), including the "no `Accept` header on exec" and "serve from `/root/www`" gotchas.
-- Regeneration runs locally via `AISA_API_KEY=... python3 scripts/regenerate_ideas.py` — Sprites are the *subject* of the ideas; AIsa still generates the text.
-- `<Idea>`/`<Hook>`/`<Theme>` TS types unchanged; only string values swap, so `src/data/ideas.ts` and all consumers keep compiling.
+- Title / pitch / market sizing / rationale — already Sprites-native from the last pivot.
+- UI copy on routes — the primer is added inside the mega-prompt payload, not the site copy.
+- Any new primitives beyond the four in `hooks.json`.
