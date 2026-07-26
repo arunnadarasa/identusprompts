@@ -8,8 +8,8 @@ import { getPlainProposition } from "@/lib/plain-language";
 export const Route = createFileRoute("/ideas/$id")({
   head: ({ params }) => {
     const idea = getIdea(params.id);
-    const title = idea ? `${idea.title} · AIsa Creative idea` : "Idea · AIsa Creative";
-    const desc = idea ? idea.pitch : "An AIsa hackathon idea.";
+    const title = idea ? `${idea.title} · Sprites Creative idea` : "Idea · Sprites Creative";
+    const desc = idea ? idea.pitch : "A fly.io Sprites hackathon idea.";
     return {
       meta: [
         { title },
@@ -32,7 +32,7 @@ export const Route = createFileRoute("/ideas/$id")({
 });
 
 const SECRETS = [
-  { name: "AISA_API_KEY", note: "Single key for AIsa chat completions, image generation, video generation and live skills. Free tier covers a hackathon weekend.", href: "https://console.aisa.one" },
+  { name: "SPRITES_TOKEN", note: "The 4-part token (org-slug/org-id/token-id/token-value) from sprites.dev/account. One token unlocks create, filesystem writes, long-running services, and exec across every Sprite you spin up.", href: "https://sprites.dev/account" },
 ];
 
 function IdeaPage() {
@@ -69,8 +69,8 @@ function IdeaPage() {
           <div className="absolute -top-24 -right-24 w-72 h-72 rounded-full gold-bloom blur-3xl opacity-60 pointer-events-none" />
           <div className="relative flex items-baseline justify-between gap-4 mb-5">
             <div>
-              <span className="eyebrow block mb-2">Section · AIsa</span>
-              <h2 className="font-display text-3xl italic text-foreground">The kernel.</h2>
+              <span className="eyebrow block mb-2">Section · Sprites</span>
+              <h2 className="font-display text-3xl italic text-foreground">The primitive.</h2>
             </div>
             <Link to="/quantum-primer" hash={idea.quantumHookId} className="story-gold eyebrow text-primary">
               full primer →
@@ -86,7 +86,7 @@ function IdeaPage() {
           {hook && (
             <div className="relative mt-8 pt-6 border-t border-border grid sm:grid-cols-2 gap-6 text-sm">
               <div>
-                <div className="eyebrow mb-2">Kernel</div>
+                <div className="eyebrow mb-2">Primitive</div>
                 <div className="text-foreground/90 font-light leading-relaxed">{hook.kernel}</div>
               </div>
               <div>
@@ -146,12 +146,12 @@ function IdeaPage() {
               Open in Lovable ↗
             </a>
             <a
-              href="https://aisa.one/docs"
+              href="https://github.com/arunnadarasa/sprite-sandbox-fun"
               target="_blank"
               rel="noreferrer"
               className="inline-flex items-center gap-2 px-6 py-3 border border-primary/40 text-foreground hover:bg-primary hover:text-primary-foreground transition-colors duration-500"
             >
-              AIsa Docs ↗
+              Reference repo ↗
             </a>
           </div>
         </section>

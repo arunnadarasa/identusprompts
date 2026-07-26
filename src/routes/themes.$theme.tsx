@@ -7,9 +7,9 @@ import { getTheme, IDEAS_BY_THEME, HOOKS } from "@/data/ideas";
 export const Route = createFileRoute("/themes/$theme")({
   head: ({ params }) => {
     const theme = getTheme(params.theme);
-    const title = theme ? `${theme.name} · 100 AIsa hackathon ideas` : "Theme · AIsa Creative";
+    const title = theme ? `${theme.name} · 100 Sprites hackathon ideas` : "Theme · Sprites Creative";
     const desc = theme
-      ? `100 buildable hackathon ideas for ${theme.audience} using Lovable + AIsa (AIsa Chat, AIsa chat, skills, music & SFX).`
+      ? `100 buildable hackathon ideas for ${theme.audience} using Lovable + fly.io Sprites (create, filesystem drop, long-running service, one-shot exec).`
       : "Browse ideas by discipline.";
     return {
       meta: [
