@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AboutRouteImport } from './routes/about'
+import { Route as LlmsFullDottxtRouteImport } from './routes/llms-full[.]txt'
 import { Route as QuantumPrimerRouteImport } from './routes/quantum-primer'
 import { Route as ShowcaseRouteImport } from './routes/showcase'
 import { Route as StrategyRouteImport } from './routes/strategy'
@@ -28,6 +29,11 @@ const IndexRoute = IndexRouteImport.update({
 const AboutRoute = AboutRouteImport.update({
   id: '/about',
   path: '/about',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LlmsFullDottxtRoute = LlmsFullDottxtRouteImport.update({
+  id: '/llms-full.txt',
+  path: '/llms-full.txt',
   getParentRoute: () => rootRouteImport,
 } as any)
 const QuantumPrimerRoute = QuantumPrimerRouteImport.update({
@@ -74,6 +80,7 @@ const ThemesThemeRoute = ThemesThemeRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/llms-full.txt': typeof LlmsFullDottxtRoute
   '/quantum-primer': typeof QuantumPrimerRoute
   '/showcase': typeof ShowcaseRouteWithChildren
   '/strategy': typeof StrategyRoute
@@ -86,6 +93,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/llms-full.txt': typeof LlmsFullDottxtRoute
   '/quantum-primer': typeof QuantumPrimerRoute
   '/strategy': typeof StrategyRoute
   '/ideas/$id': typeof IdeasIdRoute
@@ -97,6 +105,7 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/llms-full.txt': typeof LlmsFullDottxtRoute
   '/quantum-primer': typeof QuantumPrimerRoute
   '/showcase': typeof ShowcaseRouteWithChildren
   '/strategy': typeof StrategyRoute
@@ -111,6 +120,7 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/about'
+    | '/llms-full.txt'
     | '/quantum-primer'
     | '/showcase'
     | '/strategy'
@@ -123,6 +133,7 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/about'
+    | '/llms-full.txt'
     | '/quantum-primer'
     | '/strategy'
     | '/ideas/$id'
@@ -133,6 +144,7 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/about'
+    | '/llms-full.txt'
     | '/quantum-primer'
     | '/showcase'
     | '/strategy'
@@ -146,6 +158,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AboutRoute: typeof AboutRoute
+  LlmsFullDottxtRoute: typeof LlmsFullDottxtRoute
   QuantumPrimerRoute: typeof QuantumPrimerRoute
   ShowcaseRoute: typeof ShowcaseRouteWithChildren
   StrategyRoute: typeof StrategyRoute
@@ -167,6 +180,13 @@ declare module '@tanstack/react-router' {
       path: '/about'
       fullPath: '/about'
       preLoaderRoute: typeof AboutRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/llms-full.txt': {
+      id: '/llms-full.txt'
+      path: '/llms-full.txt'
+      fullPath: '/llms-full.txt'
+      preLoaderRoute: typeof LlmsFullDottxtRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/quantum-primer': {
@@ -256,6 +276,7 @@ const ThemesRouteWithChildren =
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AboutRoute: AboutRoute,
+  LlmsFullDottxtRoute: LlmsFullDottxtRoute,
   QuantumPrimerRoute: QuantumPrimerRoute,
   ShowcaseRoute: ShowcaseRouteWithChildren,
   StrategyRoute: StrategyRoute,
