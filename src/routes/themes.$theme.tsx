@@ -2,7 +2,7 @@ import { createFileRoute, Link, notFound, useRouter } from "@tanstack/react-rout
 import { useMemo, useState } from "react";
 import { SiteShell } from "@/components/site-shell";
 import { IdeaCard } from "@/components/idea-card";
-import { getTheme, IDEAS_BY_THEME, HOOKS } from "@/data/ideas";
+import { getTheme, IDEAS_BY_THEME, HOOKS, type Theme } from "@/data/ideas";
 
 export const Route = createFileRoute("/themes/$theme")({
   head: ({ params }) => {
