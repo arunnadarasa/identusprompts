@@ -97,21 +97,44 @@ function IdeaPage() {
         </section>
 
         <section className="mt-12">
+          <span className="eyebrow block mb-2">Appendix · Agent mode</span>
+          <h2 className="font-display text-3xl italic text-foreground mb-6">Pick how the agent runs.</h2>
+          <ModeSelector value={modeId} onChange={setModeId} />
+          <p className="mt-4 text-sm text-muted-foreground font-light leading-relaxed">{mode.when}</p>
+        </section>
+
+        <section className="mt-12">
           <span className="eyebrow block mb-2">Appendix · Secrets</span>
-          <h2 className="font-display text-3xl italic text-foreground mb-6">Required key.</h2>
-          <div className="grid gap-px bg-border">
-            {SECRETS.map((s) => (
-              <div key={s.name} className="p-6 bg-card">
-                <div className="font-mono text-[12px] tracking-wider text-primary">{s.name}</div>
-                <div className="text-sm text-foreground/80 mt-2 font-light leading-relaxed">{s.note}</div>
-                <a href={s.href} target="_blank" rel="noreferrer" className="story-gold eyebrow text-primary inline-block mt-3">
-                  open ↗
-                </a>
-              </div>
-            ))}
-          </div>
+          <h2 className="font-display text-3xl italic text-foreground mb-6">
+            {mode.secrets.length ? "Required keys." : "No keys required."}
+          </h2>
+          {mode.secrets.length ? (
+            <div className="grid gap-px bg-border">
+              {mode.secrets.map((name) => {
+                const s = SECRET_NOTES[name];
+                return (
+                  <div key={name} className="p-6 bg-card">
+                    <div className="font-mono text-[12px] tracking-wider text-primary">{name}</div>
+                    <div className="text-sm text-foreground/80 mt-2 font-light leading-relaxed">{s?.note}</div>
+                    {s && (
+                      <a href={s.href} target="_blank" rel="noreferrer" className="story-gold eyebrow text-primary inline-block mt-3">
+                        open ↗
+                      </a>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+          ) : (
+            <p className="p-6 bg-card border border-border text-sm text-foreground/80 font-light leading-relaxed">
+              The simulated agent runs entirely inside the app. Paste the prompt and build —
+              nothing to configure, nothing to wait for.
+            </p>
+          )}
           <p className="mt-4 eyebrow text-muted-foreground">
-            Add this in your Lovable project under Settings → Secrets before pasting the prompt below.
+            {mode.secrets.length
+              ? "Add these in your Lovable project under Settings → Secrets before pasting the prompt below."
+              : "Switch to Docker or Fly.io above when you want a real Cloud Agent."}
           </p>
         </section>
 
@@ -123,21 +146,22 @@ function IdeaPage() {
             </div>
             <div className="flex items-center gap-2">
               <span className="hidden sm:inline-flex items-center gap-1 px-3 py-2 border border-primary/40 eyebrow text-primary">
-                budget · 1 message
+                {mode.name}
               </span>
-              <CopyButton text={idea.megaPrompt} label="Copy prompt" />
+              <CopyButton text={prompt} label="Copy prompt" />
             </div>
           </div>
           <p className="text-sm text-muted-foreground mb-4 font-light leading-relaxed">
-            Paste into a fresh Lovable project. Make sure the key above is set first.{" "}
+            Paste into a fresh Lovable project. The prompt below is written for the{" "}
+            <span className="text-primary">{mode.name}</span> mode.{" "}
             <Link to="/strategy" className="story-gold text-primary">read the build strategy →</Link>
           </p>
           <pre className="whitespace-pre-wrap break-all font-mono text-[11px] sm:text-[13px] leading-relaxed p-4 sm:p-8 border border-border bg-card text-foreground/90 w-full max-w-full overflow-x-hidden" style={{ fontFamily: "'JetBrains Mono', ui-monospace, monospace", letterSpacing: 0, wordBreak: "break-word", overflowWrap: "anywhere" }}>
-{idea.megaPrompt}
+{prompt}
           </pre>
           <div className="mt-5 flex flex-wrap gap-3 text-[10px] uppercase tracking-[0.28em]">
             <a
-              href={`https://lovable.dev/?prompt=${encodeURIComponent(idea.megaPrompt)}`}
+              href={`https://lovable.dev/?prompt=${encodeURIComponent(prompt)}`}
               target="_blank"
               rel="noreferrer"
               className="inline-flex items-center gap-2 px-6 py-3 bg-primary text-primary-foreground font-semibold hover:bg-foreground transition-colors duration-500"
