@@ -63,6 +63,76 @@ GOTCHAS = """GOTCHAS (universal — apply to every agent call in this build)
 - Never call the agent from the browser. Every fetch lives inside a
   `createServerFn` handler so `AGENT_API_KEY` stays server-side."""
 
+CONVENTIONS = """RUNTIME CONVENTIONS (this template — follow exactly)
+- Stack: TanStack Start v1 + React 19 + Vite 7 + Tailwind v4 (`src/styles.css`).
+  There is NO `src/App.tsx`, no react-router-dom, no `src/pages`.
+- Routes live in `src/routes`; the home page is `src/routes/index.tsx` and uses
+  `createFileRoute("/")({ component: Page, head: () => ({ meta: [...] }) })`.
+  Never edit `src/routeTree.gen.ts`.
+- Server logic: `import { createServerFn } from "@tanstack/react-start";` in a
+  client-safe module such as `src/lib/identus.functions.ts`. Shape is
+  `createServerFn({ method: "POST" }).inputValidator((d) => schema.parse(d)).handler(async ({ data }) => {...})`.
+  Call it from the client with `useServerFn(fn)` or directly inside an event handler.
+- Read `process.env.AGENT_BASE_URL` / `process.env.AGENT_API_KEY` INSIDE the
+  handler — never at module scope (env is injected at call time).
+- The server runtime is a Cloudflare-style Worker: use `fetch`, `crypto.randomUUID()`,
+  `Buffer`. No child_process, no sharp, no native modules.
+- Toasts: `sonner` (`import { toast } from "sonner"`), and render `<Toaster />`
+  once in `src/routes/__root.tsx`. `@/hooks/use-toast` does NOT exist here.
+- Colours come from semantic tokens in `src/styles.css` — no hardcoded
+  `text-white` / `bg-black` / `bg-[#hex]` in components.
+- Give `src/routes/index.tsx` its own `head()` with a real title and description."""
+
+API_REFERENCE = """CLOUD AGENT API REFERENCE (everything you need — no other docs required)
+All calls: base URL `AGENT_BASE_URL`, headers
+`{ "content-type": "application/json", apikey: AGENT_API_KEY }`.
+
+GET  /_system/health                      -> { version } (use for a status pill)
+
+POST /did-registrar/dids
+  body { documentTemplate: { publicKeys: [{ id, purpose: "authentication"|"assertionMethod", curve: "secp256k1" }], services: [] } }
+  -> { longFormDid, status: "CREATED" }
+POST /did-registrar/dids/{didRef}/publications  -> { scheduledOperation: { id, didRef } }
+GET  /did-registrar/dids/{didRef}         -> { did, longFormDid, status: "CREATED"|"PUBLICATION_PENDING"|"PUBLISHED" }
+GET  /dids/{did}                          -> resolved DID document
+
+POST /connections
+  body { label, goalCode: "connect", goal }
+  -> { connectionId, state: "InvitationGenerated", invitation: { invitationUrl, id } }
+POST /connection-invitations
+  body { invitation: "<oob base64url string from the invitationUrl ?_oob= param>" }
+GET  /connections/{connectionId}
+  -> { state } : InvitationGenerated -> ConnectionRequestReceived -> ConnectionResponseSent
+GET  /connections                         -> { contents: [...] }
+
+POST /issue-credentials/credential-offers
+  body { claims: { ... }, issuingDID, credentialFormat: "JWT", automaticIssuance: true,
+         connectionId? | (goalCode + goal for connectionless) }
+  -> { recordId, protocolState: "OfferSent", invitation?: { invitationUrl } }
+GET  /issue-credentials/records/{recordId}
+  -> { protocolState } : OfferSent -> RequestReceived -> CredentialSent, plus `credential` (JWT string)
+GET  /issue-credentials/records           -> { contents: [...] }
+
+POST /present-proof/presentations
+  body { connectionId, proofs: [], options: { challenge, domain },
+         claims: { "<attr>": {} } }   // or anoncredPresentationRequest for ZK predicates
+  -> { presentationId, status: "RequestSent" }
+GET  /present-proof/presentations/{presentationId}
+  -> { status } : RequestSent -> PresentationReceived -> PresentationVerified | PresentationVerificationFailed
+  plus `data` (the disclosed claims)
+
+Errors are RFC-7807 JSON: { status, title, detail }. Surface `detail` in the UI —
+it names the real problem (unpublished DID, missing connectionId, bad apikey)."""
+
+REFERENCES = """REFERENCE MATERIAL (if you need more than the above)
+- Identus docs: https://identus.io/documentation/develop/
+- Cloud Agent (OpenAPI + compose examples): https://github.com/hyperledger-identus/cloud-agent
+- TypeScript SDK (browser/wallet holders): https://github.com/hyperledger-identus/sdk-ts
+- Mediator (DIDComm relay for offline wallets): https://github.com/hyperledger-identus/mediator
+- Umbrella repo: https://github.com/hyperledger-identus/hyperledger-identus
+- Reference console built with this stack: https://github.com/arunnadarasa/identus
+- Full machine-readable brief for your own LLM: https://identusprompts.lovable.app/llms-full.txt"""
+
 SNIPPETS = {
     "identus-did": """SERVER SNIPPET — DID Registrar (create + publish a did:prism)
 ```ts
