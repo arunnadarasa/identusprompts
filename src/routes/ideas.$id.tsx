@@ -1,4 +1,7 @@
 import { createFileRoute, Link, notFound, useRouter } from "@tanstack/react-router";
+import { useMemo, useState } from "react";
+import { ModeSelector } from "@/components/mode-selector";
+import { composeMegaPrompt, getMode, DEFAULT_MODE, SECRET_NOTES, type AgentMode } from "@/data/modes";
 import { SiteShell } from "@/components/site-shell";
 import { CopyButton } from "@/components/copy-button";
 import { QuantumChip } from "@/components/quantum-chip";
