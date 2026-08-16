@@ -328,6 +328,8 @@ TAM {idea['tam']} · SAM {idea['sam']} · SOM {idea['som']}
 
 {GOTCHAS}
 
+{REFERENCES}
+
 DELIVERABLE
 A working single-page demo where the flow above completes end-to-end, plus a
 one-paragraph README explaining which Identus primitive is used and how to point
