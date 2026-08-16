@@ -31,12 +31,11 @@ export const Route = createFileRoute("/ideas/$id")({
   component: IdeaPage,
 });
 
-const SECRETS = [
-  { name: "SPRITES_TOKEN", note: "The 4-part token (org-slug/org-id/token-id/token-value) from sprites.dev/account. One token unlocks create, filesystem writes, long-running services, and exec across every Sprite you spin up.", href: "https://sprites.dev/account" },
-];
-
 function IdeaPage() {
   const { idea, theme, hook } = Route.useLoaderData() as { idea: Idea; theme: Theme; hook: Hook | undefined };
+  const [modeId, setModeId] = useState<AgentMode["id"]>(DEFAULT_MODE);
+  const mode = getMode(modeId);
+  const prompt = useMemo(() => composeMegaPrompt(idea.megaPrompt, modeId), [idea.megaPrompt, modeId]);
   const related = IDEAS_BY_THEME[theme.slug]
     .filter((i) => i.id !== idea.id && (i.subDiscipline === idea.subDiscipline || i.quantumHookId === idea.quantumHookId))
     .slice(0, 4);
