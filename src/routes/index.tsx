@@ -24,15 +24,15 @@ function Index() {
       <section className="max-w-7xl mx-auto px-5 sm:px-8 pt-12 sm:pt-24 pb-12 sm:pb-20 animate-fade-in">
         <header className="flex flex-col lg:flex-row justify-between items-start lg:items-end border-b border-border pb-10 lg:pb-12 gap-8">
           <div className="max-w-3xl">
-            <span className="eyebrow block mb-6">Collection No. 01 — 1,000 Sprites Ideas</span>
+            <span className="eyebrow block mb-6">Collection No. 01 — 1,000 Identus Ideas</span>
             <h1 className="font-display text-[clamp(3.25rem,9vw,8.5rem)] leading-[0.92] tracking-tight text-foreground">
-              Sprites <span className="italic text-primary">Creative</span>
+              Identus <span className="italic text-primary">Catalyst</span>
             </h1>
             <p className="mt-8 max-w-xl text-base sm:text-lg text-muted-foreground leading-relaxed font-light">
               One thousand conceptual threads where the world's creative
-              disciplines meet four fly.io Sprites primitives — public
-              micro-VMs, filesystem drops, long-running services, and one-shot
-              exec — each one ready to ship in a single Lovable build.
+              disciplines meet four Hyperledger Identus primitives — published
+              did:prism identifiers, DIDComm connections, verifiable credentials
+              and proof presentations — each ready to ship in a single Lovable build.
             </p>
           </div>
           <div className="flex flex-wrap gap-3 text-[10px] uppercase tracking-[0.28em]">
@@ -43,12 +43,12 @@ function Index() {
               Browse the Index
             </Link>
             <a
-              href="https://sprites.dev/account"
+              href="/llms-full.txt"
               target="_blank"
               rel="noreferrer"
               className="px-6 py-3 bg-primary text-primary-foreground hover:bg-foreground transition-colors duration-500"
             >
-              Get a Sprites Token ↗
+              llms-full.txt for your LLM ↗
             </a>
           </div>
         </header>
@@ -103,7 +103,7 @@ function Index() {
           <div className="bg-primary text-primary-foreground p-8 flex flex-col justify-center items-center text-center relative overflow-hidden">
             <span className="font-display text-7xl italic leading-none">1k</span>
             <span className="eyebrow text-primary-foreground/80 mt-3" style={{ color: "var(--color-primary-foreground)", opacity: 0.85 }}>
-              Sprite Entries
+              Identus Entries
             </span>
           </div>
 
@@ -114,9 +114,9 @@ function Index() {
           >
             <span className="eyebrow">Section II</span>
             <div>
-              <h3 className="font-display text-2xl leading-tight text-foreground italic">Four Sprites primitives.</h3>
+              <h3 className="font-display text-2xl leading-tight text-foreground italic">Four Identus primitives.</h3>
               <p className="text-[11px] text-muted-foreground leading-relaxed mt-3 font-light">
-                Create, filesystem, service, and exec — the four Sprites primitives every entry leans on.
+                DIDs, connections, credentials and proofs — the four Identus primitives every entry leans on.
               </p>
             </div>
             <div className="flex gap-1">
@@ -134,9 +134,9 @@ function Index() {
           >
             <div className="max-w-md">
               <span className="eyebrow">Appendix · Build Strategy</span>
-              <h3 className="font-display text-2xl sm:text-3xl mt-3 text-foreground">The One-Token Protocol</h3>
+              <h3 className="font-display text-2xl sm:text-3xl mt-3 text-foreground">The Three-Mode Protocol</h3>
               <p className="text-sm text-muted-foreground mt-2 font-light leading-relaxed">
-                One Sprites token, one Lovable build, every demo shipping a real public micro-VM.
+                Simulated, Docker or Fly.io — one Lovable build, real verifiable credentials either way.
               </p>
             </div>
             <span className="w-12 h-12 shrink-0 rounded-full border border-primary flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-primary-foreground transition-all duration-500">
@@ -148,7 +148,7 @@ function Index() {
           <div className="bg-card border border-border p-7">
             <div className="h-full border-l border-primary/30 pl-5 flex flex-col justify-center">
               <span className="eyebrow mb-2">Status</span>
-              <p className="font-display text-2xl italic text-foreground leading-tight">Running on Sprites.</p>
+              <p className="font-display text-2xl italic text-foreground leading-tight">Running on Identus.</p>
             </div>
           </div>
         </div>
@@ -213,8 +213,8 @@ function Index() {
         <h2 className="font-display text-4xl sm:text-5xl text-foreground italic max-w-2xl">Three movements, ten minutes.</h2>
         <ol className="mt-10 grid md:grid-cols-3 gap-px bg-border">
           <Step n={1} title="Choose a house" body="Skim ten disciplines. Open the one that suits your team." />
-          <Step n={2} title="Read an entry" body="Pitch, Sprites primitive, plain-language proposition, market sizing." />
-          <Step n={3} title="Copy the mega-prompt" body="Add one token, paste into Lovable, spin up a real Sprite. Ship." />
+          <Step n={2} title="Read an entry" body="Pitch, Identus primitive, plain-language proposition, market sizing." />
+          <Step n={3} title="Copy the mega-prompt" body="Pick an agent mode, paste into Lovable, issue a real credential. Ship." />
         </ol>
         <p className="mt-10 eyebrow text-muted-foreground">
           {ALL_IDEAS.length.toLocaleString()} entries indexed · zero infra · ready to ship
