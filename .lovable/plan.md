@@ -42,7 +42,7 @@ The selected mode is client state on the idea page; the copy button emits the mo
 
 ## 4. Generation approach
 
-- Rewrite `scripts/regenerate_ideas.py` to produce 1,000 Identus ideas — one call per (theme × primitive) = 40 batches of 25 — via the Lovable AI Gateway, with a checkpoint file so reruns resume. If no gateway key is available at run time, fall back to deterministic composition from curated per-theme sub-domain lists so the catalog is always fully populated.
+- Rewrite `scripts/regenerate_ideas.py` to produce 1,000 Identus ideas — one call per (theme × primitive) = 40 batches of 25 — using the **AIsa API** (`POST https://api.aisa.one/v1/chat/completions`, `Authorization: Bearer $AISA_API_KEY`, bare model id such as `gpt-4o-mini`, no vendor prefix). Keeps the existing checkpoint file so reruns resume, handles 402 (top up at console.aisa.one) and 429 (retry with backoff). If `AISA_API_KEY` is absent at run time, fall back to deterministic composition from curated per-theme sub-domain lists so the catalog is always fully populated.
 - Rewrite `scripts/rewrite_mega_prompts.py` to stamp `quantumHook`/`quantumRationale`/`pitch`/`megaPrompt` from the new primitive templates, with the round-robin assignment (fixes the uneven-distribution bug in the previous plan at the same time).
 - Add `scripts/build_llms_txt.py` to generate both public text files from the same source data so they never drift.
 
