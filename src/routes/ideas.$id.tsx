@@ -36,7 +36,7 @@ const SECRETS = [
 ];
 
 function IdeaPage() {
-  const { idea, theme, hook } = Route.useLoaderData();
+  const { idea, theme, hook } = Route.useLoaderData() as { idea: Idea; theme: Theme; hook: Hook | undefined };
   const related = IDEAS_BY_THEME[theme.slug]
     .filter((i) => i.id !== idea.id && (i.subDiscipline === idea.subDiscipline || i.quantumHookId === idea.quantumHookId))
     .slice(0, 4);
