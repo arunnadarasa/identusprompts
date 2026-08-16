@@ -3935,5 +3935,513 @@
 "subDiscipline": "fan clubs",
 "concept": "Fans present proof of membership to unlock exclusive in-game content and experiences."
 }
+],
+"games::identus-credential": [
+{
+"title": "Creator Attribution Hub",
+"subDiscipline": "credits management",
+"concept": "Game developers receive verifiable credentials proving their contributions to projects, ensuring proper attribution in game credits."
+},
+{
+"title": "Playtester Validation",
+"subDiscipline": "user testing",
+"concept": "Playtesters can prove their eligibility and experience through verifiable credentials, allowing developers to select qualified testers for their games."
+},
+{
+"title": "Licensing Verification",
+"subDiscipline": "rights management",
+"concept": "Game creators can issue credentials that verify licensing rights for assets, ensuring legal compliance when using third-party content."
+},
+{
+"title": "Talent Agency Portal",
+"subDiscipline": "representative networking",
+"concept": "Talent agencies can provide credentials for their clients, proving talent availability and skills to game studios looking for collaborators."
+},
+{
+"title": "Safe Space Access",
+"subDiscipline": "community safety",
+"concept": "Participants in game events receive credentials proving their commitment to safe community practices, accessing exclusive spaces at conventions."
+},
+{
+"title": "Workshop Certification",
+"subDiscipline": "training programs",
+"concept": "Individuals who complete game design workshops receive verifiable credentials, showcasing their skills to future employers or collaborators."
+},
+{
+"title": "Game Jam Participation",
+"subDiscipline": "event participation",
+"concept": "Participants in game jams receive credentials verifying their involvement, allowing them to demonstrate experience and collaboration to potential employers."
+},
+{
+"title": "Artistic Collaboration Proof",
+"subDiscipline": "cross-disciplinary projects",
+"concept": "Artists involved in game projects can prove their contributions via verifiable credentials, promoting recognition across different creative fields."
+},
+{
+"title": "Mentorship Verification",
+"subDiscipline": "professional development",
+"concept": "Mentors provide credentials that verify their authority and experience, connecting them with mentees in the game design community."
+},
+{
+"title": "Age-Restricted Access",
+"subDiscipline": "content regulation",
+"concept": "Players can receive age-verifiable credentials that grant them access to age-restricted content in games and events."
+},
+{
+"title": "Guild Membership Status",
+"subDiscipline": "community building",
+"concept": "Game developers can verify membership in guilds or union affiliations through credentials, facilitating access to exclusive resources and opportunities."
+},
+{
+"title": "Collaborator Endorsements",
+"subDiscipline": "networking",
+"concept": "Collaborators in game development can issue and receive credentials that endorse their teamwork and skills, enhancing visibility in the industry."
+},
+{
+"title": "Game Asset Provenance",
+"subDiscipline": "asset authenticity",
+"concept": "Creators receive credentials that trace the provenance of their game assets, ensuring authenticity and preventing copyright issues."
+},
+{
+"title": "Content Creator Recognition",
+"subDiscipline": "influencer partnerships",
+"concept": "Content creators receive credentials verifying their influence and reach, which they can showcase to game companies for partnerships."
+},
+{
+"title": "Feedback Contributor Credential",
+"subDiscipline": "audience interaction",
+"concept": "Gamers providing valuable feedback can receive credentials acknowledging their contributions, boosting their credibility in the gaming community."
+},
+{
+"title": "Interactive Exhibit Access",
+"subDiscipline": "exhibition management",
+"concept": "Visitors to interactive media exhibits can receive credentials that prove their access and participation in exclusive events or workshops."
+},
+{
+"title": "Exclusive Beta Access",
+"subDiscipline": "testing frameworks",
+"concept": "Beta testers can obtain credentials confirming their participation in closed testing phases of games, establishing their experience to developers."
+},
+{
+"title": "Dev Conference Accreditation",
+"subDiscipline": "event participation",
+"concept": "Attendees of development conferences receive credentials that authenticate their participation, enabling access to exclusive sessions and networking opportunities."
+},
+{
+"title": "Interactive Narrative Credentials",
+"subDiscipline": "story development",
+"concept": "Writers involved in interactive narratives can receive credentials that validate their contributions and storytelling techniques to game developers."
+},
+{
+"title": "Recognition for Diversity",
+"subDiscipline": "inclusivity initiatives",
+"concept": "Creators participating in diversity programs can receive credentials acknowledging their commitment to inclusivity in game design."
+},
+{
+"title": "Historical Game Validation",
+"subDiscipline": "cultural heritage",
+"concept": "Games based on historical events receive credentials that verify their authenticity and accuracy, enhancing trust among users."
+},
+{
+"title": "Access to Game Assets",
+"subDiscipline": "resource sharing",
+"concept": "Developers can issue credentials that grant access to shared game assets within collaborative projects, streamlining resource management."
+},
+{
+"title": "Completionist Credentials",
+"subDiscipline": "player engagement",
+"concept": "Players can earn credentials showcasing their achievements in games, enhancing their profiles within communities and potentially unlocking rewards."
+},
+{
+"title": "Real World Experience",
+"subDiscipline": "industry engagement",
+"concept": "Interns at game studios receive credentials verifying their roles and contributions, aiding their future job applications."
+},
+{
+"title": "Ledger Credit",
+"subDiscipline": "credit attribution",
+"concept": "A game design app where game designers use Credential Issuance to establish who made which part of the work."
+}
+],
+"theater::identus-did": [
+{
+"title": "Verified Playwright Credits",
+"subDiscipline": "playwright recognition",
+"concept": "Playwrights claim their work credits which are verified by theaters to ensure rightful authorship during productions."
+},
+{
+"title": "Stage Designer Identity",
+"subDiscipline": "set design",
+"concept": "Stage designers publish their identity and past project credentials to validate their expertise for hiring by production companies."
+},
+{
+"title": "Performer Accreditation Hub",
+"subDiscipline": "performer guilds",
+"concept": "Actors can prove their membership in industry guilds to casting directors for eligibility in union-required roles."
+},
+{
+"title": "Authentic Script Repository",
+"subDiscipline": "script authenticity",
+"concept": "Playwrights can prove the authenticity of their scripts to theaters, preventing unauthorized adaptations and ensuring original content."
+},
+{
+"title": "Director's Verified Portfolio",
+"subDiscipline": "directing",
+"concept": "Directors present verified portfolios of their past productions to producers, simplifying the audition process for new projects."
+},
+{
+"title": "Age Verification for Performances",
+"subDiscipline": "audience access",
+"concept": "The app verifies the age of ticket holders in real-time, ensuring compliance with age-restricted performances."
+},
+{
+"title": "Lighting Designer Credentials",
+"subDiscipline": "lighting design",
+"concept": "Lighting designers publish their qualifications and past works to validate their hiring for performances."
+},
+{
+"title": "Audition Consent Tracker",
+"subDiscipline": "casting",
+"concept": "Actors submit their consent for auditions that producers can verify, ensuring transparency and respect for performer rights."
+},
+{
+"title": "Backstage Pass Verification",
+"subDiscipline": "access control",
+"concept": "Stage managers verify backstage pass holders' identities to control access and enhance security during live performances."
+},
+{
+"title": "Provenance for Costumes",
+"subDiscipline": "costume history",
+"concept": "Costume designers prove the historical authenticity of costumes to directors, ensuring fidelity to the production's era."
+},
+{
+"title": "Talent Agent Delegation",
+"subDiscipline": "agent representation",
+"concept": "Actors can prove their agent\u2019s authorization to manage bookings directly to casting directors, avoiding misrepresentation."
+},
+{
+"title": "Choreographer Identity Registry",
+"subDiscipline": "dance",
+"concept": "Choreographers publish their identities and previous works to prove credentials to dance companies seeking collaborations."
+},
+{
+"title": "Proven Rights for Music",
+"subDiscipline": "musical theater",
+"concept": "Musicians verify their rights to score compositions used in theater productions, ensuring proper credit and compensation."
+},
+{
+"title": "Production Design Validation",
+"subDiscipline": "production design",
+"concept": "Production designers validate their past work to producers seeking to hire for upcoming theatre productions."
+},
+{
+"title": "Event Accessibility Certification",
+"subDiscipline": "accessibility",
+"concept": "The app verifies the accessibility certifications of venues to ensure compliance with regulations for live performances."
+},
+{
+"title": "Festival Performer Verification",
+"subDiscipline": "theater festivals",
+"concept": "Actors submit verified identities to festival organizers, ensuring proper representation and eligibility for participation."
+},
+{
+"title": "Union Membership Proof",
+"subDiscipline": "labor relations",
+"concept": "Performers prove their union memberships to producers for participation in union-specific projects, ensuring compliance."
+},
+{
+"title": "Audience Feedback Authenticity",
+"subDiscipline": "community engagement",
+"concept": "Audience members can verify their attendance at performances to provide authentic feedback for producers and critics."
+},
+{
+"title": "Collaborator Identity Network",
+"subDiscipline": "creative teams",
+"concept": "Creative teams publish their identities and roles to verify collaborators for new theater projects, enhancing project integrity."
+},
+{
+"title": "Backstage Safety Verification",
+"subDiscipline": "safety protocols",
+"concept": "Crew members verify their safety training certifications to production managers, ensuring a safe environment during live events."
+},
+{
+"title": "Playwright Rights Tracker",
+"subDiscipline": "rights management",
+"concept": "Playwrights verify their ownership rights when licensing plays to ensure proper usage and protection against infringement."
+},
+{
+"title": "Audition Record Validation",
+"subDiscipline": "casting calls",
+"concept": "Actors verify their audition records to casting directors, simplifying the hiring process for new roles."
+},
+{
+"title": "Performance Attendance Confirmation",
+"subDiscipline": "audience management",
+"concept": "Ticket holders prove their identities and attendance to receive exclusive offers after completing performances."
+},
+{
+"title": "Rehearsal Access Pass",
+"subDiscipline": "rehearsal management",
+"concept": "Actors verify their identities to gain access to private rehearsal sessions, ensuring only authorized personnel are present."
+},
+{
+"title": "Showcase Participation Proof",
+"subDiscipline": "showcase events",
+"concept": "Artists prove their participation in showcases to festival organizers, solidifying their credentials for consideration in future events."
+}
+],
+"theater::identus-connection": [
+{
+"title": "Audition Credentialing",
+"subDiscipline": "cast auditions",
+"concept": "Actors prove their audition credentials to directors through secure invites, ensuring verified expertise and experience."
+},
+{
+"title": "Backstage Access Control",
+"subDiscipline": "event security",
+"concept": "Crew members receive verified access invitations to restricted areas, ensuring safety and authenticity of personnel on site."
+},
+{
+"title": "Performance Membership Validation",
+"subDiscipline": "theater associations",
+"concept": "Members can invite officials to verify their membership status, ensuring eligibility for benefits and opportunities."
+},
+{
+"title": "Director Collaborations Hub",
+"subDiscipline": "creative partnerships",
+"concept": "Directors can prove their collaborative project involvement to production companies using secure connections."
+},
+{
+"title": "Playwright Rights Management",
+"subDiscipline": "intellectual property",
+"concept": "Playwrights invite producers to verify their rights to scripts, ensuring legal protection and recognition."
+},
+{
+"title": "Stage Designer Portfolio Proofs",
+"subDiscipline": "design accreditation",
+"concept": "Stage designers prove their past project contributions to potential clients via secure invitations."
+},
+{
+"title": "Casting Call Verification",
+"subDiscipline": "audition process",
+"concept": "Casting agents invite talents to verify their qualifications and past roles, streamlining the selection process."
+},
+{
+"title": "Production Crew Identity Cards",
+"subDiscipline": "crew management",
+"concept": "Production crew members can verify their roles and certifications to the project leads through invitation channels."
+},
+{
+"title": "Ticket Resale Authentication",
+"subDiscipline": "event access",
+"concept": "Ticket holders prove authenticity of their tickets to event organizers before accessing performances."
+},
+{
+"title": "Age Verification for Performances",
+"subDiscipline": "audience access",
+"concept": "Event organizers invite audience members to verify their age, ensuring compliance with age restrictions for certain performances."
+},
+{
+"title": "Accredited Actor Networks",
+"subDiscipline": "actor training",
+"concept": "Actors prove their training status and memberships to casting directors through secure connections."
+},
+{
+"title": "Play Authenticity Tracking",
+"subDiscipline": "script validation",
+"concept": "Theater companies invite critics to verify the authenticity of a play's script before reviews are published."
+},
+{
+"title": "Union Membership Proof",
+"subDiscipline": "guild compliance",
+"concept": "Actors can invite producers to verify their union membership status during contract negotiations."
+},
+{
+"title": "Collaborative Rehearsal Spaces",
+"subDiscipline": "rehearsal logistics",
+"concept": "Collaborators can validate their project involvement when booking rehearsal spaces through secure invites."
+},
+{
+"title": "Costume Archive Verification",
+"subDiscipline": "wardrobe integrity",
+"concept": "Costume designers invite production teams to verify the provenance of costumes for authenticity."
+},
+{
+"title": "Performer's Rights Assertion",
+"subDiscipline": "performance rights",
+"concept": "Performers can prove their rights to royalty payouts to producers through secure invitation connections."
+},
+{
+"title": "Live Streaming Access Control",
+"subDiscipline": "digital events",
+"concept": "Live performance producers invite attendees to validate their access to digital streaming events."
+},
+{
+"title": "Mentorship Program Validation",
+"subDiscipline": "actor mentorship",
+"concept": "Mentors and mentees can verify participation in mentorship programs through secure invitations."
+},
+{
+"title": "Script Submission Proofs",
+"subDiscipline": "play submissions",
+"concept": "Playwrights can invite theaters to verify the submission timestamp of their scripts."
+},
+{
+"title": "Talent Agency Accreditation",
+"subDiscipline": "agent proof",
+"concept": "Talent agencies prove their accreditation status to clients through secure connections."
+},
+{
+"title": "Production Budget Transparency",
+"subDiscipline": "financial accountability",
+"concept": "Producers can invite stakeholders to verify budget expenditures and allocations in real-time."
+},
+{
+"title": "Performance Review Authentication",
+"subDiscipline": "critic engagements",
+"concept": "Critics can prove their review credentials to theater companies through invitation-based verification."
+},
+{
+"title": "Stage License Verification",
+"subDiscipline": "performance rights",
+"concept": "Theater productions invite officials to verify stage licenses before performances commence."
+},
+{
+"title": "Audience Feedback Verification",
+"subDiscipline": "engagement metrics",
+"concept": "Audience members can verify their attendance for feedback submissions through secure invites."
+},
+{
+"title": "Event Organizer Credibility",
+"subDiscipline": "event management",
+"concept": "Event organizers can prove their credentials to potential partners using verified connections."
+}
+],
+"theater::identus-credential": [
+{
+"title": "Director Credentials",
+"subDiscipline": "theater directing",
+"concept": "Directors can issue verifiable credentials to prove their experience and previous projects to casting agents."
+},
+{
+"title": "Playwright Verification",
+"subDiscipline": "playwriting",
+"concept": "Playwrights receive signed credentials to authenticate their works, ensuring proper attribution when submitting scripts to theaters."
+},
+{
+"title": "Lighting Designer License",
+"subDiscipline": "lighting design",
+"concept": "Lighting designers can obtain credentials confirming their training and certifications, needed for employment on professional projects."
+},
+{
+"title": "Stage Manager ID",
+"subDiscipline": "stage management",
+"concept": "Stage managers can issue credentials to verify their roles and experience, streamlining hiring for productions."
+},
+{
+"title": "Union Membership Pass",
+"subDiscipline": "professional guilds",
+"concept": "Members receive verifiable credentials validating their union status, required for access to certain gigs and performances."
+},
+{
+"title": "Child Performer Consent",
+"subDiscipline": "youth theater",
+"concept": "Parents can issue credentials to grant consent for child performers, ensuring compliance with labor laws."
+},
+{
+"title": "Actor Skill Endorsement",
+"subDiscipline": "actor training",
+"concept": "Actors can receive credentials from trainers verifying specific skills, aiding casting directors in their selection process."
+},
+{
+"title": "Casting Director References",
+"subDiscipline": "casting",
+"concept": "Casting directors can issue credentials as references for actors, proving their prior work and credibility in the industry."
+},
+{
+"title": "Performance Access Pass",
+"subDiscipline": "audience engagement",
+"concept": "Audience members can obtain credentials granting access to backstage experiences, verified through their purchases."
+},
+{
+"title": "Technical Staff Credentials",
+"subDiscipline": "production crew",
+"concept": "Technical crew members receive credentials to showcase their expertise and experience to potential employers."
+},
+{
+"title": "Theater Sponsorship Proof",
+"subDiscipline": "sponsorship",
+"concept": "Sponsors can issue credentials verifying their financial contributions to productions, enhancing transparency and trust."
+},
+{
+"title": "Production Rights Certificate",
+"subDiscipline": "intellectual property",
+"concept": "Writers can receive credentials proving their rights to perform adaptations, safeguarding against unauthorized productions."
+},
+{
+"title": "Set Designer Portfolio",
+"subDiscipline": "set design",
+"concept": "Set designers can issue credentials showcasing their previous projects, helping them secure future contracts."
+},
+{
+"title": "Costume Authenticity",
+"subDiscipline": "costume design",
+"concept": "Costume designers can issue credentials proving the authenticity and originality of their designs for productions."
+},
+{
+"title": "Performance Eligibility Badge",
+"subDiscipline": "community theater",
+"concept": "Performers can validate their eligibility status for auditions through verifiable credentials, easing the selection process."
+},
+{
+"title": "Stage Combat Certification",
+"subDiscipline": "stage combat",
+"concept": "Actors can obtain credentials certifying their stage combat training, required for specific roles in productions."
+},
+{
+"title": "Community Engagement Award",
+"subDiscipline": "audience outreach",
+"concept": "Theater companies can issue credentials to recognize audience members' participation in community engagement initiatives."
+},
+{
+"title": "Audience Age Verification",
+"subDiscipline": "age restrictions",
+"concept": "Venues can issue credentials to verify audience members' ages for access to age-restricted performances."
+},
+{
+"title": "Collaborative Project Proof",
+"subDiscipline": "joint productions",
+"concept": "Artists involved in collaborative projects can receive credentials documenting their contributions and roles within joint productions."
+},
+{
+"title": "Performance Credit Recognition",
+"subDiscipline": "credits",
+"concept": "Actors can receive credentials that validate their roles in productions, enhancing their professional reputations."
+},
+{
+"title": "Workshop Participation Badge",
+"subDiscipline": "training workshops",
+"concept": "Participants in theater workshops can earn credentials confirming their attendance and skills acquired during the sessions."
+},
+{
+"title": "Backstage Access Credential",
+"subDiscipline": "event security",
+"concept": "Crew members can issue credentials to audience members granting them backstage access during special performances."
+},
+{
+"title": "Artistic Collaboration Verification",
+"subDiscipline": "collaboration",
+"concept": "Artists collaborating on projects can issue credentials to confirm their involvement, securing recognition for joint efforts."
+},
+{
+"title": "Production Timeline Tracker",
+"subDiscipline": "project management",
+"concept": "Productions can issue credentials documenting key milestones and contributions, assisting in project management and accountability."
+},
+{
+"title": "Patron Loyalty Credential",
+"subDiscipline": "audience loyalty",
+"concept": "Theater patrons can obtain credentials recognizing their loyalty, providing perks for longstanding support of the company."
+}
 ]
 }
