@@ -12,14 +12,14 @@ function audienceWord(audience: string): string {
 type Ctx = { sub: string; who: string };
 
 const templates: Record<string, (ctx: Ctx) => string> = {
-  "sprite-create": ({ sub, who }) =>
-    `${cap(who)} tap once and a fresh public micro-VM spins up for ${sub} — the app hands them a shareable Sprite URL in seconds, no infra to configure.`,
-  "sprite-fs": ({ sub, who }) =>
-    `${cap(who)} compose the piece for ${sub}, the app writes the finished HTML and assets straight into a running Sprite, and everyone opens a real live URL.`,
-  "sprite-service": ({ sub, who }) =>
-    `${cap(who)} boot a long-running service inside a Sprite for ${sub} — the process wakes on the first visit, streams to the browser, and sleeps when the room clears.`,
-  "sprite-exec": ({ sub, who }) =>
-    `${cap(who)} run a shell command inside a Sprite for ${sub} and watch the stdout stream back — ffmpeg, imagemagick, a python one-liner — in an isolated micro-VM they never had to install.`,
+  "identus-did": ({ sub, who }) =>
+    `${cap(who)} tap once and the app mints a published did:prism for ${sub} — a decentralised identifier they own outright, resolvable by anyone, portable off this platform the day they leave it.`,
+  "identus-connection": ({ sub, who }) =>
+    `${cap(who)} scan an invitation and two wallets settle into a private DIDComm channel for ${sub} — mutually authenticated, no accounts, no email addresses handed over.`,
+  "identus-credential": ({ sub, who }) =>
+    `${cap(who)} press issue and the fact at the heart of ${sub} becomes a signed verifiable credential in the recipient's wallet — theirs to keep, present and reuse anywhere.`,
+  "identus-verify": ({ sub, who }) =>
+    `${cap(who)} request a proof and the holder answers from their wallet for ${sub} — the gate turns green on the predicate alone, with no personal data copied into your database.`,
 };
 
 export function getPlainProposition(idea: Idea, theme: Theme): string {
@@ -29,5 +29,5 @@ export function getPlainProposition(idea: Idea, theme: Theme): string {
   };
   const tmpl = templates[idea.quantumHookId];
   if (tmpl) return tmpl(ctx);
-  return `Sprites runs the primitive server-side and ${ctx.who} get a live sandbox URL they can share without leaving the app.`;
+  return `The Identus Cloud Agent handles the identity work server-side and ${ctx.who} get verifiable proof they can carry anywhere.`;
 }
