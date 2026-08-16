@@ -1,30 +1,30 @@
 [
   {
-    "id": "sprite-create",
-    "name": "Sprite Sandbox",
-    "tag": "public micro-VM",
-    "kernel": "a `POST https://api.sprites.dev/v1/sprites` with `{ name, url_settings: { auth: \"public\" } }` — fly.io mints a fresh isolated micro-VM and returns a public URL you can hand straight to a user",
-    "ui": "a launch button that spins up a disposable, shareable sandbox on demand"
+    "id": "identus-did",
+    "name": "DID Registrar",
+    "tag": "publish a did:prism",
+    "kernel": "`POST /did-registrar/dids` with a document template (curve `secp256k1`, purposes `authentication` + `assertionMethod`) then `POST /did-registrar/dids/{didRef}/publications` — the Identus Cloud Agent mints a decentralised identifier the holder controls and publishes it so anyone can resolve it",
+    "ui": "a one-tap identity button that mints a portable DID for the artist, studio, or work and shows its resolvable document"
   },
   {
-    "id": "sprite-fs",
-    "name": "Filesystem Drop",
-    "tag": "instant asset push",
-    "kernel": "`PUT https://api.sprites.dev/v1/sprites/{name}/fs/write?path=/root/www/index.html` with an octet-stream body — writes files (index.html, JSON, generated assets) straight into the sandbox and auto-creates parent dirs",
-    "ui": "a compose surface that pushes freshly-authored HTML, JSON, or media into the live sandbox"
+    "id": "identus-connection",
+    "name": "DIDComm Connection",
+    "tag": "invitation → peer channel",
+    "kernel": "`POST /connections` with `{ label, goalCode }` returns an out-of-band invitation URL; the other side calls `POST /connection-invitations` to accept, and both agents settle into a `ConnectionResponseSent` / `ConnectionResponseReceived` state over DIDComm",
+    "ui": "a QR code or invitation link that pairs two people's wallets into a private, mutually-authenticated channel"
   },
   {
-    "id": "sprite-service",
-    "name": "Long-running Service",
-    "tag": "wake-on-request server",
-    "kernel": "`PUT /sprites/{name}/services/{svc}` with `{ cmd, args, dir: \"/root/www\", http_port: 8080, needs: [] }` then `POST /services/{svc}/start` — runs any long-running process (python http.server, ffmpeg loop, socket relay) that wakes on the first request",
-    "ui": "a launcher that boots a running process — HTTP server, streaming loop, playback engine — and hands the user its public URL"
+    "id": "identus-credential",
+    "name": "Credential Issuance",
+    "tag": "signed verifiable credential",
+    "kernel": "`POST /issue-credentials/credential-offers` with `{ claims, issuingDID, credentialFormat: \"JWT\", automaticIssuance: true }` (connection-bound or connectionless with a `goalCode`) — the agent signs the claims with the issuer's published `assertionMethod` key and returns a verifiable credential the holder keeps",
+    "ui": "an issue button that turns a fact — a credit, a licence, a role, a provenance record — into a signed credential in the recipient's wallet"
   },
   {
-    "id": "sprite-exec",
-    "name": "One-shot Exec",
-    "tag": "run any shell command",
-    "kernel": "`POST /sprites/{name}/exec?cmd=bash&cmd=-lc&cmd=<script>` with only an `Authorization` header — runs a shell command inside the sandbox and streams stdout back, terminated by 0x03 + exit code",
-    "ui": "a prompt-driven console that runs a shell command in the sandbox and streams the output back to the user"
+    "id": "identus-verify",
+    "name": "Proof Presentation",
+    "tag": "verify without the middleman",
+    "kernel": "`POST /present-proof/presentations` creates a presentation request with the claims and trusted issuers you demand; the holder answers from their wallet and the verifier polls the record until `PresentationVerified` — optionally selective-disclosure or zero-knowledge so only the predicate (over-18, member-in-good-standing) is revealed",
+    "ui": "a verification gate that checks a credential at the door — no callbacks to the issuer, no personal data copied into your database"
   }
 ]
