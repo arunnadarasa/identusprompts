@@ -1,32 +1,59 @@
-## Problem
+# Pivot: Sprites Creative → Hyperledger Identus Catalyst
 
-Every theme currently shows an uneven primitive distribution — Dance is 50 / 0 / 25 / 25 (Sandbox / Filesystem Drop / Long-running Service / One-shot Exec), so the theme page renders "3 PRIMITIVES" and Filesystem Drop filters to zero entries. Cause: `scripts/rewrite_mega_prompts.py` remaps legacy hook ids one-to-one, and the legacy hooks weren't evenly distributed (AIsa-chat, tts-narration, sepolia-deploy all collapsed into `sprite-create`; `sprite-fs` legacy sources barely appear in surviving data).
+Turn this archive into a Hyperledger Identus hackathon catalyst: 1,000 mega-prompts built on Identus self-sovereign identity primitives, each available in three agent modes, plus an LLM-readable knowledge file for participants.
 
-## Fix
+## 1. New content model
 
-Redistribute the 100 ideas per theme so each Sprites primitive owns exactly 25, then regenerate the mega-prompts, rationales, and plain-language copy from the new assignments.
+**Four primitives** (replacing the Sprites hooks in `src/data/ideas/hooks.json`):
 
-### Redistribution rule
+| id | name | kernel |
+| --- | --- | --- |
+| `identus-did` | DID Registrar | create + publish a `did:prism` with authentication/assertion keys |
+| `identus-connection` | DIDComm Connection | invitation → accept → established peer channel (mediator-backed) |
+| `identus-credential` | Credential Issuance | JWT/SD-JWT credential offer signed by a published issuer DID |
+| `identus-verify` | Proof Presentation | presentation request → holder proof → verifier result |
 
-In `scripts/rewrite_mega_prompts.py`, drop `LEGACY_MAP` and replace `remap_kernel` with a deterministic round-robin over the ideas array:
+**Ten new themes** (identity-native domains, replacing the creative disciplines): Healthcare & NHS, Education & Credentials, Finance & KYC, Government & Civic ID, Supply Chain & Provenance, Employment & Skills, Travel & Borders, Events & Ticketing, AI Agents & Delegation, Creative Rights & Royalties. Each keeps the existing shape: slug, name, emoji, audience, market anchor.
 
-- Order: `sprite-create`, `sprite-fs`, `sprite-service`, `sprite-exec`.
-- Assign `HOOKS[i % 4]` to idea at index `i`, so each theme yields 25/25/25/25.
-- Keep the existing per-primitive rationale, UI blurb, and prompt-body templates — they already cover all four primitives.
+100 ideas per theme, 25 per primitive (strict round-robin, so every theme page shows 4 primitives × 25).
 
-### Regeneration
+## 2. Three agent modes
 
-- Run the updated script over all 12 theme JSONs in `src/data/ideas/`.
-- Each idea's `quantumHook`, `quantumHookId`, `quantumTag`, `quantumRationale`, `pitch`, and `megaPrompt` get rewritten from the new primitive.
-- Spot-check one idea per primitive in `dance.json` and one other theme to confirm the primer + gotchas block is still inlined and the primitive-specific server-fn snippet matches.
+New `src/data/modes.json` + a mode selector that rewrites setup copy and the generated mega-prompt:
 
-### Verification
+- **Simulated agent** — no external service; in-app mock of DIDs, connections, credentials. Zero secrets, always green. Default for a 5-credit one-shot build.
+- **Docker / Sprites agent** — the Identus Compose stack (cloud-agent + prism-node + Postgres) reachable at `http://localhost:8085/cloud-agent`; Sprites is used to author/lint the Compose file.
+- **Fly.io / Sprites agent** — dedicated Fly Machines deployment (Postgres → prism-node → cloud-agent), HTTPS at app root with no `/cloud-agent` prefix, `ADMIN_TOKEN` + `DEFAULT_WALLET_AUTH_API_KEY`.
 
-- `python3 -c "…Counter(quantumHookId)…"` on every theme file → each returns `{sprite-create:25, sprite-fs:25, sprite-service:25, sprite-exec:25}`.
-- Load the Dance theme page in preview → header reads "4 PRIMITIVES" and the Filesystem Drop filter shows 25 entries.
-- Run the project type-check.
+Each mega-prompt embeds an Identus primer, the mode-specific setup block, the primitive-specific server-function snippet, and a gotchas block (strip `/cloud-agent` on Fly, `assertionMethod` key required to sign an offer, `DIDCOMM_SERVICE_URL` must be reachable, 300s health grace period, 4 GB agent memory).
+
+The selected mode is client state on the idea page; the copy button emits the mode's variant. No backend, no secrets, no live agent calls.
+
+## 3. Pages
+
+- `/` — rewritten hero, four primitives, three modes, links to primer/themes/demo.
+- `/themes`, `/themes/$theme`, `/ideas/$id` — same layout, new data, plus the mode selector on the idea page.
+- `/primer` — Identus primer replacing `/quantum-primer` (old path permanently redirects).
+- `/modes` — new page explaining the three modes side by side with setup steps.
+- `/showcase` — reference build card linking to https://identus.lovable.app/ and https://github.com/arunnadarasa/identus, plus the four upstream repos (cloud-agent, sdk-ts, mediator, sdk-kmp, docs).
+- `/strategy`, `/about` — reworded for Identus.
+- `/llms` — page explaining the knowledge files and how to paste them into an LLM, with copy buttons.
+- `public/llms.txt` (short index) and `public/llms-full.txt` (full participant knowledge base: primitives, three modes, agent REST surface, SDK-TS snippets, mediator, gotchas, doc links) — modelled on `https://docs.docker.com/llms-full.txt`.
+
+## 4. Generation approach
+
+- Rewrite `scripts/regenerate_ideas.py` to produce 1,000 Identus ideas — one call per (theme × primitive) = 40 batches of 25 — via the Lovable AI Gateway, with a checkpoint file so reruns resume. If no gateway key is available at run time, fall back to deterministic composition from curated per-theme sub-domain lists so the catalog is always fully populated.
+- Rewrite `scripts/rewrite_mega_prompts.py` to stamp `quantumHook`/`quantumRationale`/`pitch`/`megaPrompt` from the new primitive templates, with the round-robin assignment (fixes the uneven-distribution bug in the previous plan at the same time).
+- Add `scripts/build_llms_txt.py` to generate both public text files from the same source data so they never drift.
+
+## 5. Technical notes
+
+- Field names in `src/data/ideas.ts` stay (`quantumHook*`) to avoid touching every component, but the UI labels change to "primitive". A follow-up rename is optional.
+- `src/lib/plain-language.ts` gets four new Identus templates.
+- `src/components/quantum-chip.tsx` → `primitive-chip.tsx`; site header/footer nav updated.
+- Verification: each theme JSON must return `{identus-did:25, identus-connection:25, identus-credential:25, identus-verify:25}`; every route keeps a unique `head()`; typecheck clean; preview loads `/`, a theme page, an idea page with all three mode variants, and `/llms-full.txt`.
 
 ## Out of scope
 
-- No UI or component changes; the theme page already counts primitives dynamically.
-- Idea titles stay as-is — only the primitive assignment and derived copy change.
+- No live agent provisioning, Fly/Sprites API calls, secrets, or Lovable Cloud in this app.
+- No embedded iframe of the demo — showcase links out.
