@@ -1,53 +1,52 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import hooks from "@/data/ideas/hooks.json";
+import { MODES } from "@/data/modes";
 
 export const Route = createFileRoute("/quantum-primer")({
   head: () => ({
     meta: [
-      { title: "Sprites primer · Sprites Creative" },
+      { title: "Identus primer · Hyperledger Identus Catalyst" },
       {
         name: "description",
         content:
-          "Four fly.io Sprites primitives every idea in this repo leans on: create a public micro-VM, drop files into its filesystem, run a long-running service, and exec shell commands.",
+          "Four Hyperledger Identus primitives every idea in this catalog leans on: publish a did:prism, open a DIDComm connection, issue a verifiable credential, and verify a proof.",
       },
-      { property: "og:title", content: "Sprites primer · Sprites Creative" },
+      { property: "og:title", content: "Identus primer · Hyperledger Identus Catalyst" },
+      { property: "og:type", content: "article" },
+      { name: "twitter:card", content: "summary_large_image" },
       {
         property: "og:description",
-        content: "Four Sprites primitives that power every Lovable hackathon entry in this archive.",
+        content: "Four Identus primitives and three agent modes that power every Lovable hackathon entry in this catalog.",
       },
     ],
   }),
   component: Primer,
 });
 
-const SECRETS = [
-  {
-    name: "SPRITES_TOKEN",
-    note: "The 4-part token (org-slug/org-id/token-id/token-value) from sprites.dev/account. One token unlocks create, filesystem writes, long-running services, and exec across every Sprite you spin up. A raw Fly.io org token returns 401 — always use the 4-part sprites.dev token.",
-    href: "https://sprites.dev/account",
-  },
-];
-
 const GOTCHAS = [
   {
-    title: "Serve from /root/www",
-    body: "Set `dir: \"/root/www\"` on every service. `/home/sprite` may not exist and the service fails to start with `cd: No such file or directory`.",
+    title: "Publish before you issue",
+    body: "Only a PUBLISHED did:prism carrying an `assertionMethod` key can sign a credential offer. Create → publish → wait for `PUBLISHED`, or issuance fails with a cryptic 422.",
   },
   {
-    title: "http_port is required",
-    body: "Sprites wake on the first request only when a service declares `http_port`. Omit it and the sprite reports \"Running\" but every request 502s.",
+    title: "Fly serves at the root",
+    body: "A direct Fly deploy has no APISIX gateway, so strip any trailing `/cloud-agent` from the base URL. The local docker compose stack keeps it.",
   },
   {
-    title: "Create is POST-only",
-    body: "`POST /sprites` creates. `PUT /sprites/{name}` returns 404 — create-via-PUT is not supported. Match on `409` for idempotent re-runs.",
+    title: "Everything is asynchronous",
+    body: "POST creates a record; you then poll `protocolState` — `OfferSent` → `CredentialSent`, `RequestSent` → `PresentationVerified`. Never assume the POST finished the job.",
   },
   {
-    title: "/exec takes no Accept header",
-    body: "`POST /sprites/{name}/exec?cmd=...` needs only an `Authorization` header. Adding `Accept: application/octet-stream` returns 406 Not Acceptable.",
+    title: "Connectionless needs a goalCode",
+    body: "Issuing without an established connection means omitting `connectionId` and supplying a `goalCode`. Send neither and you get \"Missing connectionId\".",
   },
   {
-    title: "Warm the URL",
-    body: "After start, poll the public URL up to ~12× at 1s with a 4s fetch timeout so the first user hits a warm sprite, not a cold-boot 502.",
+    title: "DIDComm needs a reachable host",
+    body: "`DIDCOMM_SERVICE_URL` must point at a real, publicly reachable host with port 8090 published. A placeholder makes every invitation undeliverable.",
+  },
+  {
+    title: "Give the agent room",
+    body: "First boot migrates four databases. Allow ~5 minutes and at least 4 GB of memory before deciding the agent is broken — under that it gets OOM-killed mid-migration.",
   },
 ];
 
@@ -55,14 +54,15 @@ function Primer() {
   return (
     <div className="max-w-5xl mx-auto px-5 sm:px-8 py-16 sm:py-24">
       <header className="mb-12">
-        <span className="eyebrow">primer · sprites</span>
+        <span className="eyebrow">primer · identus</span>
         <h1 className="font-display text-4xl sm:text-5xl font-bold mt-3 text-foreground">
-          Four Sprites primitives, demystified.
+          Four Identus primitives, demystified.
         </h1>
         <p className="text-muted-foreground mt-4 text-base sm:text-lg font-light leading-relaxed max-w-3xl">
-          Every idea in this repo leans on one of four fly.io Sprites primitives. Each one runs
-          against <code>api.sprites.dev/v1</code> with a single token, so you ship a real public
-          micro-VM demo with zero infra and no provider-shopping.
+          Hyperledger Identus is open-source self-sovereign identity: an issuer signs a verifiable
+          credential, a holder keeps it in their wallet, a verifier checks it without phoning the
+          issuer. Every idea in this catalog leans on one of four primitives, all reached over plain
+          REST on an Identus Cloud Agent.
         </p>
       </header>
 
@@ -82,26 +82,21 @@ function Primer() {
       </section>
 
       <section className="mt-16">
-        <h2 className="font-display text-2xl sm:text-3xl text-foreground italic mb-4">One token. That's it.</h2>
+        <h2 className="font-display text-2xl sm:text-3xl text-foreground italic mb-4">Three ways to run the agent.</h2>
         <p className="text-sm text-muted-foreground font-light leading-relaxed max-w-2xl mb-6">
-          Add this to your Lovable project (Project Settings → Secrets). It stays on the server,
-          read by your TanStack server function via <code>process.env.SPRITES_TOKEN</code>.
+          Every mega-prompt in the catalog is written for one of three modes. Pick the mode on any
+          idea page and the prompt rewrites itself.
         </p>
-        <ul className="space-y-3">
-          {SECRETS.map((s) => (
-            <li key={s.name} className="border border-border bg-card p-4 flex flex-wrap items-center justify-between gap-3">
-              <div>
-                <code className="text-foreground text-sm">{s.name}</code>
-                <p className="text-xs text-muted-foreground font-light mt-1 max-w-2xl">{s.note}</p>
-              </div>
-              <a
-                href={s.href}
-                target="_blank"
-                rel="noreferrer"
-                className="text-[10px] tracking-[0.28em] uppercase text-primary hover:text-foreground"
-              >
-                Get token ↗
-              </a>
+        <ul className="grid gap-px bg-border sm:grid-cols-3">
+          {MODES.map((m) => (
+            <li key={m.id} className="p-6 bg-card">
+              <div className="eyebrow text-primary">{m.tag}</div>
+              <h3 className="font-display text-xl italic text-foreground mt-2">{m.name}</h3>
+              <p className="text-sm text-muted-foreground font-light mt-3 leading-relaxed">{m.blurb}</p>
+              <p className="text-xs text-foreground/70 font-light mt-3 leading-relaxed">
+                <span className="text-primary">Secrets:</span>{" "}
+                {m.secrets.length ? m.secrets.join(", ") : "none"}
+              </p>
             </li>
           ))}
         </ul>
@@ -110,33 +105,41 @@ function Primer() {
       <section className="mt-16">
         <h2 className="font-display text-2xl sm:text-3xl text-foreground italic mb-4">Gotchas worth memorising.</h2>
         <p className="text-sm text-muted-foreground font-light leading-relaxed max-w-2xl mb-6">
-          The Sprites docs leave a few edges ambiguous. These five bite hardest in a one-shot Lovable build.
+          The Identus docs leave a few edges ambiguous. These bite hardest in a one-shot Lovable build.
         </p>
         <ul className="grid gap-px bg-border sm:grid-cols-2">
           {GOTCHAS.map((g) => (
             <li key={g.title} className="p-6 bg-card">
               <div className="eyebrow text-primary">{g.title}</div>
-              <p className="text-sm text-foreground/85 font-light leading-relaxed mt-2">{g.body}</p>
+              <p className="text-sm text-foreground/80 font-light mt-2 leading-relaxed">{g.body}</p>
             </li>
           ))}
         </ul>
       </section>
 
-      <section className="mt-16 border-t border-border pt-10 flex flex-wrap gap-3">
-        <a href="/strategy" className="px-5 py-2.5 bg-primary text-primary-foreground text-[10px] tracking-[0.32em] uppercase font-semibold">
-          Build strategy
-        </a>
-        <a href="/themes" className="px-5 py-2.5 border border-border text-foreground text-[10px] tracking-[0.32em] uppercase font-semibold hover:border-primary/60">
-          Browse 1,000 ideas
-        </a>
-        <a
-          href="https://github.com/arunnadarasa/sprite-sandbox-fun"
-          target="_blank"
-          rel="noreferrer"
-          className="px-5 py-2.5 border border-primary/40 text-foreground text-[10px] tracking-[0.32em] uppercase font-semibold hover:border-primary"
-        >
-          Reference repo ↗
-        </a>
+      <section className="mt-16 border border-primary/30 bg-card p-6 sm:p-8">
+        <span className="eyebrow text-primary">For your own LLM</span>
+        <h2 className="font-display text-2xl sm:text-3xl text-foreground italic mt-2">
+          Everything above, in one plain-text file.
+        </h2>
+        <p className="text-sm text-muted-foreground font-light mt-3 leading-relaxed max-w-2xl">
+          Primitives, agent modes, REST shapes, failure modes and all 1,000 catalog entries —
+          formatted for pasting straight into ChatGPT, Claude or your editor's assistant.
+        </p>
+        <div className="mt-5 flex flex-wrap gap-3">
+          <a
+            href="/llms-full.txt"
+            className="px-5 py-2.5 bg-primary text-primary-foreground text-[11px] tracking-[0.28em] uppercase font-semibold hover:bg-foreground transition-colors duration-500"
+          >
+            Open llms-full.txt ↗
+          </a>
+          <Link
+            to="/themes"
+            className="px-5 py-2.5 border border-primary/40 text-[11px] tracking-[0.28em] uppercase font-semibold hover:bg-primary hover:text-primary-foreground transition-colors duration-500"
+          >
+            Browse the index →
+          </Link>
+        </div>
       </section>
     </div>
   );
