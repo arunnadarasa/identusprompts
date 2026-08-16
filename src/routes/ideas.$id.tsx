@@ -8,8 +8,8 @@ import { getPlainProposition } from "@/lib/plain-language";
 export const Route = createFileRoute("/ideas/$id")({
   head: ({ params }) => {
     const idea = getIdea(params.id);
-    const title = idea ? `${idea.title} · Sprites Creative idea` : "Idea · Sprites Creative";
-    const desc = idea ? idea.pitch : "A fly.io Sprites hackathon idea.";
+    const title = idea ? `${idea.title} · Identus Catalyst idea` : "Idea · Identus Catalyst";
+    const desc = idea ? idea.pitch : "A Hyperledger Identus hackathon idea.";
     return {
       meta: [
         { title },
