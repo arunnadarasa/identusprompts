@@ -2,7 +2,7 @@ import { createFileRoute, Link, notFound, useRouter } from "@tanstack/react-rout
 import { SiteShell } from "@/components/site-shell";
 import { CopyButton } from "@/components/copy-button";
 import { QuantumChip } from "@/components/quantum-chip";
-import { getIdea, getTheme, getHook, IDEAS_BY_THEME } from "@/data/ideas";
+import { getIdea, getTheme, getHook, IDEAS_BY_THEME, type Idea, type Theme, type Hook } from "@/data/ideas";
 import { getPlainProposition } from "@/lib/plain-language";
 
 export const Route = createFileRoute("/ideas/$id")({
