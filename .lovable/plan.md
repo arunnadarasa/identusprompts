@@ -13,7 +13,7 @@ Turn this archive into a Hyperledger Identus hackathon catalyst: 1,000 mega-prom
 | `identus-credential` | Credential Issuance | JWT/SD-JWT credential offer signed by a published issuer DID |
 | `identus-verify` | Proof Presentation | presentation request → holder proof → verifier result |
 
-**Ten new themes** (identity-native domains, replacing the creative disciplines): Healthcare & NHS, Education & Credentials, Finance & KYC, Government & Civic ID, Supply Chain & Provenance, Employment & Skills, Travel & Borders, Events & Ticketing, AI Agents & Delegation, Creative Rights & Royalties. Each keeps the existing shape: slug, name, emoji, audience, market anchor.
+**Themes stay creative.** The existing ten disciplines are kept exactly as they are (Dance, Music, Visual Art, Video, Photography, Writing, Film & Animation, Games, Theater, Fashion) — same slugs, audiences and market anchors, so the archive remains a creative-industry catalog. What changes is the recipe: every idea applies an Identus primitive to a real creative-industry identity problem (choreography credit credentials, stem-licence proofs, artwork provenance DIDs, press-badge verification, cast/crew credentials, player identity, ticket-holder proofs, garment authenticity, and so on).
 
 100 ideas per theme, 25 per primitive (strict round-robin, so every theme page shows 4 primitives × 25).
 
