@@ -305,7 +305,11 @@ Why Identus: {idea['quantumRationale']}
 
 {PRIMER}
 
+{CONVENTIONS}
+
 <<MODE_BLOCK>>
+
+{API_REFERENCE}
 
 {SNIPPETS[hook['id']]}
 
