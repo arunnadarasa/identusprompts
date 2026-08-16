@@ -6,10 +6,10 @@ import { THEMES, ALL_IDEAS, HOOKS } from "@/data/ideas";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Sprites Creative — 1,000 fly.io Sprites hackathon ideas for Lovable" },
-      { name: "description", content: "A browseable repo of 1,000 mega-prompts that wire fly.io Sprites — create, filesystem drops, long-running services and exec — into ten creative disciplines. Built during the Sprites Creative Hackathon." },
-      { property: "og:title", content: "Sprites Creative — 1,000 fly.io Sprites hackathon ideas for Lovable" },
-      { property: "og:description", content: "A browseable repo of 1,000 mega-prompts that wire fly.io Sprites — create, filesystem drops, long-running services and exec — into ten creative disciplines. Built during the Sprites Creative Hackathon." },
+      { title: "Hyperledger Identus Catalyst — 1,000 self-sovereign identity ideas for Lovable" },
+      { name: "description", content: "A browseable catalog of 1,000 mega-prompts that wire Hyperledger Identus — did:prism, DIDComm, verifiable credentials and proofs — into ten creative disciplines." },
+      { property: "og:title", content: "Hyperledger Identus Catalyst — 1,000 self-sovereign identity ideas for Lovable" },
+      { property: "og:description", content: "A browseable catalog of 1,000 mega-prompts that wire Hyperledger Identus — did:prism, DIDComm, verifiable credentials and proofs — into ten creative disciplines." },
     ],
   }),
   component: Index,
@@ -158,7 +158,7 @@ function Index() {
         <div className="flex items-end justify-between mb-10 gap-6 flex-wrap">
           <div>
             <span className="eyebrow block mb-3">Chapter I · Disciplines</span>
-            <h2 className="font-display text-4xl sm:text-5xl text-foreground italic">Ten houses, one Sprites stack.</h2>
+            <h2 className="font-display text-4xl sm:text-5xl text-foreground italic">Ten houses, one identity stack.</h2>
           </div>
           <Link to="/themes" className="story-gold text-sm tracking-[0.24em] uppercase text-primary">See full index →</Link>
         </div>
