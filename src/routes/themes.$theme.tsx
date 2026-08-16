@@ -31,7 +31,7 @@ export const Route = createFileRoute("/themes/$theme")({
 });
 
 function ThemePage() {
-  const { theme } = Route.useLoaderData();
+  const { theme } = Route.useLoaderData() as { theme: Theme };
   const ideas = IDEAS_BY_THEME[theme.slug];
   const [q, setQ] = useState("");
   const [hookFilter, setHookFilter] = useState<string | null>(null);
