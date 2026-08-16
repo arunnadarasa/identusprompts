@@ -1,211 +1,236 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/strategy")({
   head: () => ({
     meta: [
-      { title: "Build strategy — ship a real Sprites demo in one Lovable build" },
+      { title: "Build strategy — ship a real Identus demo in one Lovable build" },
       {
         name: "description",
         content:
-          "How to ship a real fly.io Sprites demo in one Lovable build: one token, one paste, a TanStack server function calling api.sprites.dev to create, drop files, run services or exec — no infra.",
+          "How to ship a Hyperledger Identus demo in one Lovable build: pick an agent mode, paste one prompt, and let a TanStack server function talk to the Cloud Agent — DIDs, credentials, proofs.",
       },
-      { property: "og:title", content: "Real Sprites in one Lovable build" },
+      { property: "og:title", content: "Real Identus in one Lovable build" },
+      { property: "og:type", content: "article" },
+      { name: "twitter:card", content: "summary_large_image" },
       {
         property: "og:description",
-        content: "Build-time pattern for Lovable + fly.io Sprites hackathon entries.",
+        content: "Build-time pattern for Lovable + Hyperledger Identus hackathon entries.",
       },
     ],
   }),
   component: Strategy,
 });
 
-const CREATE_SNIPPET = `// src/lib/sprites.functions.ts — spin up a public Sprite
-// Built during the Sprites Creative Hackathon — StreetKode Fam · Indian Krump Festival 14
+const DID_SNIPPET = `// src/lib/identus.functions.ts — mint and publish a did:prism
+// Built for the Hyperledger Identus Catalyst — StreetKode Fam · Indian Krump Festival 14
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 
-const API = "https://api.sprites.dev/v1";
-const auth = () => ({ Authorization: \`Bearer \${process.env.SPRITES_TOKEN!}\` });
+const agent = () => ({
+  base: process.env.AGENT_BASE_URL!.replace(/\\/$/, ""),
+  headers: { "content-type": "application/json", apikey: process.env.AGENT_API_KEY! },
+});
 
-export const launch = createServerFn({ method: "POST" })
-  .inputValidator((d) => z.object({ name: z.string().min(1).max(48) }).parse(d))
-  .handler(async ({ data }) => {
-    const r = await fetch(\`\${API}/sprites\`, {
-      method: "POST",                        // NOTE: POST-only. PUT returns 404.
-      headers: { ...auth(), "Content-Type": "application/json" },
-      body: JSON.stringify({ name: data.name, url_settings: { auth: "public" } }),
-    });
-    if (!r.ok && r.status !== 409) throw new Error(\`create failed: \${r.status}\`);
-    return { url: \`https://\${data.name}.sprites.run\` };
-  });`;
-
-const FS_SNIPPET = `// src/lib/sprites.functions.ts — drop an index.html into a live Sprite
-export const publish = createServerFn({ method: "POST" })
-  .inputValidator((d) => z.object({ name: z.string(), html: z.string().min(1) }).parse(d))
-  .handler(async ({ data }) => {
-    // fs/write auto-creates parent dirs. Serve from /root/www — /home/sprite may not exist.
-    const w = await fetch(
-      \`\${API}/sprites/\${data.name}/fs/write?path=/root/www/index.html&workingDir=/\`,
-      { method: "PUT", headers: { ...auth(), "Content-Type": "application/octet-stream" }, body: data.html },
-    );
-    if (!w.ok) throw new Error(\`fs write failed: \${w.status}\`);
-    return { ok: true };
-  });`;
-
-const SERVICE_SNIPPET = `// src/lib/sprites.functions.ts — long-running service + warm-poll
-export const serve = createServerFn({ method: "POST" })
-  .inputValidator((d) => z.object({ name: z.string() }).parse(d))
-  .handler(async ({ data }) => {
-    // Reset stale, then PUT the new service. http_port is REQUIRED for wake-on-request.
-    await fetch(\`\${API}/sprites/\${data.name}/services/webapp\`, { method: "DELETE", headers: auth() });
-    await fetch(\`\${API}/sprites/\${data.name}/services/webapp\`, {
-      method: "PUT",
-      headers: { ...auth(), "Content-Type": "application/json" },
+export const mintDid = createServerFn({ method: "POST" })
+  .inputValidator((d) => z.object({ label: z.string().min(1) }).parse(d))
+  .handler(async () => {
+    const { base, headers } = agent();
+    const created = await fetch(\`\${base}/did-registrar/dids\`, {
+      method: "POST", headers,
       body: JSON.stringify({
-        cmd: "python3", args: ["-m", "http.server", "8080"],
-        dir: "/root/www", needs: [], http_port: 8080,
+        documentTemplate: {
+          publicKeys: [
+            { id: "auth-1", purpose: "authentication", curve: "secp256k1" },
+            { id: "assert-1", purpose: "assertionMethod", curve: "secp256k1" },
+          ],
+          services: [],
+        },
       }),
+    }).then((r) => r.json());
+
+    await fetch(\`\${base}/did-registrar/dids/\${created.longFormDid}/publications\`, {
+      method: "POST", headers,
     });
-    await fetch(\`\${API}/sprites/\${data.name}/services/webapp/start\`, {
-      method: "POST", headers: { ...auth(), Accept: "application/x-ndjson" },
-    });
-    // Warm-poll so the first user hits a live URL, not a cold-boot 502.
-    const url = \`https://\${data.name}.sprites.run\`;
-    for (let i = 0; i < 12; i++) {
-      try { if ((await fetch(url, { signal: AbortSignal.timeout(4000) })).ok) return { url }; } catch {}
-      await new Promise((r) => setTimeout(r, 1000));
-    }
-    return { url };
+    return { did: created.longFormDid };
   });`;
 
-const EXEC_SNIPPET = `// src/lib/sprites.functions.ts — one-shot exec inside a Sprite
-export const run = createServerFn({ method: "POST" })
-  .inputValidator((d) => z.object({ name: z.string(), script: z.string().min(1) }).parse(d))
+const CONNECTION_SNIPPET = `// src/lib/identus.functions.ts — DIDComm invitation
+export const createInvitation = createServerFn({ method: "POST" })
+  .inputValidator((d) => z.object({ label: z.string().min(1) }).parse(d))
   .handler(async ({ data }) => {
-    const qs = new URLSearchParams();
-    qs.append("cmd", "bash"); qs.append("cmd", "-lc"); qs.append("cmd", data.script);
-    const res = await fetch(\`\${API}/sprites/\${data.name}/exec?\${qs}\`, {
-      method: "POST",
-      headers: auth(),                       // Authorization ONLY. No Accept, or 406.
-    });
-    const bytes = new Uint8Array(await res.arrayBuffer());
-    // Response ends with 0x03 <exitCode>.
-    const exit = bytes.length >= 2 && bytes[bytes.length - 2] === 3 ? bytes[bytes.length - 1] : null;
-    const end = exit === null ? bytes.length : bytes.length - 2;
-    return { stdout: new TextDecoder().decode(bytes.slice(0, end)), exit };
+    const { base, headers } = agent();
+    const conn = await fetch(\`\${base}/connections\`, {
+      method: "POST", headers,
+      body: JSON.stringify({ label: data.label, goalCode: "connect", goal: data.label }),
+    }).then((r) => r.json());
+
+    // Render conn.invitation.invitationUrl as a QR code; poll GET /connections/{id}
+    // until state === "ConnectionResponseSent".
+    return { connectionId: conn.connectionId, invitationUrl: conn.invitation.invitationUrl };
   });`;
 
-const ENV_SNIPPET = `# .env (Lovable -> Project Settings -> Secrets)
-SPRITES_TOKEN=<org-slug>/<org-id>/<token-id>/<token-value>   # https://sprites.dev/account
+const CREDENTIAL_SNIPPET = `// src/lib/identus.functions.ts — issue a JWT verifiable credential
+export const offerCredential = createServerFn({ method: "POST" })
+  .inputValidator((d) => z.object({
+    issuingDID: z.string(),
+    claims: z.record(z.string(), z.string()),
+    connectionId: z.string().optional(),
+  }).parse(d))
+  .handler(async ({ data }) => {
+    const { base, headers } = agent();
+    const rec = await fetch(\`\${base}/issue-credentials/credential-offers\`, {
+      method: "POST", headers,
+      body: JSON.stringify({
+        claims: data.claims,
+        issuingDID: data.issuingDID,       // must be PUBLISHED with assertionMethod
+        credentialFormat: "JWT",
+        automaticIssuance: true,
+        ...(data.connectionId
+          ? { connectionId: data.connectionId }
+          : { goalCode: "issue-vc", goal: "Claim your credential" }),
+      }),
+    }).then((r) => r.json());
 
-# How Lovable wires this up in one prompt:
-# 1. Paste a mega-prompt from this archive.
-# 2. Lovable
-#    - writes a server function that proxies Sprites (create / fs / service / exec)
-#    - wires the client surface (launch button, compose form, console box, etc.)
-#    - keeps your token on the server via process.env.SPRITES_TOKEN
-# 3. Run it. Your demo is spinning up real fly.io micro-VMs.`;
+    // Poll GET /issue-credentials/records/{recordId} until "CredentialSent".
+    return { recordId: rec.recordId, state: rec.protocolState };
+  });`;
+
+const VERIFY_SNIPPET = `// src/lib/identus.functions.ts — request and verify a proof
+export const requestProof = createServerFn({ method: "POST" })
+  .inputValidator((d) => z.object({
+    connectionId: z.string(),
+    attributes: z.array(z.string()),
+  }).parse(d))
+  .handler(async ({ data }) => {
+    const { base, headers } = agent();
+    const rec = await fetch(\`\${base}/present-proof/presentations\`, {
+      method: "POST", headers,
+      body: JSON.stringify({
+        connectionId: data.connectionId,
+        proofs: [],
+        options: { challenge: crypto.randomUUID(), domain: "https://example.app" },
+        claims: Object.fromEntries(data.attributes.map((a) => [a, {}])),
+      }),
+    }).then((r) => r.json());
+
+    // Poll GET /present-proof/presentations/{id} until "PresentationVerified".
+    return { presentationId: rec.presentationId, state: rec.status };
+  });`;
+
+const ENV_SNIPPET = `# Simulated mode — no secrets at all. Start here.
+
+# Docker mode (local compose stack, APISIX gateway present):
+AGENT_BASE_URL=http://localhost:8085/cloud-agent
+AGENT_API_KEY=<DEFAULT_WALLET_AUTH_API_KEY>
+
+# Fly.io mode (direct deploy — NO /cloud-agent suffix):
+AGENT_BASE_URL=https://<app>.fly.dev
+AGENT_API_KEY=<DEFAULT_WALLET_AUTH_API_KEY>
+
+# The mega-prompt then:
+#    - writes createServerFn wrappers around the Cloud Agent REST API
+#    - polls protocolState instead of assuming the POST finished the job
+#    - keeps the key on the server via process.env.AGENT_API_KEY`;
 
 function Strategy() {
   return (
-    <div className="max-w-6xl mx-auto px-5 sm:px-8 py-16 sm:py-24">
-      <div className="max-w-3xl">
-        <div className="eyebrow text-primary mb-4">build strategy · sprites</div>
-        <h1 className="font-display text-4xl sm:text-6xl text-foreground italic leading-[1.05] mb-8">
-          Real Sprites, <span className="text-primary italic">one token</span>, one build.
+    <div className="max-w-4xl mx-auto px-5 sm:px-8 py-16 sm:py-24">
+      <header className="mb-12">
+        <div className="eyebrow text-primary mb-4">build strategy · identus</div>
+        <h1 className="font-display text-4xl sm:text-5xl leading-[1.05] text-foreground">
+          Real identity, <span className="text-primary italic">one prompt</span>, one build.
         </h1>
-        <p className="text-base sm:text-lg leading-relaxed text-muted-foreground font-light">
-          Every mega-prompt in this archive collapses into the same shape: a single TanStack server
-          function calling <code>api.sprites.dev/v1</code> with one secret. It's the only pattern
-          that lets a Lovable account ship a working Sprites demo in one shot, inside the 5-credit budget.
+        <p className="text-muted-foreground mt-5 text-base sm:text-lg font-light leading-relaxed max-w-2xl">
+          Every entry in this catalog compiles down to the same shape: a TanStack server function
+          calling a Hyperledger Identus Cloud Agent, plus one client surface. It's the only pattern
+          that ships a working self-sovereign identity demo in one shot, inside the 5-credit budget.
         </p>
-      </div>
+      </header>
 
-      <section className="mt-16 grid gap-8 md:grid-cols-2">
-        <div className="border border-border bg-card p-8">
-          <h2 className="font-display text-xl font-semibold text-foreground italic">Why Sprites and not a normal deploy?</h2>
-          <p className="mt-3 text-sm leading-relaxed text-muted-foreground font-light">
-            Sprites are fly.io micro-VMs behind one REST API: create a fresh sandbox in a second,
-            drop files into it, run any command or long-running service, hand the user a public URL,
-            let it sleep. No CI, no Dockerfile, no Kubernetes — every demo gets its own throwaway
-            server on demand.
+      <section className="grid gap-px bg-border sm:grid-cols-2 mb-12">
+        <div className="p-6 bg-card">
+          <h2 className="font-display text-xl font-semibold text-foreground italic">Why Identus and not a login form?</h2>
+          <p className="text-sm text-muted-foreground mt-3 font-light leading-relaxed">
+            Identus is identity infrastructure, not accounts. The issuer signs a fact once; the
+            holder carries it in their own wallet; any verifier checks it cryptographically without
+            calling the issuer. Nothing about it is a token, a coin, or a speculation.
           </p>
         </div>
-        <div className="border border-border bg-card p-8">
-          <h2 className="font-display text-xl font-semibold text-foreground italic">Why TanStack server functions?</h2>
-          <p className="mt-3 text-sm leading-relaxed text-muted-foreground font-light">
-            Lovable's TanStack Start template makes secrets trivial. <code>createServerFn</code> runs
-            on the server, reads <code>process.env.SPRITES_TOKEN</code>, hits <code>api.sprites.dev</code>,
-            and returns typed JSON. The token never reaches the browser, no edge functions or extra
-            infra needed.
+        <div className="p-6 bg-card">
+          <h2 className="font-display text-xl font-semibold text-foreground italic">Three modes, one codebase</h2>
+          <p className="text-sm text-muted-foreground mt-3 font-light leading-relaxed">
+            Start simulated — an in-app mock with the agent's exact response shapes and zero setup.
+            Swap in a local Docker stack or a hosted Fly.io deployment later by changing two
+            environment variables. The UI never has to change.
           </p>
         </div>
       </section>
 
-      <section className="mt-16">
-        <h2 className="font-display text-2xl sm:text-3xl text-foreground italic mb-6">The pattern in code.</h2>
-
-        <div className="space-y-6">
-          <div>
-            <span className="eyebrow text-primary">src/lib/sprites.functions.ts — create a Sprite</span>
-            <pre className="mt-2 border border-border bg-card p-4 sm:p-5 text-[12px] sm:text-xs leading-relaxed overflow-x-auto whitespace-pre-wrap break-all">
-              <code className="text-foreground/85 font-mono">{CREATE_SNIPPET}</code>
-            </pre>
-          </div>
-          <div>
-            <span className="eyebrow text-primary">src/lib/sprites.functions.ts — filesystem drop</span>
-            <pre className="mt-2 border border-border bg-card p-4 sm:p-5 text-[12px] sm:text-xs leading-relaxed overflow-x-auto whitespace-pre-wrap break-all">
-              <code className="text-foreground/85 font-mono">{FS_SNIPPET}</code>
-            </pre>
-          </div>
-          <div>
-            <span className="eyebrow text-primary">src/lib/sprites.functions.ts — long-running service</span>
-            <pre className="mt-2 border border-border bg-card p-4 sm:p-5 text-[12px] sm:text-xs leading-relaxed overflow-x-auto whitespace-pre-wrap break-all">
-              <code className="text-foreground/85 font-mono">{SERVICE_SNIPPET}</code>
-            </pre>
-          </div>
-          <div>
-            <span className="eyebrow text-primary">src/lib/sprites.functions.ts — one-shot exec</span>
-            <pre className="mt-2 border border-border bg-card p-4 sm:p-5 text-[12px] sm:text-xs leading-relaxed overflow-x-auto whitespace-pre-wrap break-all">
-              <code className="text-foreground/85 font-mono">{EXEC_SNIPPET}</code>
-            </pre>
-          </div>
-          <div>
-            <span className="eyebrow text-primary">.env + Lovable build</span>
-            <pre className="mt-2 border border-border bg-card p-4 sm:p-5 text-[12px] sm:text-xs leading-relaxed overflow-x-auto whitespace-pre-wrap break-all">
-              <code className="text-foreground/85 font-mono">{ENV_SNIPPET}</code>
-            </pre>
-          </div>
+      <section className="space-y-6">
+        <div>
+          <span className="eyebrow text-primary">src/lib/identus.functions.ts — publish a DID</span>
+          <Snippet code={DID_SNIPPET} />
+        </div>
+        <div>
+          <span className="eyebrow text-primary">src/lib/identus.functions.ts — DIDComm invitation</span>
+          <Snippet code={CONNECTION_SNIPPET} />
+        </div>
+        <div>
+          <span className="eyebrow text-primary">src/lib/identus.functions.ts — issue a credential</span>
+          <Snippet code={CREDENTIAL_SNIPPET} />
+        </div>
+        <div>
+          <span className="eyebrow text-primary">src/lib/identus.functions.ts — verify a proof</span>
+          <Snippet code={VERIFY_SNIPPET} />
+        </div>
+        <div>
+          <span className="eyebrow text-primary">environment</span>
+          <Snippet code={ENV_SNIPPET} />
         </div>
       </section>
 
-      <section className="mt-16 border-t border-border pt-10">
-        <h2 className="font-display text-2xl sm:text-3xl text-foreground italic mb-4">Shipping a 5-credit demo</h2>
-        <ul className="space-y-2 text-sm text-muted-foreground font-light leading-relaxed">
-          <li>· Pick one idea. Paste its mega-prompt. Add <code>SPRITES_TOKEN</code>. That's the whole build.</li>
-          <li>· Keep it to ONE route and ONE server function. No auth, no DB, no extra integrations.</li>
-          <li>· Pick the right primitive for the demo: create-only launcher, filesystem publisher, long-running service, or exec console.</li>
-          <li>· Serve services from <code>/root/www</code> with <code>http_port: 8080</code>. Warm-poll before returning the URL.</li>
-          <li>· Never send <code>Accept: application/octet-stream</code> on <code>/exec</code>. Sprites returns 406.</li>
-          <li>· Add the footer credit: "Built during the Sprites Creative Hackathon — StreetKode Fam · Indian Krump Festival 14".</li>
+      <section className="mt-14">
+        <h2 className="font-display text-2xl sm:text-3xl text-foreground italic mb-5">Rules of the build.</h2>
+        <ul className="space-y-3 text-sm text-muted-foreground font-light leading-relaxed">
+          <li>· Pick one idea, pick one mode, paste its mega-prompt. That's the whole build.</li>
+          <li>· Never call the agent from the browser — every fetch lives inside a <code>createServerFn</code> handler.</li>
+          <li>· Read <code>process.env</code> inside the handler, never at module scope.</li>
+          <li>· Publish the issuer DID and wait for <code>PUBLISHED</code> before issuing anything.</li>
+          <li>· Poll <code>protocolState</code>; issuance and presentation are asynchronous.</li>
+          <li>· On Fly, strip <code>/cloud-agent</code> from the base URL. On Docker, keep it.</li>
+          <li>· Render the state machine and the raw JSON record — judges want to see the real protocol.</li>
+          <li>· Add the footer credit: "Built for the Hyperledger Identus Catalyst — StreetKode Fam · Indian Krump Festival 14".</li>
         </ul>
-        <div className="mt-8 flex flex-wrap gap-3">
-          <a href="/quantum-primer" className="px-5 py-2.5 bg-primary text-primary-foreground text-[10px] tracking-[0.32em] uppercase font-semibold">
-            Sprites primer
-          </a>
-          <a href="/themes" className="px-5 py-2.5 border border-border text-foreground text-[10px] tracking-[0.32em] uppercase font-semibold hover:border-primary/60">
-            Browse 1,000 ideas
-          </a>
+        <div className="mt-8 flex flex-wrap gap-3 text-[10px] uppercase tracking-[0.28em]">
+          <Link to="/quantum-primer" className="px-6 py-3 border border-primary/40 text-foreground hover:bg-primary hover:text-primary-foreground transition-colors duration-500">
+            Identus primer
+          </Link>
           <a
-            href="https://github.com/arunnadarasa/sprite-sandbox-fun"
+            href="https://identus.io/documentation/develop/"
             target="_blank"
             rel="noreferrer"
-            className="px-5 py-2.5 border border-primary/40 text-foreground text-[10px] tracking-[0.32em] uppercase font-semibold hover:border-primary"
+            className="px-6 py-3 border border-primary/40 text-foreground hover:bg-primary hover:text-primary-foreground transition-colors duration-500"
           >
-            Reference repo ↗
+            Identus docs ↗
+          </a>
+          <a
+            href="https://github.com/arunnadarasa/identus"
+            target="_blank"
+            rel="noreferrer"
+            className="px-6 py-3 bg-primary text-primary-foreground font-semibold hover:bg-foreground transition-colors duration-500"
+          >
+            Reference console ↗
           </a>
         </div>
       </section>
     </div>
+  );
+}
+
+function Snippet({ code }: { code: string }) {
+  return (
+    <pre className="mt-2 whitespace-pre-wrap font-mono text-[11px] sm:text-[12px] leading-relaxed p-4 sm:p-6 border border-border bg-card text-foreground/90 overflow-x-auto" style={{ fontFamily: "'JetBrains Mono', ui-monospace, monospace", wordBreak: "break-word", overflowWrap: "anywhere" }}>
+{code}
+    </pre>
   );
 }
