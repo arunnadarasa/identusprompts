@@ -4443,5 +4443,640 @@
 "subDiscipline": "audience loyalty",
 "concept": "Theater patrons can obtain credentials recognizing their loyalty, providing perks for longstanding support of the company."
 }
+],
+"theater::identus-verify": [
+{
+"title": "Actor Credentials Hub",
+"subDiscipline": "casting",
+"concept": "Actors present verified acting credits to directors, ensuring authenticity and trust in their experience and training."
+},
+{
+"title": "Stage Access Passport",
+"subDiscipline": "backstage access",
+"concept": "Technicians and performers prove their backstage privileges to venue staff via verified credentials for secure access."
+},
+{
+"title": "Director's Validation Tool",
+"subDiscipline": "directing",
+"concept": "Directors can request producers to verify their past successful productions without revealing full details of their contracts."
+},
+{
+"title": "Performance License Verifier",
+"subDiscipline": "licensing",
+"concept": "Theater companies submit proof of performance licenses to venues, ensuring they are authorized to stage a particular play."
+},
+{
+"title": "Choreographer's Record Keeper",
+"subDiscipline": "choreography",
+"concept": "Choreographers present their credentials and previous works to dance companies to validate their expertise."
+},
+{
+"title": "Guild Membership Checker",
+"subDiscipline": "union membership",
+"concept": "Performers prove their guild membership status to producers, ensuring compliance with industry standards."
+},
+{
+"title": "Age Verification Stage",
+"subDiscipline": "youth theater",
+"concept": "Young performers present age verification without revealing their exact birth dates to access youth programs."
+},
+{
+"title": "Playwright Authenticator",
+"subDiscipline": "playwriting",
+"concept": "Playwrights validate the provenance of their scripts to theaters, confirming original authorship and rights."
+},
+{
+"title": "Lighting Technician Credentials",
+"subDiscipline": "technical theater",
+"concept": "Lighting designers present verified qualifications and past projects to gain trust from production teams."
+},
+{
+"title": "Costume Designer Proof",
+"subDiscipline": "costume design",
+"concept": "Costume designers prove their previous work experience and credentials to theaters seeking trusted collaborators."
+},
+{
+"title": "Production Team Validator",
+"subDiscipline": "production management",
+"concept": "Production managers present verified team members' credentials to stakeholders, ensuring experienced personnel are involved."
+},
+{
+"title": "Audience Consent Tracker",
+"subDiscipline": "audience engagement",
+"concept": "Audiences provide verified consent to theaters for data usage while maintaining personal privacy."
+},
+{
+"title": "Backstage Safety Certifier",
+"subDiscipline": "safety training",
+"concept": "Technicians verify their safety training certificates before being allowed into hazardous production areas."
+},
+{
+"title": "Provenance Stage App",
+"subDiscipline": "artistic integrity",
+"concept": "Artists present evidence of their past work to validate claims of experience and authenticity within theater."
+},
+{
+"title": "Sponsorship Proof Hub",
+"subDiscipline": "fundraising",
+"concept": "Performers verify their sponsorship agreements to potential investors, ensuring transparency in funding sources."
+},
+{
+"title": "Collaborative Project Validator",
+"subDiscipline": "co-productions",
+"concept": "Theaters verify co-production agreements with each other, ensuring all parties have legitimated interest in the project."
+},
+{
+"title": "Application Talent Showcase",
+"subDiscipline": "auditions",
+"concept": "Auditionees prove their training and experience to casting directors without sharing sensitive personal information."
+},
+{
+"title": "Incubator Program Validator",
+"subDiscipline": "theater education",
+"concept": "Emerging artists present verified acceptance into incubator programs to industry professionals for mentorship opportunities."
+},
+{
+"title": "Theater Review Verifier",
+"subDiscipline": "critique",
+"concept": "Critics validate their credentials and affiliations to theaters to build trust around their feedback."
+},
+{
+"title": "Script Submission Tracker",
+"subDiscipline": "play submission",
+"concept": "Playwrights submit scripts with proof of prior submissions to manage their portfolios securely."
+},
+{
+"title": "Rehearsal Attendance Checker",
+"subDiscipline": "rehearsal",
+"concept": "Actors verify their rehearsal attendance to directors without sharing full attendance records."
+},
+{
+"title": "Festival Participation Proof",
+"subDiscipline": "festivals",
+"concept": "Theaters prove their participation in festivals with verified credentials, enhancing their reputation and opportunities."
+},
+{
+"title": "Educational Credential Presenter",
+"subDiscipline": "theater education",
+"concept": "Educators present verified teaching credentials to institutions for job applications without detailed personal data."
+},
+{
+"title": "Audience Feedback Identity",
+"subDiscipline": "feedback collection",
+"concept": "Audience members validate their feedback contributions to theaters while maintaining anonymity with verified identities."
+},
+{
+"title": "Regional Equity Validator",
+"subDiscipline": "equity compliance",
+"concept": "Theaters prove compliance with regional equity regulations by presenting verified workforce data."
+}
+],
+"fashion::identus-did": [
+{
+"title": "Designer Identity Vault",
+"subDiscipline": "fashion designers",
+"concept": "Designers publish their verified identity to prove authorship of their collections to retailers and collaborators."
+},
+{
+"title": "Authenticity Checker",
+"subDiscipline": "textile artists",
+"concept": "Textile artists register their designs to authenticate original works against potential replicas for buyers."
+},
+{
+"title": "Membership Access Pass",
+"subDiscipline": "stylists",
+"concept": "Stylists mint a DID to access exclusive industry events, proving their credentials and membership status."
+},
+{
+"title": "Costume Credit Ledger",
+"subDiscipline": "costume designers",
+"concept": "Costume designers publish their contributions to productions, ensuring proper credit is given to creators and collaborators."
+},
+{
+"title": "Provenance Tracker",
+"subDiscipline": "sustainable fashion",
+"concept": "Fashion brands use DIDs to document and verify the ethical sourcing of materials to prove sustainability to consumers."
+},
+{
+"title": "Design Collaboration Hub",
+"subDiscipline": "co-creation",
+"concept": "Designers establish verified identities to collaborate securely on projects, ensuring rights and contributions are respected."
+},
+{
+"title": "Access Control Manager",
+"subDiscipline": "event management",
+"concept": "Event organizers use DIDs to manage access to shows and events, verifying attendees' identities and statuses."
+},
+{
+"title": "Credited Contributor Registry",
+"subDiscipline": "fashion journalism",
+"concept": "Fashion journalists register their credentials to receive proper acknowledgment for their articles and images."
+},
+{
+"title": "Vintage Authenticity Service",
+"subDiscipline": "vintage fashion",
+"concept": "Sellers of vintage clothing register items with DIDs to verify authenticity and provide provenance information."
+},
+{
+"title": "Costume Archive System",
+"subDiscipline": "theatrical design",
+"concept": "Theater companies prove ownership and authenticity of costumes through a registered DID, streamlining costume rentals."
+},
+{
+"title": "Influencer Identity Badge",
+"subDiscipline": "influencer marketing",
+"concept": "Fashion influencers create a verified identity that brands can trust for collaborations and endorsements."
+},
+{
+"title": "Membership Verification Tool",
+"subDiscipline": "fashion unions",
+"concept": "Fashion union members publish their credentials to ensure access to benefits and services exclusive to members."
+},
+{
+"title": "Copyright Verification App",
+"subDiscipline": "design copyright",
+"concept": "Designers register their works to protect copyrights and easily prove ownership in disputes."
+},
+{
+"title": "Age Verification Platform",
+"subDiscipline": "children's fashion",
+"concept": "Children's fashion brands verify the age of their audience to comply with advertising regulations."
+},
+{
+"title": "Limited Edition Validator",
+"subDiscipline": "limited releases",
+"concept": "Brands authenticate limited edition products through DIDs, allowing purchasers to verify authenticity and provenance."
+},
+{
+"title": "Access Rights Manager",
+"subDiscipline": "costume rentals",
+"concept": "Costume rental services verify identities of users to ensure access to high-value costume items."
+},
+{
+"title": "Workshop Participant Registry",
+"subDiscipline": "workshops",
+"concept": "Participants register their identity for workshops to ensure qualifications and secure a spot."
+},
+{
+"title": "Fashion Show Entry System",
+"subDiscipline": "fashion events",
+"concept": "Models and designers use DIDs to confirm their participation and access backstage areas at fashion shows."
+},
+{
+"title": "Artisan Collaboration Network",
+"subDiscipline": "handmade fashion",
+"concept": "Artisans register with DIDs to facilitate collaborative projects and confirm skill sets among partners."
+},
+{
+"title": "Licensing Proof Platform",
+"subDiscipline": "design licensing",
+"concept": "Designers issue verifiable credentials for licensing agreements, ensuring clarity in rights and usage."
+},
+{
+"title": "Educational Accreditation Service",
+"subDiscipline": "fashion education",
+"concept": "Fashion institutions verify student identities and achievements to ensure recognized qualifications in the industry."
+},
+{
+"title": "Showcase Identity Portal",
+"subDiscipline": "emerging designers",
+"concept": "Emerging designers publish their DIDs to showcase verified portfolios to potential employers and clients."
+},
+{
+"title": "Freelancer Identity Record",
+"subDiscipline": "freelance design",
+"concept": "Freelance designers use DIDs to establish a verifiable record of work history and client feedback."
+},
+{
+"title": "License Holder Verification",
+"subDiscipline": "trademark fashion",
+"concept": "Trademark fashion items are linked to verified licenses, helping consumers confirm legal ownership."
+},
+{
+"title": "Resource Sharing Network",
+"subDiscipline": "community resources",
+"concept": "Fashion professionals publish their skills and resources via DIDs to foster collaboration and resource sharing."
+}
+],
+"fashion::identus-credential": [
+{
+"title": "Designer Collaboration Pass",
+"subDiscipline": "costume design",
+"concept": "Designers prove their collaboration status to access shared project resources."
+},
+{
+"title": "Fabric Authenticity Card",
+"subDiscipline": "textile sourcing",
+"concept": "Textile artists prove the authenticity of their sourced materials to buyers."
+},
+{
+"title": "Fashion Show Access Pass",
+"subDiscipline": "event management",
+"concept": "Participants prove their eligibility for backstage access at fashion shows."
+},
+{
+"title": "Skill Certification Badge",
+"subDiscipline": "fashion education",
+"concept": "Graduates prove their skill certifications to potential employers."
+},
+{
+"title": "Pattern Licensing Certificate",
+"subDiscipline": "pattern design",
+"concept": "Designers prove they own rights to exclusive patterns for licensing purposes."
+},
+{
+"title": "Artisan Membership Card",
+"subDiscipline": "textile craft",
+"concept": "Artisans prove their membership in a guild to access exclusive resources."
+},
+{
+"title": "Provenance Tracker",
+"subDiscipline": "sustainable fashion",
+"concept": "Brands prove the eco-friendly origin of their materials to consumers."
+},
+{
+"title": "Influencer Endorsement Badge",
+"subDiscipline": "branding",
+"concept": "Influencers prove their endorsement deals to brands and followers."
+},
+{
+"title": "Costume Archive Access",
+"subDiscipline": "theater history",
+"concept": "Researchers prove their credentials to access restricted costume archives."
+},
+{
+"title": "Design Competition Entry",
+"subDiscipline": "apparel design",
+"concept": "Designers prove their eligibility and submission for fashion competitions."
+},
+{
+"title": "Exclusive Collection Pass",
+"subDiscipline": "luxury fashion",
+"concept": "Clients prove their status to gain access to limited edition collections."
+},
+{
+"title": "Sustainability Certification",
+"subDiscipline": "eco-fashion",
+"concept": "Brands prove their sustainable practices to gain consumer trust."
+},
+{
+"title": "Runway Model Credential",
+"subDiscipline": "modeling",
+"concept": "Models prove their verified experience to agencies and clients."
+},
+{
+"title": "Student Designer Portfolio",
+"subDiscipline": "fashion education",
+"concept": "Students prove their coursework and projects to potential employers."
+},
+{
+"title": "Fashion Licensing Rights",
+"subDiscipline": "intellectual property",
+"concept": "Designers prove their licensing rights for specific designs to manufacturers."
+},
+{
+"title": "Editorial Feature Approval",
+"subDiscipline": "fashion journalism",
+"concept": "Writers prove their editorial features to brands for collaborations."
+},
+{
+"title": "Dye Safety Certificate",
+"subDiscipline": "fabric production",
+"concept": "Producers prove the safety standards of dyes used in their fabrics."
+},
+{
+"title": "Costume Rental Agreement",
+"subDiscipline": "film production",
+"concept": "Costume houses prove rental agreements to production companies."
+},
+{
+"title": "Fashion School Accreditation",
+"subDiscipline": "fashion education",
+"concept": "Institutions prove their accreditation status to potential students."
+},
+{
+"title": "Fabric Care Instructions",
+"subDiscipline": "textile care",
+"concept": "Designers provide verified fabric care instructions to consumers."
+},
+{
+"title": "Style Contributor Verification",
+"subDiscipline": "fashion blogging",
+"concept": "Bloggers prove their contributions to style publications for legitimacy."
+},
+{
+"title": "Trade Show Exhibitor Badge",
+"subDiscipline": "marketing",
+"concept": "Exhibitors prove their registration for trade shows to organizers."
+},
+{
+"title": "Virtual Fitting Room Access",
+"subDiscipline": "retail tech",
+"concept": "Customers prove their age or eligibility to access virtual fitting experiences."
+},
+{
+"title": "Costume Design Rights",
+"subDiscipline": "theater design",
+"concept": "Designers prove their ownership of costume designs for legal protection."
+},
+{
+"title": "Fabric Swatch Provenance",
+"subDiscipline": "textile sourcing",
+"concept": "Manufacturers prove the origin of their fabric swatches for clients."
+}
+],
+"fashion::identus-connection": [
+{
+"title": "Designer Collaborations",
+"subDiscipline": "fashion partnerships",
+"concept": "Facilitates proof of collaboration between designers by managing connection invitations for joint projects."
+},
+{
+"title": "Print Rights Manager",
+"subDiscipline": "textile production",
+"concept": "Allows textile artists to verify and share their print rights with manufacturers through secure connections."
+},
+{
+"title": "Costume Attribution",
+"subDiscipline": "theatrical design",
+"concept": "Enables costume designers to claim authorship and provide verifiable credits to their works for productions."
+},
+{
+"title": "Fashion Guild Access",
+"subDiscipline": "industry membership",
+"concept": "Connects fashion professionals to guilds, verifying their membership status for exclusive events."
+},
+{
+"title": "Provenance Tracker",
+"subDiscipline": "sustainable sourcing",
+"concept": "Tracks the origin of materials used in garments, allowing designers to prove sustainability claims."
+},
+{
+"title": "Image Licensing Hub",
+"subDiscipline": "visual content",
+"concept": "Connects photographers and designers to manage image licensing agreements securely."
+},
+{
+"title": "Stylist Credentials",
+"subDiscipline": "personal styling",
+"concept": "Facilitates verification of stylists' credentials for clients seeking qualified professionals."
+},
+{
+"title": "Edition Verification",
+"subDiscipline": "limited collections",
+"concept": "Confirms the authenticity of limited edition fashion pieces through secure identity connections."
+},
+{
+"title": "Fashion Research Credits",
+"subDiscipline": "academic publishing",
+"concept": "Allows fashion researchers to verify and claim authorship of their work to institutions."
+},
+{
+"title": "Model Releases",
+"subDiscipline": "fashion photography",
+"concept": "Enables models to grant permission securely for the use of their images in fashion campaigns."
+},
+{
+"title": "Fabric Authenticity",
+"subDiscipline": "textile science",
+"concept": "Verifies and documents the authenticity of specialty fabrics for consumers and retailers."
+},
+{
+"title": "Union Verification",
+"subDiscipline": "labor rights",
+"concept": "Connects fashion workers to unions, allowing them to prove membership and access benefits."
+},
+{
+"title": "Designer Recommendations",
+"subDiscipline": "collaborative projects",
+"concept": "Facilitates verified recommendations between designers for potential collaborations and partnerships."
+},
+{
+"title": "Costume History Archives",
+"subDiscipline": "historical research",
+"concept": "Connects costume historians with institutions, certifying ownership of historical designs."
+},
+{
+"title": "Age Verification",
+"subDiscipline": "youth fashion",
+"concept": "Helps children's clothing designers verify age eligibility for child models without disclosing personal data."
+},
+{
+"title": "Fashion Show Passes",
+"subDiscipline": "event management",
+"concept": "Issues secure backstage passes for fashion show participants to verify their access credentials."
+},
+{
+"title": "IP Protection System",
+"subDiscipline": "design rights",
+"concept": "Helps designers prove their intellectual property claims when submitting designs for approval."
+},
+{
+"title": "Artisan Connections",
+"subDiscipline": "craft sourcing",
+"concept": "Connects designers with artisans for collaborations, verifying skill and project intentions."
+},
+{
+"title": "Peer Reviews",
+"subDiscipline": "design critique",
+"concept": "Enables designers to securely share work for peer review and receive verifiable feedback."
+},
+{
+"title": "Collaboration Contracts",
+"subDiscipline": "joint ventures",
+"concept": "Manages signing and verification of collaboration contracts between designers and brands."
+},
+{
+"title": "Sample Tracking",
+"subDiscipline": "production logistics",
+"concept": "Tracks the movement of design samples, verifying sender and recipient connections."
+},
+{
+"title": "Event Participation",
+"subDiscipline": "fashion fairs",
+"concept": "Facilitates verified attendance for designers at industry trade shows and fairs."
+},
+{
+"title": "Fashion Mentorship",
+"subDiscipline": "career development",
+"concept": "Connects mentees with verified mentors in the fashion industry for advice and guidance."
+},
+{
+"title": "Product Journey",
+"subDiscipline": "supply chain",
+"concept": "Proves the entire journey of a fashion item from design to sale, ensuring authenticity."
+},
+{
+"title": "Client Approval System",
+"subDiscipline": "custom design",
+"concept": "Gathers and verifies client approvals for bespoke designs through secure communication."
+}
+],
+"fashion::identus-verify": [
+{
+"title": "Provenance Passport",
+"subDiscipline": "sustainable fashion",
+"concept": "Brands prove the sustainable origin of their materials to consumers seeking eco-friendly products."
+},
+{
+"title": "Accredited Designers",
+"subDiscipline": "fashion education",
+"concept": "Design students verify their accredited qualifications to potential employers or internship providers."
+},
+{
+"title": "Authentic Editions",
+"subDiscipline": "limited collections",
+"concept": "Designers prove the authenticity of limited-edition pieces to buyers seeking genuine products."
+},
+{
+"title": "Member Status Check",
+"subDiscipline": "fashion guilds",
+"concept": "Guild members verify their active status for exclusive access to industry events and workshops."
+},
+{
+"title": "Age Verification Access",
+"subDiscipline": "youth fashion",
+"concept": "Brands verify age eligibility of models for campaigns aimed at specific age groups."
+},
+{
+"title": "Costume Ownership",
+"subDiscipline": "theatrical costumes",
+"concept": "Theatrical productions prove ownership and rights of costumes for rental agreements."
+},
+{
+"title": "Design Attribution",
+"subDiscipline": "fashion credits",
+"concept": "Stylists verify their contributions to campaigns to ensure proper credit on published work."
+},
+{
+"title": "Cultural Authenticity",
+"subDiscipline": "traditional textiles",
+"concept": "Artisans prove the cultural authenticity of their textile designs to maintain heritage integrity."
+},
+{
+"title": "Fabric Certification",
+"subDiscipline": "material sourcing",
+"concept": "Sourcing companies verify that fabrics meet industry standards, ensuring quality for designers."
+},
+{
+"title": "Design Competition Entry",
+"subDiscipline": "fashion contests",
+"concept": "Participants verify eligibility and adhere to competition rules before submitting designs."
+},
+{
+"title": "Influencer Authenticity",
+"subDiscipline": "fashion marketing",
+"concept": "Brands verify the authenticity and reach of influencers before collaboration deals."
+},
+{
+"title": "Costume Rental Trust",
+"subDiscipline": "costume design",
+"concept": "Costume designers verify ownership and condition of costumes for rental transactions."
+},
+{
+"title": "Diversity Certification",
+"subDiscipline": "inclusive fashion",
+"concept": "Brands prove their commitment to diversity in hiring practices to consumers and regulators."
+},
+{
+"title": "Stylist Verification",
+"subDiscipline": "fashion styling",
+"concept": "Freelance stylists verify their work experience to clients seeking professional stylists."
+},
+{
+"title": "Behind-the-Scenes Access",
+"subDiscipline": "fashion shows",
+"concept": "Fashion show attendees verify backstage passes to gain access to exclusive areas."
+},
+{
+"title": "Agent Verification",
+"subDiscipline": "model representation",
+"concept": "Models verify their representation by agents for legitimate contract negotiations."
+},
+{
+"title": "Fashion Insider Membership",
+"subDiscipline": "industry insiders",
+"concept": "Insiders verify their private membership status to access exclusive industry news and events."
+},
+{
+"title": "Exhibit Authenticator",
+"subDiscipline": "art installations",
+"concept": "Artists prove the authenticity of their pieces displayed in galleries to potential buyers."
+},
+{
+"title": "Usage Licensing",
+"subDiscipline": "fashion photography",
+"concept": "Photographers verify licensing agreements for their fashion imagery to protect their rights."
+},
+{
+"title": "Textile Source Verification",
+"subDiscipline": "fabric design",
+"concept": "Designers verify the source of their textiles to ensure ethical supply chain practices."
+},
+{
+"title": "Front Row Tickets",
+"subDiscipline": "fashion events",
+"concept": "Attendees verify their premium ticket status for front-row seating at fashion shows."
+},
+{
+"title": "Pattern Design Approval",
+"subDiscipline": "textile patterns",
+"concept": "Designers verify that patterns used in production are approved and licensed to avoid piracy."
+},
+{
+"title": "Seasonal Collection Access",
+"subDiscipline": "seasonal fashion",
+"concept": "Retailers verify access to seasonal collections to ensure exclusivity for high-demand items."
+},
+{
+"title": "Ledger Credit",
+"subDiscipline": "credit attribution",
+"concept": "A fashion app where fashion designers use Proof Presentation to establish who made which part of the work."
+},
+{
+"title": "Signet Licensing",
+"subDiscipline": "licensing terms",
+"concept": "A fashion app where fashion designers use Proof Presentation to establish what a buyer is allowed to do with the work."
+}
 ]
 }
