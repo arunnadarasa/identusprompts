@@ -22,7 +22,7 @@ function SiteHeader() {
         <Link to="/" className="flex items-center gap-2 min-w-0 group">
           <span className="hidden sm:inline eyebrow shrink-0">Vol. 01</span>
           <span className="font-display text-lg sm:text-2xl truncate text-foreground">
-            Sprites <span className="italic text-primary">Creative</span>
+            Identus <span className="italic text-primary">Catalyst</span>
           </span>
         </Link>
         <nav className="hidden md:flex items-center gap-1 text-sm">
@@ -32,7 +32,7 @@ function SiteHeader() {
           <NavLink to="/quantum-primer">Primer</NavLink>
           <NavLink to="/about">About</NavLink>
           <a
-            href="https://docs.sprites.dev/"
+            href="https://identus.io/documentation/develop/"
             target="_blank"
             rel="noreferrer"
             className="ml-3 px-3 py-2 border border-border text-foreground text-[10px] font-semibold tracking-[0.28em] uppercase hover:border-primary/60 hover:text-primary transition-colors duration-500"
@@ -40,7 +40,7 @@ function SiteHeader() {
             Docs ↗
           </a>
           <a
-            href="https://github.com/arunnadarasa/sprite-sandbox-fun"
+            href="https://github.com/arunnadarasa/identus"
             target="_blank"
             rel="noreferrer"
             className="ml-2 px-3 py-2 border border-border text-foreground text-[10px] font-semibold tracking-[0.28em] uppercase hover:border-primary/60 hover:text-primary transition-colors duration-500"
@@ -48,12 +48,12 @@ function SiteHeader() {
             Reference repo ↗
           </a>
           <a
-            href="https://sprites.dev/account"
+            href="/llms-full.txt"
             target="_blank"
             rel="noreferrer"
             className="ml-2 px-4 py-2 bg-primary text-primary-foreground text-[10px] font-semibold tracking-[0.28em] uppercase hover:bg-foreground transition-colors duration-500"
           >
-            Get a token ↗
+            llms-full.txt ↗
           </a>
         </nav>
         <Sheet open={open} onOpenChange={setOpen}>
@@ -66,7 +66,7 @@ function SiteHeader() {
           <SheetContent side="right" className="w-80 bg-background border-l border-border p-0">
             <SheetTitle className="sr-only">Navigation</SheetTitle>
             <div className="flex items-center justify-between px-6 py-5 border-b border-border">
-              <span className="font-display text-xl">Sprites <span className="italic text-primary">Creative</span></span>
+              <span className="font-display text-xl">Identus <span className="italic text-primary">Catalyst</span></span>
             </div>
             <nav className="flex flex-col p-4 gap-1 text-base">
               <MobileLink to="/themes" onClick={close}>Themes</MobileLink>
@@ -75,7 +75,7 @@ function SiteHeader() {
               <MobileLink to="/quantum-primer" onClick={close}>Primer</MobileLink>
               <MobileLink to="/about" onClick={close}>About</MobileLink>
               <a
-                href="https://docs.sprites.dev/"
+                href="https://identus.io/documentation/develop/"
                 target="_blank"
                 rel="noreferrer"
                 onClick={close}
@@ -84,7 +84,7 @@ function SiteHeader() {
                 Docs ↗
               </a>
               <a
-                href="https://github.com/arunnadarasa/sprite-sandbox-fun"
+                href="https://github.com/arunnadarasa/identus"
                 target="_blank"
                 rel="noreferrer"
                 onClick={close}
@@ -93,13 +93,13 @@ function SiteHeader() {
                 Reference repo ↗
               </a>
               <a
-                href="https://sprites.dev/account"
+                href="/llms-full.txt"
                 target="_blank"
                 rel="noreferrer"
                 onClick={close}
                 className="mt-2 px-4 py-3 bg-primary text-primary-foreground text-[11px] tracking-[0.28em] uppercase font-semibold text-center"
               >
-                Get a token ↗
+                llms-full.txt ↗
               </a>
             </nav>
           </SheetContent>
@@ -140,11 +140,11 @@ function SiteFooter() {
       <div className="max-w-7xl mx-auto px-5 sm:px-8 py-10 flex flex-col gap-3 text-[10px] tracking-[0.32em] uppercase text-muted-foreground">
         <div className="flex flex-wrap items-center justify-between gap-4">
           <span>Vol. 01 · 1,000 entries · 10 disciplines</span>
-          <span className="font-display normal-case tracking-normal text-base italic text-primary">Lovable × Sprites</span>
-          <span>Create · Files · Services · Exec · MMXXVI</span>
+          <span className="font-display normal-case tracking-normal text-base italic text-primary">Lovable × Identus</span>
+          <span>DIDs · Connections · Credentials · Proofs · MMXXVI</span>
         </div>
         <div className="border-t border-border/60 pt-3 normal-case tracking-normal text-[11px] font-light leading-relaxed text-muted-foreground/80">
-          Built during the Sprites Creative Hackathon — organised by{" "}
+          Built for the Hyperledger Identus Catalyst — organised by{" "}
           <span className="text-primary">StreetKode Fam</span> during Indian Krump Festival 14.
         </div>
       </div>

@@ -71,7 +71,7 @@ function IdeaPage() {
           <div className="absolute -top-24 -right-24 w-72 h-72 rounded-full gold-bloom blur-3xl opacity-60 pointer-events-none" />
           <div className="relative flex items-baseline justify-between gap-4 mb-5">
             <div>
-              <span className="eyebrow block mb-2">Section · Sprites</span>
+              <span className="eyebrow block mb-2">Section · Identus</span>
               <h2 className="font-display text-3xl italic text-foreground">The primitive.</h2>
             </div>
             <Link to="/quantum-primer" hash={idea.quantumHookId} className="story-gold eyebrow text-primary">
@@ -172,7 +172,7 @@ function IdeaPage() {
               Open in Lovable ↗
             </a>
             <a
-              href="https://github.com/arunnadarasa/sprite-sandbox-fun"
+              href="https://github.com/arunnadarasa/identus"
               target="_blank"
               rel="noreferrer"
               className="inline-flex items-center gap-2 px-6 py-3 border border-primary/40 text-foreground hover:bg-primary hover:text-primary-foreground transition-colors duration-500"
