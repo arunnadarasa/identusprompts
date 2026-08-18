@@ -107,6 +107,7 @@ POST /did-registrar/dids
 POST /did-registrar/dids/{didRef}/publications  -> { scheduledOperation: { id, didRef } }
 GET  /did-registrar/dids/{didRef}         -> { did, longFormDid, status: "CREATED"|"PUBLICATION_PENDING"|"PUBLISHED" }
 GET  /dids/{did}                          -> resolved DID document
+  (check `assertionMethod` is non-empty before offering the DID as an issuer)
 
 POST /connections
   body { label, goalCode: "connect", goal }
