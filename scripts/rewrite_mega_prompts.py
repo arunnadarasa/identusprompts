@@ -48,7 +48,11 @@ PRIMER = """IDENTUS PRIMER (assume the reader has never used Identus)
 GOTCHAS = """GOTCHAS (universal — apply to every agent call in this build)
 - Only a PUBLISHED DID with an `assertionMethod` key can sign a credential
   offer. Create -> publish -> wait for `PUBLISHED` before issuing, or you get a
-  cryptic 422/500.
+  cryptic 422/500. Before showing an issuer picker, resolve each DID with
+  `GET /dids/{did}` and offer ONLY those whose document exposes `assertionMethod`;
+  list the excluded ones with the reason instead of hiding them.
+- Put a `dob` claim on every issued credential (ISO date). Without a date-of-birth
+  claim an age / zero-knowledge proof is impossible later.
 - On a direct Fly deploy the agent serves at the app ROOT — strip any trailing
   `/cloud-agent` from the base URL. On the local docker compose stack, KEEP it.
 - Every issuance/presentation endpoint is asynchronous: you POST, then POLL the
@@ -58,6 +62,8 @@ GOTCHAS = """GOTCHAS (universal — apply to every agent call in this build)
   send neither a `connectionId` nor a `goalCode` you get "Missing connectionId".
 - The human principal and any AI agent acting for them are DIFFERENT DIDs.
   Compare principal to credential subject, agent to mandate subject — never cross them.
+- Never print a raw DID, JWT or hash inline in prose: truncate (first 12 + last 6)
+  and keep the full value behind a copy button or in the raw JSON panel.
 - First boot of a real agent migrates four databases: allow ~5 minutes and >= 4 GB
   of memory before deciding it is broken.
 - Never call the agent from the browser. Every fetch lives inside a
@@ -73,15 +79,21 @@ CONVENTIONS = """RUNTIME CONVENTIONS (this template — follow exactly)
   client-safe module such as `src/lib/identus.functions.ts`. Shape is
   `createServerFn({ method: "POST" }).inputValidator((d) => schema.parse(d)).handler(async ({ data }) => {...})`.
   Call it from the client with `useServerFn(fn)` or directly inside an event handler.
+- Routes and components import ONLY from `*.functions.ts` (and plain type modules) —
+  never from a `*.server.ts` file. Raw agent logic lives in `*.server.ts`, is
+  imported by the `.functions.ts` wrapper, and never reaches the client bundle.
 - Read `process.env.AGENT_BASE_URL` / `process.env.AGENT_API_KEY` INSIDE the
   handler — never at module scope (env is injected at call time).
 - The server runtime is a Cloudflare-style Worker: use `fetch`, `crypto.randomUUID()`,
   `Buffer`. No child_process, no sharp, no native modules.
+- TypeScript runs with `exactOptionalPropertyTypes`: pass optional props as
+  `...(x ? { prop: x } : {})`, not `prop: x ?? undefined`.
 - Toasts: `sonner` (`import { toast } from "sonner"`), and render `<Toaster />`
   once in `src/routes/__root.tsx`. `@/hooks/use-toast` does NOT exist here.
 - Colours come from semantic tokens in `src/styles.css` — no hardcoded
   `text-white` / `bg-black` / `bg-[#hex]` in components.
 - Give `src/routes/index.tsx` its own `head()` with a real title and description."""
+
 
 API_REFERENCE = """CLOUD AGENT API REFERENCE (everything you need — no other docs required)
 All calls: base URL `AGENT_BASE_URL`, headers
@@ -95,6 +107,7 @@ POST /did-registrar/dids
 POST /did-registrar/dids/{didRef}/publications  -> { scheduledOperation: { id, didRef } }
 GET  /did-registrar/dids/{didRef}         -> { did, longFormDid, status: "CREATED"|"PUBLICATION_PENDING"|"PUBLISHED" }
 GET  /dids/{did}                          -> resolved DID document
+  (check `assertionMethod` is non-empty before offering the DID as an issuer)
 
 POST /connections
   body { label, goalCode: "connect", goal }
