@@ -10,7 +10,7 @@ function buildDoc(): string {
   p();
   p("A complete, LLM-ready knowledge dump for building Hyperledger Identus demos");
   p("with Lovable during the Hyperledger Identus Catalyst hackathon — organised by");
-  p("StreetKode Fam during Indian Krump Festival 14.");
+  p("Midnight Aliit Builder & Nightforce Alpha during Indian Krump Festival 14.");
   p();
   p("Paste this whole file into your own LLM, then ask it to build one of the ideas");
   p("listed at the end. Everything the model needs — primitives, agent modes, REST");
@@ -102,7 +102,7 @@ function buildDoc(): string {
   p();
   p("Hyperledger Identus is an LF Decentralized Trust project (Apache-2.0).");
   p("This catalog was built for the Hyperledger Identus Catalyst — organised by");
-  p("StreetKode Fam during Indian Krump Festival 14.");
+  p("Midnight Aliit Builder & Nightforce Alpha during Indian Krump Festival 14.");
   p();
   return lines.join("\n");
 }

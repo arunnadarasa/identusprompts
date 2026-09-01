@@ -79,7 +79,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { name: "viewport", content: "width=device-width, initial-scale=1" },
       { title: "Hyperledger Identus Catalyst — 1,000 self-sovereign identity ideas for Lovable" },
       { name: "description", content: "A browseable catalog of 1,000 mega-prompts that wire Hyperledger Identus — did:prism, DIDComm, verifiable credentials and proofs — into ten creative disciplines." },
-      { name: "author", content: "StreetKode Fam · Indian Krump Festival 14" },
+      { name: "author", content: "Midnight Aliit Builder & Nightforce Alpha · Indian Krump Festival 14" },
       { property: "og:title", content: "Hyperledger Identus Catalyst — 1,000 self-sovereign identity ideas for Lovable" },
       { property: "og:description", content: "A browseable catalog of 1,000 mega-prompts that wire Hyperledger Identus — did:prism, DIDComm, verifiable credentials and proofs — into ten creative disciplines." },
       { property: "og:type", content: "website" },

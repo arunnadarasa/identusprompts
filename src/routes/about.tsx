@@ -67,7 +67,7 @@ function About() {
         <h2 className="font-display text-2xl font-semibold mt-10 mb-3 text-foreground italic">Credits</h2>
         <p className="text-muted-foreground font-light">
           Built for the <strong className="text-foreground">Hyperledger Identus Catalyst</strong> organised by{" "}
-          <strong className="text-foreground">StreetKode Fam</strong> during <strong className="text-foreground">Indian Krump Festival 14</strong>.
+          <strong className="text-foreground">Midnight Aliit Builder & Nightforce Alpha</strong> during <strong className="text-foreground">Indian Krump Festival 14</strong>.
           Hyperledger Identus is an LF Decentralized Trust project.{" "}
           <Link to="/strategy" className="text-foreground underline decoration-primary">Read the build strategy →</Link>
         </p>

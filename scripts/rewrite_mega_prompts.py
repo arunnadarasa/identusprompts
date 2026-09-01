@@ -17,7 +17,7 @@ THEMES = json.loads((DATA / "themes.json").read_text())
 HOOKS = {h["id"]: h for h in json.loads((DATA / "hooks.json").read_text())}
 HOOK_ORDER = ["identus-did", "identus-connection", "identus-credential", "identus-verify"]
 
-CREDIT = ("Built for the Hyperledger Identus Catalyst — organised by StreetKode Fam "
+CREDIT = ("Built for the Hyperledger Identus Catalyst — organised by Midnight Aliit Builder & Nightforce Alpha "
           "during Indian Krump Festival 14")
 
 BUDGET = """LOVABLE BUDGET (HARD CAP: ONE-SHOT, ~5 CREDITS TOTAL):
