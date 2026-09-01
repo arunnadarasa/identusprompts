@@ -130,6 +130,33 @@ function ShowcaseIndex() {
           </p>
         </a>
         <a
+          href="https://github.com/arunnadarasa/ipsmidnight"
+          target="_blank"
+          rel="noreferrer"
+          className="p-6 bg-card hover:bg-background transition-colors"
+        >
+          <span className="eyebrow text-primary">Source · GitHub</span>
+          <h3 className="font-display text-xl mt-2 italic text-foreground">arunnadarasa/ipsmidnight ↗</h3>
+          <p className="text-sm text-muted-foreground mt-3 leading-relaxed font-light">
+            IPS Compass — FHIR summary parsing, digest derivation, Identus issuance and the Midnight
+            anchoring flow.
+          </p>
+        </a>
+        <a
+          href="https://github.com/arunnadarasa/identusprompts"
+          target="_blank"
+          rel="noreferrer"
+          className="p-6 bg-card hover:bg-background transition-colors"
+        >
+          <span className="eyebrow text-primary">Source · GitHub</span>
+          <h3 className="font-display text-xl mt-2 italic text-foreground">arunnadarasa/identusprompts ↗</h3>
+          <p className="text-sm text-muted-foreground mt-3 leading-relaxed font-light">
+            This catalyst itself — the 1,000-idea index, the mega-prompt generator and the three
+            agent-mode recipes.
+          </p>
+        </a>
+
+        <a
           href="https://identus.io/documentation/develop/"
           target="_blank"
           rel="noreferrer"
