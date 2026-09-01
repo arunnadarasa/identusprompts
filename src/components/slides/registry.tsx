@@ -325,24 +325,32 @@ SHA-256 digest        (no patient data leaves)
       <SlideLayout kicker="Over to you" page={page} total={total}>
         <Title>Try it, fork it, break it.</Title>
         <div className="mt-14 flex gap-10">
-          <Card title="Apps" accent>
+          <Card title="Catalyst" accent>
             identusprompts.lovable.app
-            <br />
-            identus.lovable.app
-            <br />
-            ipsmidnight.lovable.app
+            <div className="slide-caption mt-4 font-mono text-muted-foreground">
+              github.com/arunnadarasa/identusprompts
+            </div>
           </Card>
-          <Card title="Source">
-            github.com/arunnadarasa/identus
-            <br />
-            github.com/arunnadarasa/ipsmidnight
+          <Card title="Identus Hub / NHS">
+            identus.lovable.app
+            <div className="slide-caption mt-4 font-mono text-muted-foreground">
+              github.com/arunnadarasa/identus
+            </div>
+          </Card>
+          <Card title="IPS Compass">
+            ipsmidnight.lovable.app
+            <div className="slide-caption mt-4 font-mono text-muted-foreground">
+              github.com/arunnadarasa/ipsmidnight
+            </div>
           </Card>
           <Card title="For your LLM">
             identusprompts.lovable.app/llms-full.txt
-            <br />
-            identus.io/documentation/develop
+            <div className="slide-caption mt-4 font-mono text-muted-foreground">
+              identus.io/documentation/develop
+            </div>
           </Card>
         </div>
+
         <p className="slide-body mt-12 text-muted-foreground">
           Questions — especially the uncomfortable ones about the sharp edges.
         </p>
