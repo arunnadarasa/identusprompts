@@ -39,6 +39,8 @@ export const SLIDES: Slide[] = [
         <p className="slide-body mt-12 text-foreground">
           Arun Nadarasa · StreetKode Fam
         </p>
+        <p className="slide-caption mt-3 font-mono text-primary">github.com/arunnadarasa</p>
+
       </SlideLayout>
     ),
   },
@@ -75,17 +77,27 @@ export const SLIDES: Slide[] = [
             1,000 build-ready ideas, each with a self-contained mega-prompt and three ways to run an
             agent.
             <div className="slide-caption mt-5 font-mono text-primary">identusprompts.lovable.app</div>
+            <div className="slide-caption font-mono text-muted-foreground">
+              github.com/arunnadarasa/identusprompts
+            </div>
           </Card>
           <Card title="Identus Hub / NHS">
             Explainer, developer docs and a live console: DIDs, issuance, verification, ZK proof and
             agentic-commerce demos.
             <div className="slide-caption mt-5 font-mono text-primary">identus.lovable.app</div>
+            <div className="slide-caption font-mono text-muted-foreground">
+              github.com/arunnadarasa/identus
+            </div>
           </Card>
           <Card title="IPS Compass">
             FHIR patient summary → digest → Identus credential → Midnight anchor, with infra
             provisioned from inside the app.
             <div className="slide-caption mt-5 font-mono text-primary">ipsmidnight.lovable.app</div>
+            <div className="slide-caption font-mono text-muted-foreground">
+              github.com/arunnadarasa/ipsmidnight
+            </div>
           </Card>
+
         </div>
         <p className="slide-body mt-12 text-muted-foreground">
           Ideation → first-mile tooling → a real regulated-domain workflow.
@@ -313,24 +325,32 @@ SHA-256 digest        (no patient data leaves)
       <SlideLayout kicker="Over to you" page={page} total={total}>
         <Title>Try it, fork it, break it.</Title>
         <div className="mt-14 flex gap-10">
-          <Card title="Apps" accent>
+          <Card title="Catalyst" accent>
             identusprompts.lovable.app
-            <br />
-            identus.lovable.app
-            <br />
-            ipsmidnight.lovable.app
+            <div className="slide-caption mt-4 font-mono text-muted-foreground">
+              github.com/arunnadarasa/identusprompts
+            </div>
           </Card>
-          <Card title="Source">
-            github.com/arunnadarasa/identus
-            <br />
-            github.com/arunnadarasa/ipsmidnight
+          <Card title="Identus Hub / NHS">
+            identus.lovable.app
+            <div className="slide-caption mt-4 font-mono text-muted-foreground">
+              github.com/arunnadarasa/identus
+            </div>
+          </Card>
+          <Card title="IPS Compass">
+            ipsmidnight.lovable.app
+            <div className="slide-caption mt-4 font-mono text-muted-foreground">
+              github.com/arunnadarasa/ipsmidnight
+            </div>
           </Card>
           <Card title="For your LLM">
             identusprompts.lovable.app/llms-full.txt
-            <br />
-            identus.io/documentation/develop
+            <div className="slide-caption mt-4 font-mono text-muted-foreground">
+              identus.io/documentation/develop
+            </div>
           </Card>
         </div>
+
         <p className="slide-body mt-12 text-muted-foreground">
           Questions — especially the uncomfortable ones about the sharp edges.
         </p>
