@@ -147,7 +147,7 @@ function SiteFooter() {
         </div>
         <div className="border-t border-border/60 pt-3 normal-case tracking-normal text-[11px] font-light leading-relaxed text-muted-foreground/80">
           Built for the Hyperledger Identus Catalyst — organised by{" "}
-          <span className="text-primary">StreetKode Fam</span> during Indian Krump Festival 14.
+          <span className="text-primary">Midnight Aliit Builder & Nightforce Alpha</span> during Indian Krump Festival 14.
         </div>
       </div>
     </footer>

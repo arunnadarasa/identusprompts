@@ -37,7 +37,7 @@ export const SLIDES: Slide[] = [
           newcomer.
         </p>
         <p className="slide-body mt-12 text-foreground">
-          Arun Nadarasa · StreetKode Fam
+          Arun Nadarasa · Midnight Aliit Builder & Nightforce Alpha
         </p>
         <p className="slide-caption mt-3 font-mono text-primary">github.com/arunnadarasa</p>
 

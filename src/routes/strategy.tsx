@@ -22,7 +22,7 @@ export const Route = createFileRoute("/strategy")({
 });
 
 const DID_SNIPPET = `// src/lib/identus.functions.ts — mint and publish a did:prism
-// Built for the Hyperledger Identus Catalyst — StreetKode Fam · Indian Krump Festival 14
+// Built for the Hyperledger Identus Catalyst — Midnight Aliit Builder & Nightforce Alpha · Indian Krump Festival 14
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 
@@ -199,7 +199,7 @@ function Strategy() {
           <li>· Poll <code>protocolState</code>; issuance and presentation are asynchronous.</li>
           <li>· On Fly, strip <code>/cloud-agent</code> from the base URL. On Docker, keep it.</li>
           <li>· Render the state machine and the raw JSON record — judges want to see the real protocol.</li>
-          <li>· Add the footer credit: "Built for the Hyperledger Identus Catalyst — StreetKode Fam · Indian Krump Festival 14".</li>
+          <li>· Add the footer credit: "Built for the Hyperledger Identus Catalyst — Midnight Aliit Builder & Nightforce Alpha · Indian Krump Festival 14".</li>
         </ul>
         <div className="mt-8 flex flex-wrap gap-3 text-[10px] uppercase tracking-[0.28em]">
           <Link to="/quantum-primer" className="px-6 py-3 border border-primary/40 text-foreground hover:bg-primary hover:text-primary-foreground transition-colors duration-500">
