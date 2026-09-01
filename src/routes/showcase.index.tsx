@@ -3,14 +3,15 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 export const Route = createFileRoute("/showcase/")({
   head: () => ({
     meta: [
-      { title: "Showcase — Hyperledger Identus reference console" },
-      { name: "description", content: "identus.lovable.app is the reference implementation: three agent modes, did:prism publication, credential issuance and proof verification, built with Lovable." },
-      { property: "og:title", content: "Showcase — Hyperledger Identus reference console" },
-      { property: "og:description", content: "The Identus console shows DID → connection → credential → proof end-to-end across simulated, Docker and Fly.io agents." },
+      { title: "Showcase — Hyperledger Identus reference builds" },
+      { name: "description", content: "Two live builds: the Identus console (three agent modes, did:prism, issuance, proofs) and IPS Compass (FHIR patient summary anchored to Midnight)." },
+      { property: "og:title", content: "Showcase — Hyperledger Identus reference builds" },
+      { property: "og:description", content: "The Identus console shows DID → connection → credential → proof end-to-end; IPS Compass turns a FHIR patient summary into a credential anchored on Midnight." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
+
   component: ShowcaseIndex,
 });
 
