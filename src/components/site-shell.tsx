@@ -30,6 +30,7 @@ function SiteHeader() {
           <NavLink to="/showcase">Showcase</NavLink>
           <NavLink to="/strategy">Strategy</NavLink>
           <NavLink to="/quantum-primer">Primer</NavLink>
+          <NavLink to="/deck">Deck</NavLink>
           <NavLink to="/about">About</NavLink>
           <a
             href="https://identus.io/documentation/develop/"
@@ -73,6 +74,7 @@ function SiteHeader() {
               <MobileLink to="/showcase" onClick={close}>Showcase</MobileLink>
               <MobileLink to="/strategy" onClick={close}>Strategy</MobileLink>
               <MobileLink to="/quantum-primer" onClick={close}>Primer</MobileLink>
+              <MobileLink to="/deck" onClick={close}>Deck</MobileLink>
               <MobileLink to="/about" onClick={close}>About</MobileLink>
               <a
                 href="https://identus.io/documentation/develop/"

@@ -11,11 +11,15 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AboutRouteImport } from './routes/about'
+import { Route as DeckRouteImport } from './routes/deck'
 import { Route as LlmsFullDottxtRouteImport } from './routes/llms-full[.]txt'
 import { Route as QuantumPrimerRouteImport } from './routes/quantum-primer'
 import { Route as ShowcaseRouteImport } from './routes/showcase'
 import { Route as StrategyRouteImport } from './routes/strategy'
 import { Route as ThemesRouteImport } from './routes/themes'
+import { Route as DeckIndexRouteImport } from './routes/deck.index'
+import { Route as DeckSlideRouteImport } from './routes/deck.$slide'
+import { Route as DeckPrintRouteImport } from './routes/deck.print'
 import { Route as IdeasIdRouteImport } from './routes/ideas.$id'
 import { Route as ShowcaseIndexRouteImport } from './routes/showcase.index'
 import { Route as ThemesIndexRouteImport } from './routes/themes.index'
@@ -29,6 +33,11 @@ const IndexRoute = IndexRouteImport.update({
 const AboutRoute = AboutRouteImport.update({
   id: '/about',
   path: '/about',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DeckRoute = DeckRouteImport.update({
+  id: '/deck',
+  path: '/deck',
   getParentRoute: () => rootRouteImport,
 } as any)
 const LlmsFullDottxtRoute = LlmsFullDottxtRouteImport.update({
@@ -56,6 +65,21 @@ const ThemesRoute = ThemesRouteImport.update({
   path: '/themes',
   getParentRoute: () => rootRouteImport,
 } as any)
+const DeckIndexRoute = DeckIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => DeckRoute,
+} as any)
+const DeckSlideRoute = DeckSlideRouteImport.update({
+  id: '/$slide',
+  path: '/$slide',
+  getParentRoute: () => DeckRoute,
+} as any)
+const DeckPrintRoute = DeckPrintRouteImport.update({
+  id: '/print',
+  path: '/print',
+  getParentRoute: () => DeckRoute,
+} as any)
 const IdeasIdRoute = IdeasIdRouteImport.update({
   id: '/ideas/$id',
   path: '/ideas/$id',
@@ -80,13 +104,17 @@ const ThemesThemeRoute = ThemesThemeRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/deck': typeof DeckRouteWithChildren
   '/llms-full.txt': typeof LlmsFullDottxtRoute
   '/quantum-primer': typeof QuantumPrimerRoute
   '/showcase': typeof ShowcaseRouteWithChildren
   '/strategy': typeof StrategyRoute
   '/themes': typeof ThemesRouteWithChildren
+  '/deck/$slide': typeof DeckSlideRoute
+  '/deck/print': typeof DeckPrintRoute
   '/ideas/$id': typeof IdeasIdRoute
   '/themes/$theme': typeof ThemesThemeRoute
+  '/deck/': typeof DeckIndexRoute
   '/showcase/': typeof ShowcaseIndexRoute
   '/themes/': typeof ThemesIndexRoute
 }
@@ -96,8 +124,11 @@ export interface FileRoutesByTo {
   '/llms-full.txt': typeof LlmsFullDottxtRoute
   '/quantum-primer': typeof QuantumPrimerRoute
   '/strategy': typeof StrategyRoute
+  '/deck/$slide': typeof DeckSlideRoute
+  '/deck/print': typeof DeckPrintRoute
   '/ideas/$id': typeof IdeasIdRoute
   '/themes/$theme': typeof ThemesThemeRoute
+  '/deck': typeof DeckIndexRoute
   '/showcase': typeof ShowcaseIndexRoute
   '/themes': typeof ThemesIndexRoute
 }
@@ -105,13 +136,17 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/deck': typeof DeckRouteWithChildren
   '/llms-full.txt': typeof LlmsFullDottxtRoute
   '/quantum-primer': typeof QuantumPrimerRoute
   '/showcase': typeof ShowcaseRouteWithChildren
   '/strategy': typeof StrategyRoute
   '/themes': typeof ThemesRouteWithChildren
+  '/deck/$slide': typeof DeckSlideRoute
+  '/deck/print': typeof DeckPrintRoute
   '/ideas/$id': typeof IdeasIdRoute
   '/themes/$theme': typeof ThemesThemeRoute
+  '/deck/': typeof DeckIndexRoute
   '/showcase/': typeof ShowcaseIndexRoute
   '/themes/': typeof ThemesIndexRoute
 }
@@ -120,13 +155,17 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/about'
+    | '/deck'
     | '/llms-full.txt'
     | '/quantum-primer'
     | '/showcase'
     | '/strategy'
     | '/themes'
+    | '/deck/$slide'
+    | '/deck/print'
     | '/ideas/$id'
     | '/themes/$theme'
+    | '/deck/'
     | '/showcase/'
     | '/themes/'
   fileRoutesByTo: FileRoutesByTo
@@ -136,21 +175,28 @@ export interface FileRouteTypes {
     | '/llms-full.txt'
     | '/quantum-primer'
     | '/strategy'
+    | '/deck/$slide'
+    | '/deck/print'
     | '/ideas/$id'
     | '/themes/$theme'
+    | '/deck'
     | '/showcase'
     | '/themes'
   id:
     | '__root__'
     | '/'
     | '/about'
+    | '/deck'
     | '/llms-full.txt'
     | '/quantum-primer'
     | '/showcase'
     | '/strategy'
     | '/themes'
+    | '/deck/$slide'
+    | '/deck/print'
     | '/ideas/$id'
     | '/themes/$theme'
+    | '/deck/'
     | '/showcase/'
     | '/themes/'
   fileRoutesById: FileRoutesById
@@ -158,6 +204,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AboutRoute: typeof AboutRoute
+  DeckRoute: typeof DeckRouteWithChildren
   LlmsFullDottxtRoute: typeof LlmsFullDottxtRoute
   QuantumPrimerRoute: typeof QuantumPrimerRoute
   ShowcaseRoute: typeof ShowcaseRouteWithChildren
@@ -180,6 +227,13 @@ declare module '@tanstack/react-router' {
       path: '/about'
       fullPath: '/about'
       preLoaderRoute: typeof AboutRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/deck': {
+      id: '/deck'
+      path: '/deck'
+      fullPath: '/deck'
+      preLoaderRoute: typeof DeckRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/llms-full.txt': {
@@ -217,6 +271,27 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ThemesRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/deck/': {
+      id: '/deck/'
+      path: '/'
+      fullPath: '/deck/'
+      preLoaderRoute: typeof DeckIndexRouteImport
+      parentRoute: typeof DeckRoute
+    }
+    '/deck/$slide': {
+      id: '/deck/$slide'
+      path: '/$slide'
+      fullPath: '/deck/$slide'
+      preLoaderRoute: typeof DeckSlideRouteImport
+      parentRoute: typeof DeckRoute
+    }
+    '/deck/print': {
+      id: '/deck/print'
+      path: '/print'
+      fullPath: '/deck/print'
+      preLoaderRoute: typeof DeckPrintRouteImport
+      parentRoute: typeof DeckRoute
+    }
     '/ideas/$id': {
       id: '/ideas/$id'
       path: '/ideas/$id'
@@ -248,6 +323,20 @@ declare module '@tanstack/react-router' {
   }
 }
 
+interface DeckRouteChildren {
+  DeckSlideRoute: typeof DeckSlideRoute
+  DeckPrintRoute: typeof DeckPrintRoute
+  DeckIndexRoute: typeof DeckIndexRoute
+}
+
+const DeckRouteChildren: DeckRouteChildren = {
+  DeckSlideRoute: DeckSlideRoute,
+  DeckPrintRoute: DeckPrintRoute,
+  DeckIndexRoute: DeckIndexRoute,
+}
+
+const DeckRouteWithChildren = DeckRoute._addFileChildren(DeckRouteChildren)
+
 interface ShowcaseRouteChildren {
   ShowcaseIndexRoute: typeof ShowcaseIndexRoute
 }
@@ -276,6 +365,7 @@ const ThemesRouteWithChildren =
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AboutRoute: AboutRoute,
+  DeckRoute: DeckRouteWithChildren,
   LlmsFullDottxtRoute: LlmsFullDottxtRoute,
   QuantumPrimerRoute: QuantumPrimerRoute,
   ShowcaseRoute: ShowcaseRouteWithChildren,
