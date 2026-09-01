@@ -29,26 +29,68 @@ function ShowcaseIndex() {
         smaller slice of this exact shape.
       </p>
 
-      <a
-        href="https://identus.lovable.app/"
-        target="_blank"
-        rel="noreferrer"
-        className="mt-12 block p-6 sm:p-8 border border-primary/50 bg-card hover:bg-primary/5 transition-colors duration-300 group"
-      >
-        <span className="eyebrow text-primary">Vol. 01 · No. 01 · Live · identus.lovable.app</span>
-        <h2 className="font-display text-2xl sm:text-3xl mt-3 italic group-hover:text-primary transition-colors">
-          Identus console — the working reference build.
-        </h2>
-        <p className="mt-4 text-sm text-muted-foreground leading-relaxed max-w-2xl font-light">
-          A TanStack Start app that talks to a Hyperledger Identus Cloud Agent from{" "}
-          <code>createServerFn</code> handlers: mint and publish DIDs, generate DIDComm invitations,
-          issue JWT credentials (connection-bound or connectionless), request proof presentations,
-          and deploy the whole agent stack to Fly Machines from the browser.
-        </p>
-        <span className="mt-5 inline-block text-[11px] tracking-[0.28em] uppercase font-semibold text-primary">
-          Open the live console ↗
-        </span>
-      </a>
+      <div className="mt-12 border border-primary/50 bg-card">
+        <a
+          href="https://identus.lovable.app/"
+          target="_blank"
+          rel="noreferrer"
+          className="block p-6 sm:p-8 hover:bg-primary/5 transition-colors duration-300 group"
+        >
+          <span className="eyebrow text-primary">Vol. 01 · No. 01 · Live · identus.lovable.app</span>
+          <h2 className="font-display text-2xl sm:text-3xl mt-3 italic group-hover:text-primary transition-colors">
+            Identus console — the working reference build.
+          </h2>
+          <p className="mt-4 text-sm text-muted-foreground leading-relaxed max-w-2xl font-light">
+            A TanStack Start app that talks to a Hyperledger Identus Cloud Agent from{" "}
+            <code>createServerFn</code> handlers: mint and publish DIDs, generate DIDComm invitations,
+            issue JWT credentials (connection-bound or connectionless), request proof presentations,
+            and deploy the whole agent stack to Fly Machines from the browser.
+          </p>
+          <span className="mt-5 inline-block text-[11px] tracking-[0.28em] uppercase font-semibold text-primary">
+            Open the live console ↗
+          </span>
+        </a>
+        <a
+          href="https://github.com/arunnadarasa/identus"
+          target="_blank"
+          rel="noreferrer"
+          className="block border-t border-border px-6 sm:px-8 py-3 font-mono text-xs text-muted-foreground hover:text-primary transition-colors"
+        >
+          github.com/arunnadarasa/identus ↗
+        </a>
+      </div>
+
+      <div className="mt-8 border border-primary/50 bg-card">
+        <a
+          href="https://ipsmidnight.lovable.app/"
+          target="_blank"
+          rel="noreferrer"
+          className="block p-6 sm:p-8 hover:bg-primary/5 transition-colors duration-300 group"
+        >
+          <span className="eyebrow text-primary">Vol. 01 · No. 02 · Live · ipsmidnight.lovable.app</span>
+          <h2 className="font-display text-2xl sm:text-3xl mt-3 italic group-hover:text-primary transition-colors">
+            IPS Compass — a clinical summary you can prove.
+          </h2>
+          <p className="mt-4 text-sm text-muted-foreground leading-relaxed max-w-2xl font-light">
+            A FHIR International Patient Summary is reduced to a digest, issued as an Identus
+            verifiable credential and anchored to the Midnight ledger — so a clinician abroad can
+            check that a summary is authentic and unaltered without the record itself leaving the
+            patient. The agent stack is provisioned from inside the app.
+          </p>
+          <span className="mt-5 inline-block text-[11px] tracking-[0.28em] uppercase font-semibold text-primary">
+            Open the live demo ↗
+          </span>
+        </a>
+        <a
+          href="https://github.com/arunnadarasa/ipsmidnight"
+          target="_blank"
+          rel="noreferrer"
+          className="block border-t border-border px-6 sm:px-8 py-3 font-mono text-xs text-muted-foreground hover:text-primary transition-colors"
+        >
+          github.com/arunnadarasa/ipsmidnight ↗
+        </a>
+      </div>
+
 
       <div className="mt-8 grid sm:grid-cols-2 gap-px bg-border">
         <ShowcaseCard
